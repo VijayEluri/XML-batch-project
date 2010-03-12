@@ -1,0 +1,1774 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="qualified"
+  elementFormDefault="qualified" id="query"
+  targetNamespace="edu.bxml.swt" xmlns="edu.bxml.swt"
+  xmlns:app0="com.browsexml.core" xmlns:app1="edu.bxml.http" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="com.browsexml.core" schemaLocation="com_browsexml_core.xsd"/>
+  <xs:import namespace="edu.bxml.http" schemaLocation="edu_bxml_http.xsd"/>
+  <xs:complexType name="LayoutType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="GridLayoutType">
+    <xs:complexContent>
+      <xs:extension base="LayoutType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="numColumns" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Specifies the number of cell columns in the layout
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="makeColumnsEqualWidth" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				specifies whether all columns in the layout will be forced to have the same width.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="marginWidth" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				specifies the number of pixels of horizontal margin that will be placed along the left and right edges of the layout
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="marginHeight" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				specifies the number of pixels of vertical margin that will be placed along the top and bottom edges of the layout
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="verticalSpacing" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				specifies the number of pixels between the bottom edge of one cell and the top edge of its neighbouring cell underneath
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="horizontalSpacing" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				specifies the number of pixels between the right edge of one cell and the left edge of its neighbouring cell to the right
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ListenerType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="app0:xmlObject"/>
+          <xs:element ref="app1:get"/>
+        </xs:choice>
+        <xs:attribute form="unqualified" name="mask" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The type of event to listen for.  The value depends on the parent.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="GUIObjectType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="gridLayout"/>
+          <xs:element ref="listener"/>
+        </xs:choice>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="MenuItemType">
+    <xs:complexContent>
+      <xs:extension base="GUIObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="menu"/>
+        </xs:choice>
+        <xs:attribute form="unqualified" name="style" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				CHECK, CASCADE, PUSH, RADIO, SEPARATOR
+ events: Arm, Help, Selection
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="text" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the text of the menu item
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="MenuType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="menuItem"/>
+        </xs:choice>
+        <xs:attribute form="unqualified" name="style" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				BAR, DROP_DOWN, POP_UP, NO_RADIO_GROUP, LEFT_TO_RIGHT, RIGHT_TO_LEFT 
+ events: Help, Hide, Show
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="RowLayoutType">
+    <xs:complexContent>
+      <xs:extension base="LayoutType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="type">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				HORIZONTAL or VERTICAL layout
+ 
+ @param strWrap
+			]]></xs:documentation>
+          </xs:annotation>
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="HORIZONTAL"/>
+              <xs:enumeration value="VERTICAL"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="pack" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				all controls same size
+ 
+ @param strWrap
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="wrap" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				wrap the contents of the row to the next line
+ @param strWrap
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="fill" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				@param fill
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="justify" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				put any extra space placed between the controls to justify
+ @param strWrap
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="spacing" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				number of pixels between the edge of one cell and the edge of its neighbouring cell.
+ 
+ @param strWrap
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="LayoutDataType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ControlObjectType">
+    <xs:complexContent>
+      <xs:extension base="GUIObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="layoutData"/>
+        </xs:choice>
+        <xs:attribute form="unqualified" name="size" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Size as a comma separated width and height
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="visible" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Makes the control visible or invisible.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="toolTipText" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the text to pop up when the mouse hovers over a control.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="enabled" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Enable the control.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ActsAsCompositeType">
+    <xs:complexContent>
+      <xs:extension base="ControlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="gridLayout"/>
+          <xs:element ref="rowLayout"/>
+          <xs:element ref="controlObject"/>
+        </xs:choice>
+        <xs:attribute form="unqualified" name="layout" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				NO COMMENT
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="focus" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				NO COMMENT
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="style" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				NO_BACKGROUND, NO_FOCUS, NO_MERGE_PAINTS, NO_REDRAW_RESIZE, NO_RADIO_GROUP, EMBEDDED, DOUBLE_BUFFERED
+ Events: None
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="GroupType">
+    <xs:complexContent>
+      <xs:extension base="ActsAsCompositeType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="style">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				SHADOW_ETCHED_IN, SHADOW_ETCHED_OUT, SHADOW_IN, SHADOW_OUT, SHADOW_NONE 
+ Events: None
+			]]></xs:documentation>
+          </xs:annotation>
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="SHADOW_ETCHED_IN"/>
+              <xs:enumeration value="SHADOW_ETCHED_OUT"/>
+              <xs:enumeration value="SHADOW_IN"/>
+              <xs:enumeration value="SHADOW_OUT"/>
+              <xs:enumeration value="SHADOW_NONE"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="GridDataType">
+    <xs:complexContent>
+      <xs:extension base="LayoutDataType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="style" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				BEGINNING, CENTER, END, FILL, VERTICAL_ALIGN_BEGINNING, VERTICAL_ALIGN_CENTER, VERTICAL_ALIGN_END, VERTICAL_ALIGN_FILL, HORIZONTAL_ALIGN_BEGINNING, HORIZONTAL_ALIGN_CENTER, HORIZONTAL_ALIGN_END, HORIZONTAL_ALIGN_FILL, GRAB_HORIZONTAL, GRAB_VERTICAL, FILL_VERTICAL = VERTICAL_ALIGN_FILL | GRAB_VERTICAL , FILL_HORIZONTAL = HORIZONTAL_ALIGN_FILL | GRAB_HORIZONTAL , FILL_BOTH = FILL_VERTICAL | FILL_HORIZONTAL
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="heightHint" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Minimum height for the row.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="widthHint" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Minimum width for the column
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="horizontalSpan" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Tell the layout how many cells this area spans horizontally
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="exclude" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Exclude
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="horizontalAlignment" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				How controls will be positioned horizontally within a cell. (BEGINNING, CENTER, END, FILL)
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="horizontalIndent" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The number of pixels of indentation that will be placed along the left side of the cell.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="minimumHeight" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Minimum height for the row.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="minimumWidth" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Minimum width for the column.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="verticalAlignment">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				How controls will be positioned vertically within a cell.  (BEGINNING, CENTER, END, FILL)
+			]]></xs:documentation>
+          </xs:annotation>
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="BEGINNING"/>
+              <xs:enumeration value="CENTER"/>
+              <xs:enumeration value="END"/>
+              <xs:enumeration value="FILL"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="verticalIndent" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The number of pixels of indentation that will be placed along the top side of the cell.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="verticalSpan" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The number of row cells that the control will take up.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified"
+          name="grabExcessHorizontalSpace" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Specifies whether the cell will be made wide enough to fit the remaining horizontal space.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="grabExcessVerticalSpace" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Specifies whether the cell will be made tall enough to fit the remaining vertical space
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="CompositeType">
+    <xs:complexContent>
+      <xs:extension base="ActsAsCompositeType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="group"/>
+        </xs:choice>
+        <xs:attribute form="unqualified" name="style" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Determines what style (NO_BACKGROUND, NO_FOCUS, NO_MERGE_PAINTS, 
+ NO_REDRAW_RESIZE, NO_RADIO_GROUP, EMBEDDED, DOUBLE_BUFFERED)
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="TabItemType">
+    <xs:complexContent>
+      <xs:extension base="GUIObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="group"/>
+          <xs:element ref="composite"/>
+          <xs:element ref="listener"/>
+        </xs:choice>
+        <xs:attribute form="unqualified" name="text" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the text on the tab
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="TabFolderType">
+    <xs:complexContent>
+      <xs:extension base="ActsAsCompositeType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="gridData"/>
+          <xs:element ref="tabItem"/>
+        </xs:choice>
+        <xs:attribute form="unqualified" name="style" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				TOP, BOTTOM 
+ Events:  Selection
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="selection" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Selects the item at the given zero-relative index in the receiver.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ShellType">
+    <xs:complexContent>
+      <xs:extension base="ActsAsCompositeType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="menu"/>
+          <xs:element ref="group"/>
+          <xs:element ref="tabFolder"/>
+          <xs:element ref="composite"/>
+        </xs:choice>
+        <xs:attribute form="unqualified" name="defaultButton" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the default button.
+ The default button is the button that is selected when the receiver is active and the user presses ENTER.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="visible" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Sets whether it is visible
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="style" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				BORDER, CLOSE, MIN, MAX, NO_TRIM, RESIZE, TITLE, ON_TOP, TOOL, APPLICATION_MODAL, MODELESS, PRIMARY_MODAL, SYSTEM_MODAL
+ events: Activate, Close, Deactivate, Deiconify, Iconify
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="pack" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Pack the controls in the shell
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="text" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the text (title bar text)
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ColorType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="systemColor" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				System Color may be:
+ COLOR_WHITE COLOR_BLACK COLOR_RED COLOR_DARK_RED 
+ COLOR_GREEN COLOR_DARK_GREEN COLOR_YELLOW COLOR_DARK_YELLOW 
+ COLOR_BLUE COLOR_DARK_BLUE COLOR_MAGENTA COLOR_DARK_MAGENTA 
+ COLOR_CYAN COLOR_DARK_CYAN COLOR_GRAY COLOR_DARK_GRAY
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ApplyType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="object" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Declare the object that will recieve properties and children
+ @param object
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="InterfaceType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="shell"/>
+          <xs:element ref="color"/>
+          <xs:element ref="apply"/>
+        </xs:choice>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType mixed="true" name="ArgumentType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="BrowserType">
+    <xs:complexContent>
+      <xs:extension base="ControlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="style" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Styles: 
+  Events: CloseWindow Location OpenWindow Progress StatusText 
+  		Title VisibilityWindow
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="navigate" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				forward, back, refresh, stop
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ButtonType">
+    <xs:complexContent>
+      <xs:extension base="ControlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="style" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				ARROW, CHECK, PUSH, RADIO, TOGGLE, FLAT, UP, DOWN, LEFT, RIGHT, CENTER 
+ Events: Selection
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="text" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the text associated with the button
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="selection" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the selection of the button.  For check box style buttons, setting this
+ to true will cause the button to be checked.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="CloseType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType mixed="true" name="ItemType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="key" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				set the key
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ComboType">
+    <xs:complexContent>
+      <xs:extension base="ControlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="item"/>
+        </xs:choice>
+        <xs:attribute form="unqualified" name="style" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				DROP_DOWN, READ_ONLY, SIMPLE 
+ Events: DefaultSelection, Modify, Selection
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="text" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the text
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="visibleItemCount" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the number of items appearing without the need to scroll.
+ If more items this this are in the drop down list, a scrollbar
+ will be drawn at the right.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="DataType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="app0:xmlObject"/>
+        </xs:choice>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="DateTimeType">
+    <xs:complexContent>
+      <xs:extension base="ControlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="style" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				DATE, TIME, CALENDAR, SHORT, MEDIUM, LONG  
+  Events: Selection
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="alignType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+  </xs:complexType>
+  <xs:complexType name="columnAlignType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+  </xs:complexType>
+  <xs:complexType name="layoutType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+  </xs:complexType>
+  <xs:complexType name="MessageBoxStylesType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+  </xs:complexType>
+  <xs:complexType name="EnumerationsType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+  </xs:complexType>
+  <xs:complexType mixed="true" name="ExceptionType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="throw" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Actually throw an exception.  If true this will cause the remainder
+ of a page currently being processed not to be interpreted.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ExecuteType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="extension" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Extension is used to find which program to run.  For example 'html' is 
+ usually Internet Explorer.
+ 
+ @param extension
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="StylesType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+  </xs:complexType>
+  <xs:complexType name="ItemsType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="LabelType">
+    <xs:complexContent>
+      <xs:extension base="ControlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="style" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				SEPARATOR, HORIZONTAL, VERTICAL, SHADOW_IN, SHADOW_OUT, SHADOW_NONE, CENTER, LEFT, RIGHT, WRAP
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="text" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Sets the text
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="alignment">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Controls how text and images will be displayed in the receiver
+			]]></xs:documentation>
+          </xs:annotation>
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="BEGINNING"/>
+              <xs:enumeration value="CENTER"/>
+              <xs:enumeration value="END"/>
+              <xs:enumeration value="FILL"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="LinkedhashmapType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="LocationListenerType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="app0:xmlObject"/>
+          <xs:element ref="app1:get"/>
+        </xs:choice>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType mixed="true" name="MessageBoxType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="style" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				ICON_ERROR, ICON_INFORMATION, ICON_QUESTION, ICON_WARNING, ICON_WORKING 
+ OK, OK | CANCEL 
+ YES | NO, YES | NO | CANCEL 
+ RETRY | CANCEL 
+ ABORT | RETRY | IGNORE 
+ 
+ @param style
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="continue" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Continue if the message box returns a press from this button type (see styles)
+ @param c
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType mixed="true" name="ParameterType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="value" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the value of the variable
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="type" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the type of the variable
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="key" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the name of the variable
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType mixed="true" name="PrintType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ProgressBarType">
+    <xs:complexContent>
+      <xs:extension base="ControlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="style" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				SMOOTH, HORIZONTAL, VERTICAL, INDETERMINATE 
+ Events: none
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="maximum" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the maximum
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="selection" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the selection
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="minimum" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the minimum
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="incrementSelection" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				increment the selection
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="RowDataType">
+    <xs:complexContent>
+      <xs:extension base="LayoutDataType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="height" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				height for the item.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="width" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				width for the item
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="SvgType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="uri" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Location of the svg file
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="SwingType">
+    <xs:complexContent>
+      <xs:extension base="GUIObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="svg"/>
+        </xs:choice>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="TableColumnType">
+    <xs:complexContent>
+      <xs:extension base="GUIObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="style" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				LEFT, RIGHT, CENTER 
+ Events: Move, Resize, Selection
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="text" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the column's header text
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="alignment">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the column's alignment LEFT, RIGHT, CENTER
+			]]></xs:documentation>
+          </xs:annotation>
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="LEFT"/>
+              <xs:enumeration value="RIGHT"/>
+              <xs:enumeration value="CENTER"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="width" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Sets the width attribute
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="dataSeparation" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Use this string to separate values if multiple columns are selected
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="moveable" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Sets the moveable attribute
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="resizable" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Sets the resize attribute
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType mixed="true" name="TdType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="TrType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="td"/>
+        </xs:choice>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="TableSelectType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="index" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The line number of the row to select
+ @return
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="TableType">
+    <xs:complexContent>
+      <xs:extension base="ControlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="tableColumn"/>
+          <xs:element ref="tr"/>
+          <xs:element ref="tableSelect"/>
+        </xs:choice>
+        <xs:attribute form="unqualified" name="style" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the table style.  Should be styles from SWT separated by the 
+ '|' symbol.  A typical setting would be SINGLE|BORDER|FULL_SELECTION.
+ 
+ SINGLE, MULTI, CHECK, FULL_SELECTION, HIDE_SELECTION, VIRTUAL 
+ Events: Selection, DefaultSelection
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="pack" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Pack the table; makes the columns just wide enough to fit
+ the headers and/or data.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="linesVisible" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the lines visible
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="headerVisible" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the header visible
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="removeAll" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Clear all lines of data from the table.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType mixed="true" name="TextType">
+    <xs:complexContent>
+      <xs:extension base="ControlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="style" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				CENTER, LEFT, MULTI, PASSWORD, SINGLE, RIGHT, READ_ONLY, WRAP 
+  Events: DefaultSelection, Modify, Verify
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="text" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Sets the text
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="mask" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Sets a mask.  # represents a digit (0-9).  Any other character is taken as a literal.
+ A date string is the most common use: ##/##/####
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="textLimit" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Sets the maximum number of characters that the receiver is capable of holding to be the argument
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="echoChar" type="xs:string ">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Sets the echo character.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="selectAllOnFocus" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				If true will select all the text when selected so that previously 
+ existing text in the text box can be easily overwritten.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="TimerType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="app1:get"/>
+        </xs:choice>
+        <xs:attribute form="unqualified" name="time" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				NO COMMENT
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ToolItemType">
+    <xs:complexContent>
+      <xs:extension base="GUIObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="style" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				ARROW, CHECK, PUSH, RADIO, TOGGLE, FLAT, UP, DOWN, LEFT, RIGHT, CENTER 
+ Events: Selection
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="text" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the text associated with the button
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="selection" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the selection of the button.  For check box style buttons, setting this
+ to true will cause the button to be checked.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ToolBarType">
+    <xs:complexContent>
+      <xs:extension base="ActsAsCompositeType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="toolItem"/>
+        </xs:choice>
+        <xs:attribute form="unqualified" name="style" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				FLAT, WRAP, RIGHT, HORIZONTAL, VERTICAL, SHADOW_OUT 
+ Events: none
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="TreeColumnType">
+    <xs:complexContent>
+      <xs:extension base="GUIObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="style" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				LEFT, RIGHT, CENTER 
+ Events: Move, Resize, Selection
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="text" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the column's header text
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="alignment">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the column's alignment LEFT, RIGHT, CENTER
+			]]></xs:documentation>
+          </xs:annotation>
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="LEFT"/>
+              <xs:enumeration value="RIGHT"/>
+              <xs:enumeration value="CENTER"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="width" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Sets the width attribute
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="dataSeparation" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Use this string to separate values if multiple columns are selected
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="moveable" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Sets the moveable attribute
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="resizable" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Sets the resize attribute
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="TreeItemType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="treeItem"/>
+        </xs:choice>
+        <xs:attribute form="unqualified" name="style" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Styles: none 
+ Events: none
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="expanded" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				NO COMMENT
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="TreeType">
+    <xs:complexContent>
+      <xs:extension base="ControlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="tr"/>
+          <xs:element ref="treeColumn"/>
+          <xs:element ref="treeItem"/>
+        </xs:choice>
+        <xs:attribute form="unqualified" name="style" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the Tree style.  Should be styles from SWT separated by the 
+ '|' symbol.  A typical setting would be SINGLE|BORDER|FULL_SELECTION.
+ 
+ SINGLE, MULTI, CHECK, FULL_SELECTION, HIDE_SELECTION, VIRTUAL 
+ Events: Selection, DefaultSelection
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="pack" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Pack the Tree; makes the columns just wide enough to fit
+ the headers and/or data.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="linesVisible" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the lines visible
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="headerVisible" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the header visible
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="removeAll" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Clear all lines of data from the Tree.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="XMaskType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+  </xs:complexType>
+  <xs:element name="layout" substitutionGroup="app0:xmlObject" type="LayoutType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="gridLayout" substitutionGroup="layout" type="GridLayoutType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Lay out the control children of a Composite in a grid.
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="listener" substitutionGroup="app0:xmlObject" type="ListenerType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Execute children when an event of the given type occurs
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="gUIObject" substitutionGroup="app0:xmlObject" type="GUIObjectType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		All gui objects are subclassed from this.
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="menuItem" substitutionGroup="gUIObject" type="MenuItemType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		A selectable user interface object that issues notification when pressed and released.
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="menu" substitutionGroup="app0:xmlObject" type="MenuType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Create a menu
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="rowLayout" substitutionGroup="layout" type="RowLayoutType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="layoutData" substitutionGroup="app0:xmlObject" type="LayoutDataType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="controlObject" substitutionGroup="gUIObject" type="ControlObjectType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		All controls are subclassed from this.
+ See also GUIObject
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="actsAsComposite" substitutionGroup="controlObject" type="ActsAsCompositeType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		A composite holds other gui objects.
+ See also ControlObject
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="group" substitutionGroup="actsAsComposite" type="GroupType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Instances of this class provide an etched border with an optional title.
+ See also ActsAsComposite
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="gridData" substitutionGroup="layoutData" type="GridDataType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Grid data for a Grid type of layout
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="composite" substitutionGroup="actsAsComposite" type="CompositeType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		A composite holds other gui objects.
+ See also ActsAsComposite
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="tabItem" substitutionGroup="gUIObject" type="TabItemType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Instances of this class represent a selectable user interface object corresponding to a tab for a page in a tab folder.
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="tabFolder" substitutionGroup="actsAsComposite" type="TabFolderType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Instances of this class implement the notebook user interface metaphor
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="shell" substitutionGroup="actsAsComposite" type="ShellType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Instances of this class represent the "windows" which the desktop or "window manager" is managing.
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="color" substitutionGroup="app0:xmlObject" type="ColorType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="apply" substitutionGroup="app0:xmlObject" type="ApplyType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Calls setters and adders for named objects using its own attributes and children.
+ Any attributes and children of the target object can be used by Apply.
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="interface" substitutionGroup="app0:xmlObject" type="InterfaceType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Root of swt portion of an xml file for gui objects
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="argument" substitutionGroup="app0:xmlObject" type="ArgumentType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="browser" substitutionGroup="controlObject" type="BrowserType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Instances of this class are selectable user interface objects that allow the user to enter and modify text.
+ See also Control Object
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="button" substitutionGroup="controlObject" type="ButtonType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		A push button, radio button or check box gui object
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="close" substitutionGroup="app0:xmlObject" type="CloseType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="item" substitutionGroup="app0:xmlObject" type="ItemType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Hold a key/value pair; the value is in the body of the tag
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="combo" substitutionGroup="controlObject" type="ComboType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		A combo box gui item
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="data" substitutionGroup="app0:xmlObject" type="DataType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Is the root object for xml files attempting to supply data to populate
+ interface objects.  Usually children should be 'Apply' objects.
+ If the parent is an 'Apply' object and the children are other types of objects,
+ then those ojects will be sent to the parent 'Apply' which in turn will use
+ the data to populate an object in the interface.
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="dateTime" substitutionGroup="controlObject" type="DateTimeType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Allow the user to enter and modify date or time values
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="align" type="alignType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="columnAlign" type="columnAlignType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="layout" type="layoutType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="messageBoxStyles" type="MessageBoxStylesType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="enumerations" type="EnumerationsType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="exception" substitutionGroup="app0:xmlObject" type="ExceptionType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Pop up a message box showing an exception message or 
+ other informative message contained in the body of the tag.
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="execute" substitutionGroup="app0:xmlObject" type="ExecuteType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Spawn a separate program.
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="styles" type="StylesType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="items" substitutionGroup="app0:xmlObject" type="ItemsType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="label" substitutionGroup="controlObject" type="LabelType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Instances of this class represent a non-selectable user interface object that displays a string or image. When SEPARATOR is specified, displays a single vertical or horizontal line.
+ See also ControlObject.
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="linkedhashmap" substitutionGroup="app0:xmlObject" type="LinkedhashmapType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="locationListener" substitutionGroup="app0:xmlObject" type="LocationListenerType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Execute children when an event of the given type occurs
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="messageBox" substitutionGroup="app0:xmlObject" type="MessageBoxType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="parameter" substitutionGroup="app0:xmlObject" type="ParameterType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Access an Swt object's attributes
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="print" substitutionGroup="app0:xmlObject" type="PrintType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		A debug tool that sends the contents of the xml tag's body to System.out
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="progressBar" substitutionGroup="controlObject" type="ProgressBarType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		A combo box gui item
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="rowData" substitutionGroup="layoutData" type="RowDataType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Grid data for a Grid type of layout
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="svg" substitutionGroup="app0:xmlObject" type="SvgType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Draw a Scaled Vector Graphics image
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="swing" substitutionGroup="gUIObject" type="SwingType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Allow swing components to be embedded in SWT composite
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="tableColumn" substitutionGroup="gUIObject" type="TableColumnType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Instances of this class represent a column in a table widget.
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="td" substitutionGroup="app0:xmlObject" type="TdType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Add a cell of data to a table.  The data is contained in the body of the tag.
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="tr" substitutionGroup="app0:xmlObject" type="TrType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Add a row of data to a table.
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="tableSelect" substitutionGroup="app0:xmlObject" type="TableSelectType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Select rows of a table
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="table" substitutionGroup="controlObject" type="TableType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Instances of this class implement a selectable user interface object that displays a list of images and strings and issue notification when selected.
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="text" substitutionGroup="controlObject" type="TextType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Instances of this class are selectable user interface objects that allow the user to enter and modify text.
+ See also Control Object
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="timer" substitutionGroup="app0:xmlObject" type="TimerType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="toolItem" substitutionGroup="gUIObject" type="ToolItemType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		A push button, radio button or check box gui object
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="toolBar" substitutionGroup="actsAsComposite" type="ToolBarType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		A composite holds other gui objects.
+ See also ActsAsComposite
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="treeColumn" substitutionGroup="gUIObject" type="TreeColumnType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Instances of this class represent a column in a table widget.
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="treeItem" substitutionGroup="app0:xmlObject" type="TreeItemType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Add a row of data to a Tree.
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="tree" substitutionGroup="controlObject" type="TreeType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Instances of this class implement a selecTree user interface object that displays a list of images and strings and issue notification when selected.
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="xMask" type="XMaskType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+</xs:schema>
+

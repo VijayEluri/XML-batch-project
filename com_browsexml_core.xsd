@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="qualified"
+  elementFormDefault="qualified" id="query"
+  targetNamespace="com.browsexml.core" xmlns="com.browsexml.core" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:app1="edu.bxml.io" xmlns:app2="edu.bxml.ftp" >
+  <xs:import namespace="edu.bxml.io" schemaLocation="edu_bxml_io.xsd"/>
+  <xs:import namespace="edu.bxml.ftp" schemaLocation="edu_bxml_ftp.xsd"/>
+  <xs:complexType name="XmlObjectType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+    <xs:attribute form="unqualified" name="name" type="xs:string">
+      <xs:annotation>
+        <xs:documentation><![CDATA[ 
+				Add Processing of fields to a pipeline
+ 
+ @param file
+			]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="ExecuterType">
+    <xs:complexContent>
+      <xs:extension base="XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="xmlObject"/>
+           <xs:element ref="app1:email"/>
+           <xs:element ref="app2:ftp"/>
+        </xs:choice>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="BrowserType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+  </xs:complexType>
+  <xs:complexType name="ErrorHandlerType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+  </xs:complexType>
+  <xs:complexType name="DefaultErrorHandlerType">
+    <xs:complexContent>
+      <xs:extension base="ErrorHandlerType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="DumpMethodsType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+  </xs:complexType>
+  <xs:complexType mixed="true" name="ExitType">
+    <xs:complexContent>
+      <xs:extension base="XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="MainType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+  </xs:complexType>
+  <xs:complexType name="PersonalNamespaceContextType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+  </xs:complexType>
+  <xs:complexType name="trimType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+  </xs:complexType>
+  <xs:complexType name="TrimContextType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+  </xs:complexType>
+  <xs:complexType name="xDefaultErrorHandlerType">
+    <xs:complexContent>
+      <xs:extension base="ErrorHandlerType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="XMLBuildExceptionType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+  </xs:complexType>
+  <xs:complexType name="QueryReaderType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+  </xs:complexType>
+  <xs:complexType name="XmlParserType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+  </xs:complexType>
+  <xs:element name="xmlObject" type="XmlObjectType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="executer" substitutionGroup="xmlObject" type="ExecuterType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Call Execute on each immediate child.
+ 
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="browser" type="BrowserType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="errorHandler" type="ErrorHandlerType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="defaultErrorHandler"
+    substitutionGroup="errorHandler" type="DefaultErrorHandlerType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="dumpMethods" type="DumpMethodsType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="exit" substitutionGroup="xmlObject" type="ExitType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Call Execute on each immediate child.
+ 
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="main" type="MainType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="personalNamespaceContext" type="PersonalNamespaceContextType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="trim" type="trimType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="trimContext" type="TrimContextType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="xDefaultErrorHandler"
+    substitutionGroup="errorHandler" type="xDefaultErrorHandlerType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="xMLBuildException" type="XMLBuildExceptionType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="queryReader" type="QueryReaderType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="xmlParser" type="XmlParserType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Format a query's output
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+</xs:schema>
+

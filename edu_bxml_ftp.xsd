@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="qualified"
+  elementFormDefault="qualified" id="query"
+  targetNamespace="edu.bxml.ftp" xmlns="edu.bxml.ftp"
+  xmlns:app0="edu.bxml.io" xmlns:app1="com.browsexml.core" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="edu.bxml.io" schemaLocation="edu_bxml_io.xsd"/>
+  <xs:import namespace="com.browsexml.core" schemaLocation="com_browsexml_core.xsd"/>
+  <xs:complexType name="ConnectionType">
+    <xs:complexContent>
+      <xs:extension base="app1:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="host" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Ip address or DNS name of the FTP server
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="port" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Port to connect to.  Should be 22 for sftp.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="login" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Login name to use when connecting to server
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="password" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Password to use when connecting to server
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="knownHosts" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				File location listing known hosts and their finger print.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="timeout" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Timeout during connect.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="channelType" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Type of data transfer.  Currently only sftp supported.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="trust" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Trust the other computer - don't require a finger print.  You can
+ set this to true on the first connect to get a finger print and then
+ set to false;
+ @param trust
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="PutType">
+    <xs:complexContent>
+      <xs:extension base="app0:FilterType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="RecursiveGetType">
+    <xs:complexContent>
+      <xs:extension base="app0:FilterType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="include" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				NO COMMENT
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="timeTolerance" type="xs:long">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The program will not retrieve files already on the local 
+  machine if the 'modified' timestamp is within this amount
+  of seconds of the remote file's timestamp
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="exclude" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Don't consider directory + file patterns that match the exclude pattern
+ @return
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="fileNameMatch" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Only retrieve files who's name matches the pattern
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="RecursivePutType">
+    <xs:complexContent>
+      <xs:extension base="app0:FilterType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="archive" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Move the file just 'put' to this directory after the put completes.
+ @return
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="GetType">
+    <xs:complexContent>
+      <xs:extension base="app1:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="dst" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the name of the destination local file
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="src" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the name of the source remote file
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ListType">
+    <xs:complexContent>
+      <xs:extension base="app1:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="dir" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The name of the remote directory to retrieve contents.  If the name 
+  doesn't start with a slash (/) it will be relative to the current directory.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="exclude" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Exclude from listing files matching this regular expression.
+ @param recursive
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="recursive" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				List all subdirectories if set
+ @param recursive
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="limitFormat" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				A java SimpleDateFormat for the limit property.  This must
+ be specified if limit is specified.
+ @return
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="limit" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Files listed will be more recent than this time.  If a time is specified, 
+ list all files modified within that time.  If a date is specified, list all
+ files modified after that date  (the date must be later than the UNIX epoch of 
+ 1970-01-01).  For example, if limit = 1 and limitFormat="M", then
+ list all files modified in the last minute.
+ @return
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="CdType">
+    <xs:complexContent>
+      <xs:extension base="app1:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="dir" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The directory to make the default
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="MoveType">
+    <xs:complexContent>
+      <xs:extension base="app1:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="file" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				A regular expression that must match the name of all remote files to 
+  be moved.  The regular expression is that of java.String.match().
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="dir" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The remote directory to move the file from.  If the directory name
+  doesn't start with the slash (/) then it will be relative to the
+  current remote directory.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="dest" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The remote directory to move the file to. If the directory name
+  doesn't start with the slash (/) then it will be relative to the
+  current remote directory.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="RmType">
+    <xs:complexContent>
+      <xs:extension base="app1:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="file" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				A regular expression that must match the name of all remote files to 
+  be moved.  The regular expression is that of java.String.match().
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="dir" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The remote directory to move the file from.  If the directory name
+  doesn't start with the slash (/) then it will be relative to the
+  current remote directory.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="QuitType">
+    <xs:complexContent>
+      <xs:extension base="app1:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ExecuteType">
+    <xs:complexContent>
+      <xs:extension base="app1:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="put"/>
+          <xs:element ref="recursiveGet"/>
+          <xs:element ref="recursivePut"/>
+          <xs:element ref="get"/>
+          <xs:element ref="list"/>
+          <xs:element ref="cd"/>
+          <xs:element ref="move"/>
+          <xs:element ref="rm"/>
+          <xs:element ref="quit"/>
+        </xs:choice>
+        <xs:attribute form="unqualified" name="connection" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Name the Connection object used to connect to an FTP server.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FtpType">
+    <xs:complexContent>
+      <xs:extension base="app0:FilterType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="connection"/>
+          <xs:element ref="execute"/>
+        </xs:choice>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="CommandType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+  </xs:complexType>
+  <xs:complexType name="FtpTestType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+  </xs:complexType>
+  <xs:element name="connection" substitutionGroup="app1:xmlObject" type="ConnectionType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Store information about how to connect to an FTP server
+ 
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="put" substitutionGroup="app0:filter" type="PutType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Put a single local file up to a remote ftp server.
+ Extends io:Filter; Implements Command.
+ 
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="recursiveGet" substitutionGroup="app0:filter" type="RecursiveGetType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Recursively get all files from a remote FTP server.  Sets
+ the timestamp on all received files to match the timestamp of 
+ the remote file.  Will not get a file already on the local system
+ if the timestamp also matches within timeTolerance.
+ Extends io:Filter; Implements Command.
+ 
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="recursivePut" substitutionGroup="app0:filter" type="RecursivePutType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Recursively put files in a directory structure on a remote 
+ ftp site.
+ Extends io:Filter; Implements Command
+ 
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="get" substitutionGroup="app1:xmlObject" type="GetType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Get a single file from the remote ftp server.
+ Implements Command.
+ 
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="list" substitutionGroup="app1:xmlObject" type="ListType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		List the contents of a remote directory.
+ Implements Command.
+ 
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="cd" substitutionGroup="app1:xmlObject" type="CdType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Change default directory on the FTP server.
+ Implements Command.
+ 
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="move" substitutionGroup="app1:xmlObject" type="MoveType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Move a remote file to another remote location on the same FTP server.
+ Implements Command.
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="rm" substitutionGroup="app1:xmlObject" type="RmType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Remove a file from the remote FTP server.
+ Implements Command
+ 
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="quit" substitutionGroup="app1:xmlObject" type="QuitType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Disconnect from the FTP server.
+ Implements Command.
+ 
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="execute" substitutionGroup="app1:xmlObject" type="ExecuteType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Execute FTP commands
+ 
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="ftp" substitutionGroup="app0:filter" type="FtpType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Connect to an FTP site for file transfers.
+ Extends io:Filter.
+ 
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="command" type="CommandType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Interface: A class that extends this may be executed
+ 
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="ftpTest" type="FtpTestType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Test harness
+ 
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+</xs:schema>
+

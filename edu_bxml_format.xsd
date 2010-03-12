@@ -1,0 +1,1467 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="qualified"
+  elementFormDefault="qualified" id="query"
+  targetNamespace="edu.bxml.format" xmlns="edu.bxml.format"
+  xmlns:app0="com.browsexml.core" xmlns:app1="edu.bxml.io" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="com.browsexml.core" schemaLocation="com_browsexml_core.xsd"/>
+  <xs:import namespace="edu.bxml.io" schemaLocation="edu_bxml_io.xsd"/>
+  <xs:complexType name="ExecuteType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="sql" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The name of the sql object to execute.  This should usually by a 
+ stored procedure.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="onZero" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Execute this alternate sql object if zero records are affected by 
+ the primary 'sql' command.  May be the word 'exit' to terminate 
+ program execution.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="connection" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Information on connection to database
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="file" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The name of the file containing sql commands to execute.  Can be a regular expression
+ but it must match at least one file name.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="dir" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The directory where the file(s) to execute can be found.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType mixed="true" name="SqlType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ConnectionType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="sql"/>
+        </xs:choice>
+        <xs:attribute form="unqualified" name="url" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Sets the connection URL to a database.  An odbc connection 
+ would be something like jdbc:odbc:Campus6 where
+ Campus6 is the name of an ODBC data source on 
+ your computer.  jdbc:microsoft:sqlserver://pinky:1433;databaseName=Campus6
+ would be the url using MS-SQL JDBC with the same database.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="class" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Sets the java jdbc class.  The odbc bridge that comes with java 
+ is sun.jdbc.odbc.JdbcOdbcDriver; com.microsoft.jdbc.sqlserver.SQLServerDriver
+ is for the MS SQL JDBC driver
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="password" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The database password
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="login" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The database user name
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ExistsType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="queryName" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The name of the query to check for existance of data.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="true" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Do the command specified if results are returned by the query.  The 
+ only command supported is 'exit'.
+ @param falseCmd
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="false" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Do the command specified if no results are returned by the query.  The 
+ only command supported is 'exit'.
+ @param falseCmd
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="KeyType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="field" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Sets the name of the field that will 
+ uniquely determine each record AFTER
+ all groups have been applied.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType mixed="true" name="ReplaceType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="expression" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Regular expression to match contents of field. The expression is used by
+ java.lang.String replaceAll(expression, replacement), so any valid
+ 'replaceAll' expression will work here.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="replacement" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				String to use as a replacement. The expression is used by
+ java.lang.String replaceAll(expression, replacement), so any valid
+ 'replaceAll' replacement will work here.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType mixed="true" name="FieldType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="replace"/>
+        </xs:choice>
+        <xs:attribute form="unqualified" name="size" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the maximum length of characters to be taken up in the output file
+ for this field.  The data will be cut off if it excedes size.  If the data is
+ shorter than size, only enough space is given to hold the data.  If you 
+ want the data to always have a width of 'size', you should specify padLeft
+ or padRight.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="default" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Sets the default value.  During a select, this will be
+ output rather than null.  If the value is {skipline}, the 
+ entire line of data will be skipped if this value is null.
+ During a load, this value will 
+ go into the database rather than the empty string.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="type">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the datatype of this field.  Must be one of IMAGE, CHAR, NUMBER, TEXT, 
+ DATE or HIDDEN.
+			]]></xs:documentation>
+          </xs:annotation>
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="IMAGE"/>
+              <xs:enumeration value="CHAR"/>
+              <xs:enumeration value="NUMBER"/>
+              <xs:enumeration value="TEXT"/>
+              <xs:enumeration value="DATE"/>
+              <xs:enumeration value="HIDDEN"/>
+              <xs:enumeration value="MONEY"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="delimit" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Override the parent delimiter at the end of this field.  Especially 
+ effective for changing the delimiter to 'newline' in headers.
+ @param delimit
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="outFormat" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				NO COMMENT
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="postText" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set text to appear after the database field value
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="preText" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set text to be output imediately before value.  Can be used as a 
+ label of the values meaning, especially in headers.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="fieldName" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The name of the query's field to be output.  The name will be in the header
+ if a header is printed.  It must also match a column in the sql query
+ that is used as the source data.
+ 
+ FIXME com.browsexml.XMLObject calling setName with null name
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="headerName" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The name of the data in the input header file.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="padleft" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The character to pad left with; usually zero for numeric fields or 
+ date fields
+ and space for character fields.  If the field is numeric and negative
+ and the pad left character is zero, then the negative sign will be
+ placed in the left-most position.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="padright" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The character to pad right with; usually space for character fields.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="format" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Sets the format.  For times, the format is the same as
+ the Java SimpleDataFormat. "HH:mm:ss MM/dd/yyyy" would be an hour, minute,
+ second, month, day, year time stamp on a 24 hour clock.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="decimals" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The number of places after the decimal point to output for numeric types.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="group">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Run an aggregate function on this field as long as key (see the 'key' object) is the same as its
+ previous value. Value must be CONCAT to create a comma separated
+ string
+			]]></xs:documentation>
+          </xs:annotation>
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="NONE"/>
+              <xs:enumeration value="CONCAT"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="HiddenFieldType">
+    <xs:complexContent>
+      <xs:extension base="FieldType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="TextFieldType">
+    <xs:complexContent>
+      <xs:extension base="FieldType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="NumberFieldType">
+    <xs:complexContent>
+      <xs:extension base="FieldType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="CharFieldType">
+    <xs:complexContent>
+      <xs:extension base="FieldType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="DateFieldType">
+    <xs:complexContent>
+      <xs:extension base="FieldType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType mixed="true" name="FootFieldType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="select"/>
+        </xs:choice>
+        <xs:attribute form="unqualified" name="size" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the maximum length of characters to be taken up in the output file
+ for this field.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="type">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Must be one of: COUNT - the number of records in the file, CONSTANT a 
+ constant string usually to identify this as a footer record, DATE - the 
+ current date and/or time.  SQL - a separate independent SQL query that 
+ usually would be expected to return a single element of data.
+			]]></xs:documentation>
+          </xs:annotation>
+          <xs:simpleType>
+            <xs:restriction base="xs:string">
+              <xs:enumeration value="COUNT"/>
+              <xs:enumeration value="CONSTANT"/>
+              <xs:enumeration value="DATE"/>
+              <xs:enumeration value="LENGTH"/>
+              <xs:enumeration value="SQL"/>
+            </xs:restriction>
+          </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="padleft" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The character to pad left with; usually zero for numeric fields or 
+ date fields 
+ and space for character fields.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="padright" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The character to pad right with; usually space for character fields.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="format" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Sets the format.  For times, the format is the same as
+ the Java SimpleDataFormat. "HH:mm:ss MM/dd/yyyy" would be an hour, minute,
+ second, month, day, year time stamp on a 24 hour clock.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="decimals" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The number of places after the decimal point to output for numeric types.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="add" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the maximum length of characters to be taken up in the output file
+ for this field.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="HeaderType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="footField"/>
+        </xs:choice>
+        <xs:attribute form="unqualified" name="columnsNames" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Is the header to contain column names, true or false
+ @param booleanValue
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FooterType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="footField"/>
+        </xs:choice>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="SelectType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="key"/>
+          <xs:element ref="replace"/>
+          <xs:element ref="field"/>
+          <xs:element ref="hiddenField"/>
+          <xs:element ref="textField"/>
+          <xs:element ref="numberField"/>
+          <xs:element ref="charField"/>
+          <xs:element ref="dateField"/>
+          <xs:element ref="header"/>
+          <xs:element ref="footer"/>
+        </xs:choice>
+        <xs:attribute form="unqualified" name="dir" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the directory where output files will be placed.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="queryName" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The name of the query to use to populate the output file
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="archive" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the directory where a copy of the output files will be made, relative
+ to the files' directory.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="delimit" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Sets the field delimiter. The delimiter must be a single character and
+ should not be space.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="concatSep" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the string to separate concatinated fields.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="filenameField" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The output will go to a file specified by the value in this field.
+ The query should sort by this field first so that all the data
+ intended for one file will be completely written before the file is closed.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="filename" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The output will go to a file specified.  Date formats can be embedded 
+ in currly brackets {} to include the current date in the file name.
+ filename="wbu_grades_{yyyymmdd}.csv" will evaluate to 'wbu_grades_20060801.csv'
+ on August 1, 2006.
+ @param filenameField
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ImageFieldType">
+    <xs:complexContent>
+      <xs:extension base="FieldType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="file" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The name fo the file containing binary data to load
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="dir" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The name fo the directory containing binary data to load
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="LoadType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="imageField"/>
+          <xs:element ref="field"/>
+          <xs:element ref="numberField"/>
+          <xs:element ref="charField"/>
+          <xs:element ref="dateField"/>
+        </xs:choice>
+        <xs:attribute form="unqualified" name="table" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Database table to recieve the data.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="connection" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Information on connection to database
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="file" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The name of the file containing data to load.  Can be a regular expression
+ but it must match at least one file name.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="dir" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The directory where the file(s) to load can be found.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="archive" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The name of a directory relative to 'dir' where the file is moved 
+ if the loaded file is saved for archive purposes.  Since this is a move 
+ operation, the file will not be in the original location after the load.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="delimit" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Sets the regular expressoin value of the field delimiter.  
+ Uses the java 'String.split' command, so the regular expression follows
+ that documentation.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="archiveName" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Name of the file when it is copied to the archive directory.  Can
+ be used to include a date in the name to avoid overwrite.
+ @param archiveName
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="deleteFirst" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				A comma separated list of fields to delete on before a new
+ record with the same values for those fields is loaded.
+ Each 'name' must match a field child element with the name
+ parameter set to a matching value.
+ @param deleteFirst
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="upperCaseHeader" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Headers in source files will be matched as if they were uppercase.
+ This is a good way to ignore the case the headers may come in as.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="printCreateTable" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The load command won't automatically create a table that doesn't exist
+ in the database, but if printCreateTable is true, then the SQL command 
+ to create the table will be printed to standard error before the program 
+ exits.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="quoteText" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Boolean determins if strings will be enclosed in quotes
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="printFieldValue" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Print the values parsed out of the file and what
+ field they are associated with if true.  Useful for debugging.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="stopAfterErrors" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Stops after the given number of errors.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="truncateFirst" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Truncate the table before loading new data only-if a 
+ new data source file exists
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="outputToFile" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Output goes to a file if true
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="header" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Does the first line contain header information.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="binaryData" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The name of a directory relative to 'dir' where the file is moved 
+ if the loaded file is saved for archive purposes.  Since this is a move 
+ operation, the file will not be in the original location after the load.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="LoadBlobType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="table" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Database table to recieve the data.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="connection" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Information on connection to database
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="file" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The name of the file containing data to load. Can be a regular expression
+ but it must match at least one file name.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="dir" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The directory where the file(s) to load can be found.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="archive" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The name of a directory relative to 'dir' where the file is moved if the
+ loaded file is saved for archive purposes. Since this is a move
+ operation, the file will not be in the original location after the load.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="filenameField" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The field in which to store the name of the source file.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="deleteFirst" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Delete any records with the same filename before the import if true.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="dataField" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The field in which to store the data.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ExcelXmlType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="table" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Database table to recieve the data.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="connection" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Information on connection to database
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="file" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The name of the file containing data to load.  Can be a regular expression
+ but it must match at least one file name.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="dir" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The directory where the file(s) to load can be found.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="truncateFirst" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Truncate the table before loading new data only-if a 
+ new data source file exists
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType mixed="true" name="PropertyType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="text" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				set the value of the variable.  The 'name' property of the
+ variable can be used to reference its value elsewhere using 
+ the format ${name}
+ @param text
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType mixed="true" name="PropertiesType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="file" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Load the properties contained in the file named.  The file is in the
+ format of a Java properties file  i.e. lines with name=value 
+ @param text
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="QueryType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="execute"/>
+          <xs:element ref="connection"/>
+          <xs:element ref="exists"/>
+          <xs:element ref="select"/>
+          <xs:element ref="load"/>
+          <xs:element ref="loadBlob"/>
+          <xs:element ref="excelXml"/>
+          <xs:element ref="property"/>
+          <xs:element ref="properties"/>
+          <xs:element ref="app1:pipe"/>
+        </xs:choice>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType mixed="true" name="ExcelDataType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="GroupingType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+  </xs:complexType>
+  <xs:complexType name="TypesType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+  </xs:complexType>
+  <xs:complexType name="FootFieldTypesType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+  </xs:complexType>
+  <xs:complexType name="LoadParameterType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+  </xs:complexType>
+  <xs:complexType name="ParameterType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+  </xs:complexType>
+  <xs:complexType name="ResultMetadataType">
+    <xs:complexContent>
+      <xs:extension base="app1:FilterType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="queryName" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				query to get meta data from
+ 
+ @param file
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="TxtFileFilterType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+  </xs:complexType>
+  <xs:complexType name="SyncOnArchiveType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="fileEnding" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				All files considered for copy must have this extension.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="liveDir" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the location of the processing directory.  Files in this directory
+  are expected to be processed in some way by another process, such as loading into 
+  a database, and then moved to an archive location so that they will
+  not be processed again.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="liveDirRelativeArchive" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				An archive directory path relative to the live dir.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="archiveBase" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				An archive directory that holds a complete collection 
+  of all files that should have been processed.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="UtilType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+  </xs:complexType>
+  <xs:complexType name="XmlLoadType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="imageField"/>
+          <xs:element ref="field"/>
+          <xs:element ref="numberField"/>
+          <xs:element ref="charField"/>
+          <xs:element ref="dateField"/>
+        </xs:choice>
+        <xs:attribute form="unqualified" name="table" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Database table to recieve the data.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="connection" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Information on connection to database
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="file" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The name of the file containing data to load.  Can be a regular expression
+ but it must match at least one file name.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="dir" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The directory where the file(s) to load can be found.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="archive" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The name of a directory relative to 'dir' where the file is moved 
+ if the loaded file is saved for archive purposes.  Since this is a move 
+ operation, the file will not be in the original location after the load.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="delimit" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Sets the regular expressoin value of the field delimiter.  
+ Uses the java 'String.split' command, so the regular expression follows
+ that documentation.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="deleteFirst" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				A comma separated list of fields to delete on before a new
+ record with the same values for those fields is loaded.
+ Each 'name' must match a field child element with the name
+ parameter set to a matching value.
+ @param deleteFirst
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="upperCaseHeader" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Headers in source files will be matched as if they were uppercase.
+ This is a good way to ignore the case the headers may come in as.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="printCreateTable" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The load command won't automatically create a table that doesn't exist
+ in the database, but if printCreateTable is true, then the SQL command 
+ to create the table will be printed to standard error before the program 
+ exits.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="quoteText" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Boolean determins if strings will be enclosed in quotes
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="printFieldValue" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Print the values parsed out of the file and what
+ field they are associated with if true.  Useful for debugging.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="stopAfterErrors" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Stops after the given number of errors.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="truncateFirst" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Truncate the table before loading new data only-if a 
+ new data source file exists
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="header" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Does the first line contain header information.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="binaryData" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The name of a directory relative to 'dir' where the file is moved 
+ if the loaded file is saved for archive purposes.  Since this is a move 
+ operation, the file will not be in the original location after the load.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="XmlSelectType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="key"/>
+          <xs:element ref="replace"/>
+          <xs:element ref="header"/>
+        </xs:choice>
+        <xs:attribute form="unqualified" name="root" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				This will be the root element name in the XML output.
+ @param root
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="dir" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the directory where output files will be placed.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="queryName" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The name of the query to use to populate the output file
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="archive" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the directory where a copy of the output files will be made, relative
+ to the files' directory.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="delimit" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Sets the field delimiter. The delimiter must be a single character and
+ should not be space.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="concatSep" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the string to separate concatinated fields.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="filenameField" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The output will go to a file specified by the value in this field.
+ The query should sort by this field first so that all the data
+ intended for one file will be completely written before the file is closed.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="filename" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The output will go to a file specified.  Date formats can be embedded 
+ in currly brackets {} to include the current date in the file name.
+ filename="wbu_grades_{yyyymmdd}.csv" will evaluate to 'wbu_grades_20060801.csv'
+ on August 1, 2006.
+ @param filenameField
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="record" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				This will be the name of each record element in the XML output.
+ @param root
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="execute" substitutionGroup="app0:xmlObject" type="ExecuteType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Execute SQL, usually a stored procedure.
+ 
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="sql" substitutionGroup="app0:xmlObject" type="SqlType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="connection" substitutionGroup="app0:xmlObject" type="ConnectionType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Define a connection to a database
+ 
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="exists" substitutionGroup="app0:xmlObject" type="ExistsType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Represent how to format all the fields of a query.
+ 
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="key" substitutionGroup="app0:xmlObject" type="KeyType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the unique id after all groups have been
+ aggregated.  This is similar to a 'group by' clause
+ in an sql query.  The sql must return this field in sorted
+ order for the aggregation to work properly.
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="replace" substitutionGroup="app0:xmlObject" type="ReplaceType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Allow regular expression matching and replacement by callling
+ java.lang.String replaceAll(expression, replacement) on the contents of a
+ field of data coming out of the database before it is formatted. This can be
+ used to strip out unexpected delimiter characcters embedded in data or remove
+ extraneous spaces from names or addresses.
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="field" substitutionGroup="app0:xmlObject" type="FieldType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Hold information about how to format one field if embedded in a Select object or 
+ how to expect data to be formated in a flat file if embedded in a Load object.  This 
+ is now an abstract class and must be used via charField, textField, numberField,
+ dateField or hiddenField.
+ 
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="hiddenField" substitutionGroup="field" type="HiddenFieldType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Hold information about how to format one field if embedded in a Select object.
+ This field is used to hold a key and is not put in the output file.
+ See Field.
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="textField" substitutionGroup="field" type="TextFieldType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Hold information about how to format one field if embedded in a Select object or 
+ how to expect data to be formated in a flat file if embedded in a Load object.  This
+ type is not bound by a size constraint.
+ See Field.
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="numberField" substitutionGroup="field" type="NumberFieldType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Hold information about how to format one field if embedded in a Select object or 
+ how to expect data to be formated in a flat file if embedded in a Load object.
+ See Field.
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="charField" substitutionGroup="field" type="CharFieldType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Hold information about how to format one field if embedded in a Select object or 
+ how to expect data to be formated in a flat file if embedded in a Load object.
+ Also has all the attributes and nested elements that Field has.
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="dateField" substitutionGroup="field" type="DateFieldType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Hold information about how to format one field if embedded in a Select object or 
+ how to expect data to be formated in a flat file if embedded in a Load object.
+ See Field.
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="footField" substitutionGroup="app0:xmlObject" type="FootFieldType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Hold information about how to format one field of a footer record and
+ what data that field should hold, current time, string constant or record count.
+ 
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="header" substitutionGroup="app0:xmlObject" type="HeaderType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Hold information about how to format the header
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="footer" substitutionGroup="app0:xmlObject" type="FooterType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Hold information about how to format the footer
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="select" substitutionGroup="app0:xmlObject" type="SelectType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Represent how to format all the fields of a query.
+ 
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="imageField" substitutionGroup="field" type="ImageFieldType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Hold information about how to format one field if embedded in a Select object or 
+ how to expect data to be formated in a flat file if embedded in a Load object.
+ Also has all the attributes and nested elements that Field has.
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="load" substitutionGroup="app0:xmlObject" type="LoadType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Load data from a flat file into a database table
+ 
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="loadBlob" substitutionGroup="app0:xmlObject" type="LoadBlobType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Load binary data and the name of the file it came from into the database. The
+ database table is expected to have at least two fields, one a varchar for the
+ name of the file and the second a blob for the data.
+ 
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="excelXml" substitutionGroup="app0:xmlObject" type="ExcelXmlType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="property" substitutionGroup="app0:xmlObject" type="PropertyType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Declare a property (variable).  The property is created as soon as the end-tag
+ is read.
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="properties" substitutionGroup="app0:xmlObject" type="PropertiesType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Read properties from a file.  The properties are created as soon as the end-tag
+ is read.
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="query" substitutionGroup="app0:xmlObject" type="QueryType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify formatting and the query to be formatted as children of this item.
+ 
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="excelData" substitutionGroup="app0:xmlObject" type="ExcelDataType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="grouping" type="GroupingType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="types" type="TypesType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="footFieldTypes" type="FootFieldTypesType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="loadParameter" type="LoadParameterType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="parameter" type="ParameterType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="resultMetadata" substitutionGroup="app1:filter" type="ResultMetadataType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Retrieve table meta-data in pipe-separated format.  The fields retrieved are
+ columnName, columnName as a Java variable name (all '_' removed and next character
+ upper-cased), type of data, size, and isNullable
+ 
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="txtFileFilter" type="TxtFileFilterType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="syncOnArchive" substitutionGroup="app0:xmlObject" type="SyncOnArchiveType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Copy files from an archive directory to a processing directory
+ if the file does not exist in the 'processed files' archive directory.
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="util" type="UtilType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="xmlLoad" substitutionGroup="app0:xmlObject" type="XmlLoadType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Load data from a flat file into a database table
+ 
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="xmlSelect" substitutionGroup="app0:xmlObject" type="XmlSelectType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Represent how to format all the fields of a query.
+ 
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+</xs:schema>
+

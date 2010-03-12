@@ -1,0 +1,11 @@
+<example>
+<description>Add a combo to a grid layout
+</description>
+<code><pre><![CDATA[
+<combo name="cmbFindCampus" style="DROP_DOWN|BORDER">
+	<gridData style="FILL_BOTH"/>
+</combo>
+]]></pre></code>
+<note>
+</note>
+</example>

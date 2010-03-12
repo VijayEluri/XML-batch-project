@@ -1,0 +1,12 @@
+<example>
+<description>Connect to the eArmyU test server
+</description>
+<code><pre><![CDATA[
+	<connection name="eArmyU" login="wbu001" password="itsAsecret"
+		knownHosts="C:\hosts_2" 
+		host="170.224.101.13" port="22" channelType="sftp" >
+	</connection>
+]]></pre></code>
+<note>
+</note>
+</example>

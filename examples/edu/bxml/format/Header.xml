@@ -1,0 +1,7 @@
+<example>
+<description>Instruct a header of field names to be included.
+</description>
+<code><pre><![CDATA[
+<header columnsNames="true"/>
+]]></pre></code>
+</example>

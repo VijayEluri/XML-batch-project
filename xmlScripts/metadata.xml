@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<!-- 
+	Generate Roo commands from database tables
+-->
+<query xmlns='edu.bxml.format' xmlns:io='edu.bxml.io'  xmlns:swt='edu.bxml.swt'  
+		xmlns:core="com.browsexml.core" xmlns:format="edu.bxml.format"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		xsi:schemaLocation="edu.bxml.format file:///C:/Users/geoff.ritchey/workspace/browsexml/edu_bxml_format.xsd edu.bxml.io file:///C:/Users/geoff.ritchey/workspace/browsexml/edu_bxml_io.xsd"
+		>
+
+	
+	<io:pipe name="pipe" dir="xmlScripts" file=".*.xml" toDir="build" toFile="x.txt"> 
+		<resultMetadata  queryName="body3">
+		</resultMetadata>
+		<io:load xmlns="edu.bxml.format" delimit="\|" header="false">
+			
+			<charField name="fieldName" size="20" />
+			<charField name="varName" size="20" />
+			<charField name="type" size="20" />
+			<charField name="size" size="20" />
+			<charField name="null" size="20" />Require|Require|bit|1|null|9
+			<io:matches expression="varchar" ><![CDATA[
+field string --fieldName %{varName} --column %{fieldName} --sizeMax %{size} ]]></io:matches>
+<io:matches expression="bit" ><![CDATA[
+field string --type java.lang.Boolean --fieldName %{varName} --column %{fieldName} ]]></io:matches>
+<io:matches expression="int" ><![CDATA[
+field number --type java.lang.Integer --fieldName %{varName} --column %{fieldName} ]]></io:matches>		
+<io:matches expression="datetime" ><![CDATA[
+field date --type java.util.Date --fieldName %{varName} --column %{fieldName} ]]></io:matches>
+		</io:load>
+	</io:pipe>
+	<connection name="powercampus" 
+			login="sa" password="aj9854wbl"
+			class="net.sourceforge.jtds.jdbcx.JtdsDataSource"
+			url="jdbc:jtds:sqlserver://admin2/Campus6_Train;instance=powercampus" >
+		<sql name="body">
+<![CDATA[
+select *
+from LCUeCampusSections
+where 1=0
+]]>
+		</sql>
+<sql name="body1">
+<![CDATA[
+select e.First_Name+' '+e.Last_Name AS InstructorName
+	,e.start_date AS StartDateCourse, e.END_DATE AS EndDateForCourse
+	,e.EVENT_ID AS CourseLevel1, e.SECTION AS CourseLevel2
+	,e.EVENT_LONG_NAME AS CourseName, e.MAX_PARTICIPANT AS Enrollment
+	,i.ISBN, i.Title AS TextTitle, i.Publisher
+	,Require, RequireNEW, case when i.ISBN is null then 'NoText' else '' end AS NoText, AcceptSubstitution
+from LCUeCampusSections e	
+	left join [LCUTextbooks] b on b.sectionid = e.sectionId
+	left join [LCUBookInfo] i on i.id = b.book
+WHERE ACADEMIC_YEAR='2010' AND (ACADEMIC_TERM='Spring' or ACADEMIC_TERM='Janmester' )
+order by event_id
+]]>
+		</sql>
+		<sql name="body2">
+<![CDATA[
+select *
+from LCUTextbooks
+where 1=0
+]]>
+		</sql>
+		<sql name="body3">
+<![CDATA[
+select *
+from LCUPeopleInfo
+where 1=0
+]]>
+		</sql>
+	</connection>
+</query>

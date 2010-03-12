@@ -1,0 +1,46 @@
+<example>
+<description>Create a formatted field of type CHAR (varchar) and 
+size of 8 characters maximum, regardless of the length 
+of the actual data.  The field will be from a query
+that has a field name of 'subject'.
+</description>
+<code><pre><![CDATA[
+<charField name="subject" type="CHAR" size="8"/>
+]]></pre></code>
+<note>This depends on a query being defined elsewhere with a field called subject.
+</note>
+</example>
+<example>
+<description>Create a formatted field of type TEXT and 
+no maximum size.  The field will be from a query
+that has a field name of 'Long Description'.
+</description>
+<code><pre><![CDATA[
+<textField name="Long Description" type="TEXT"/>
+]]></pre></code>
+<note>This depends on a query being defined elsewhere with a field called 'Long Description'.
+</note>
+</example>
+<example>
+<description>Create a formatted field of type CHAR and 
+ maximum size of 254 characters.  The field will be from a query
+that has a field name of 'Course Materials'.  This will append the
+value of the field as an aggregate function until the 'key' value changes.
+</description>
+<code><pre><![CDATA[
+<charField name="Course Materials" type="CHAR" size="254" group="CONCAT"/>
+]]></pre></code>
+<note>This depends on a query being defined elsewhere with a field called 'Course Materials'.
+</note>
+</example>
+<example>
+<description>Create a formatted field of type NUMBER and 
+ maximum size of 5 digits with a decimal point taking up one of those places.  Two digits will be after the decimal point.  The field will be from a query
+that has a field name of 'credits'.
+</description>
+<code><pre><![CDATA[
+<numberField name="credits" type="NUMBER" size="5" decimals="2" />
+]]></pre></code>
+<note>This depends on a query being defined elsewhere with a field called 'credits'.
+</note>
+</example>

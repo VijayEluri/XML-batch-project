@@ -1,0 +1,211 @@
+<?xml version="1.0"?>
+<core:executer xmlns='edu.bxml.format' xmlns:io='edu.bxml.io'  
+			xmlns:core='com.browsexml.core' 
+			xmlns:ftp='edu.bxml.ftp' 
+			xmlns:format='edu.bxml.format'
+			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+			xsi:schemaLocation="
+			edu.bxml.format file:///C:/Users/geoff.ritchey/workspace/browsexml/edu_bxml_format.xsd 
+			edu.bxml.io file:///C:/Users/geoff.ritchey/workspace/browsexml/edu_bxml_io.xsd
+			edu.bxml.ftp file:///C:/Users/geoff.ritchey/workspace/browsexml/edu_bxml_ftp.xsd  
+			com.browsexml.core file:///C:/Users/geoff.ritchey/workspace/browsexml/com_browsexml_core.xsd"
+	>
+
+	<format:property name="csvFile" text="x.csv"></format:property>
+	<format:property name="lastSentCsvFile" text="lastSentCsvFile.csv"></format:property>
+	<format:property name="toDir" text="."></format:property>
+	<format:property name="dir" text="."></format:property>
+	<format:property name="archive" text="archive"></format:property>
+	
+	<io:pipe name="pipe" toDir="${toDir}" toFile="${csvFile}" iff="true">
+		<query >
+			<format:select name="select"
+				queryName="body" delimit="," >
+				<format:charField fieldName="EmailAddress"></format:charField>
+				<format:charField fieldName="ID"></format:charField>
+				<format:charField fieldName="Password"></format:charField>
+				<format:charField fieldName="Name"></format:charField>
+				<format:charField fieldName="Category"></format:charField>
+				<format:charField fieldName="Amount" ></format:charField>
+				<format:dateField format="mm/dd/yyyy" 
+					fieldName="ExpirationDate" default="" ></format:dateField>
+			</format:select>
+			<connection name="powercampus" 
+					login="sa" password="aj9854wbl"
+					class="net.sourceforge.jtds.jdbcx.JtdsDataSource"
+					url="jdbc:jtds:sqlserver://powercampus/Campus6;instance=powercampus" 
+					>
+				<sql name="body">
+		<![CDATA[
+SELECT     dbo.LCUeCampusEmployees.EmailAddress, dbo.LCUeCampusEmployees.ID, dbo.LCUeCampusEmployees.Password, dbo.LCUeCampusEmployees.Name, 
+                      dbo.LCUeCampusEmployees.Category, dbo.LCUeCampusEmployees.Amount, dbo.LCUeCampusEmployees.ExpirationDate
+into #temp
+FROM         dbo.LCUeCampusEmployees LEFT OUTER JOIN
+                      dbo.LCUeCampusEmployeeNOC ON dbo.LCUeCampusEmployees.ID = dbo.LCUeCampusEmployeeNOC.PEOPLE_ID
+WHERE     (dbo.LCUeCampusEmployeeNOC.PEOPLE_ID IS NULL)
+
+
+SELECT     LEFT(dbo.PEOPLE.FIRST_NAME, 1) + dbo.PEOPLE.LAST_NAME + RIGHT(dbo.PEOPLE.PEOPLE_ID, 4) + '@LCU.EDU' AS EmailAddress, 
+					dbo.PEOPLE.PEOPLE_ID AS ID,
+                       LEFT(dbo.PEOPLE.FIRST_NAME, 1) + LOWER(LEFT(dbo.PEOPLE.LAST_NAME, 1)) + '$' + RIGHT(dbo.PEOPLE.GOVERNMENT_ID, 4) AS Password, 
+                      dbo.PEOPLE.FIRST_NAME + ' ' + dbo.PEOPLE.MIDDLE_NAME + ' ' + + dbo.PEOPLE.LAST_NAME AS Name, 
+						dbo.ACADEMIC.PROGRAM AS Category, 650 AS Amount, 
+                      MAX(CONVERT(varchar, DATEADD(wk, 3, dbo.TRANSCRIPTDETAIL.START_DATE), 101)) AS ExpirationDate
+FROM  dbo.TRANSCRIPTDETAIL 
+	JOIN dbo.PEOPLE ON dbo.TRANSCRIPTDETAIL.PEOPLE_CODE_ID = dbo.PEOPLE.PEOPLE_CODE_ID 
+	JOIN dbo.ACADEMIC ON dbo.TRANSCRIPTDETAIL.PEOPLE_CODE_ID = dbo.ACADEMIC.PEOPLE_CODE_ID AND 
+                      dbo.TRANSCRIPTDETAIL.ACADEMIC_YEAR = dbo.ACADEMIC.ACADEMIC_YEAR AND 
+                      dbo.TRANSCRIPTDETAIL.ACADEMIC_TERM = dbo.ACADEMIC.ACADEMIC_TERM AND 
+                      dbo.TRANSCRIPTDETAIL.ACADEMIC_SESSION = dbo.ACADEMIC.ACADEMIC_SESSION
+			join academiccalendar ac on ac.academic_year = academic.academic_year
+					and ac.academic_term = academic.academic_term 
+					and getDate() between ac.pre_reg_date and ac.end_date 
+			left join #temp t on t.ID = people.people_id
+WHERE     (dbo.TRANSCRIPTDETAIL.CREDIT > 0) AND ((dbo.TRANSCRIPTDETAIL.ADD_DROP_WAIT = 'A') OR
+                      (dbo.TRANSCRIPTDETAIL.CREDIT > 0) AND (dbo.TRANSCRIPTDETAIL.ADD_DROP_WAIT = 'A'))
+		and academic.primary_flag = 'Y'
+		and t.ID is null
+GROUP BY dbo.TRANSCRIPTDETAIL.ACADEMIC_YEAR, dbo.TRANSCRIPTDETAIL.ACADEMIC_TERM, dbo.PEOPLE.PEOPLE_ID, 
+                      dbo.PEOPLE.FIRST_NAME + ' ' + dbo.PEOPLE.MIDDLE_NAME + ' ' + + dbo.PEOPLE.LAST_NAME, LEFT(dbo.PEOPLE.FIRST_NAME, 1) 
+                      + dbo.PEOPLE.LAST_NAME + RIGHT(dbo.PEOPLE.PEOPLE_ID, 4) + '@LCU.EDU', LEFT(dbo.PEOPLE.FIRST_NAME, 1) + LOWER(LEFT(dbo.PEOPLE.LAST_NAME, 1)) 
+                      + '$' + RIGHT(dbo.PEOPLE.GOVERNMENT_ID, 4), dbo.ACADEMIC.PROGRAM, dbo.ACADEMIC.PRIMARY_FLAG
+order by people.people_id
+		]]>
+				</sql>
+			</connection>
+		</query>
+	</io:pipe>
+
+	<!-- io:email host="www.outlook.com" user="geoff.ritchey@lcu.edu" 
+		password="Lp&amp;h4tfW" toList="geoff.ritchey@lcu.edu"
+		subject="file upload - test of automatic send" filename="${select.filename}">
+		Todays people list 
+	</io:email-->
+	
+	<io:sortedCsvDiff diffOnly="false" name="diff" key="1" dir="${dir}" 
+			file="${lastSentCsvFile}" otherFile="${csvFile}" toFile="diff.csv" 
+			printUpdateOnly="true" fileOneInsert="D" fileTwoInsert="A"
+			fileTwoEqualUpdate="U" separator="," iff="true">
+	</io:sortedCsvDiff>
+	
+	<io:Filter toDir="${toDir}" toFile="studentExportList.xsl" iff="${diff.different}">
+	<io:copy ><![CDATA[<?xml version="1.0"?>
+		<?mso-application progid="Excel.Sheet"?>
+		<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+		 xmlns:o="urn:schemas-microsoft-com:office:office"
+		 xmlns:x="urn:schemas-microsoft-com:office:excel"
+		 xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+		 xmlns:html="http://www.w3.org/TR/REC-html40">
+		 <DocumentProperties xmlns="urn:schemas-microsoft-com:office:office">
+		  <Author>Technology Services</Author>
+		  <LastAuthor>geoff.ritchey</LastAuthor>
+		  <Created>2010-01-18T15:09:00Z</Created>
+		  <LastSaved>2010-01-19T20:51:39Z</LastSaved>
+		  <Company>Microsoft Corporation</Company>
+		  <Version>12.00</Version>
+		 </DocumentProperties>
+		 <ExcelWorkbook xmlns="urn:schemas-microsoft-com:office:excel">
+		  <WindowHeight>9210</WindowHeight>
+		  <WindowWidth>11355</WindowWidth>
+		  <WindowTopX>480</WindowTopX>
+		  <WindowTopY>30</WindowTopY>
+		  <CreateBackup/>
+		  <ProtectStructure>False</ProtectStructure>
+		  <ProtectWindows>False</ProtectWindows>
+		 </ExcelWorkbook>
+		 <Styles>
+		  <Style ss:ID="Default" ss:Name="Normal">
+		   <Alignment ss:Vertical="Bottom"/>
+		   <Borders/>
+		   <Font ss:FontName="MS Sans Serif"/>
+		   <Interior/>
+		   <NumberFormat/>
+		   <Protection/>
+		  </Style>
+		  <Style ss:ID="s16">
+		   <Alignment ss:Vertical="Center"/>
+		   <NumberFormat ss:Format="Short Date"/>
+		   <Protection/>
+		  </Style>
+		 </Styles>
+		 <Names>
+		  <NamedRange ss:Name="dbo_LCUeCampusPeople"
+		   ss:RefersTo="=dbo_LCUeCampusPeople!R1C1:R2298C7"/>
+		 </Names>
+		 <Worksheet ss:Name="dbo_LCUeCampusPeople">
+		  <Table x:FullColumns="1"
+		   x:FullRows="1">
+		   <Column ss:Width="188.25"/>
+		   <Column ss:Width="52.5"/>
+		   <Column ss:Index="4" ss:Width="179.25"/>
+		   <Column ss:Index="7" ss:Width="72"/>
+		   <Row>
+		    <Cell><Data ss:Type="String">EmailAddress</Data></Cell>
+		    <Cell><Data ss:Type="String">ID</Data></Cell>
+		    <Cell><Data ss:Type="String">Password</Data></Cell>
+		    <Cell><Data ss:Type="String">Name</Data></Cell>
+		    <Cell><Data ss:Type="String">Category</Data></Cell>
+		    <Cell><Data ss:Type="String">Amount</Data></Cell>
+		    <Cell><Data ss:Type="String">ExpirationDate</Data></Cell>
+		   </Row>]]>
+	</io:copy>
+	<io:load delimit="," header="false" dir="${dir}" file="${csvFile}" iff="true">
+					<format:charField fieldName="EmailAddress"/>
+					<format:charField fieldName="ID"></format:charField>
+					<format:charField fieldName="Password"></format:charField>
+					<format:charField fieldName="Name"></format:charField>
+					<format:charField fieldName="Category"></format:charField>
+					<format:charField fieldName="Amount"></format:charField>
+					<format:charField fieldName="ExpirationDate"></format:charField>
+					<![CDATA[
+		<Row>
+		    <Cell><Data ss:Type="String">%{EmailAddress}</Data></Cell>
+		    <Cell><Data ss:Type="String">%{ID}</Data></Cell>
+		    <Cell><Data ss:Type="String">%{Password}</Data></Cell>
+		    <Cell><Data ss:Type="String">%{Name}</Data></Cell>
+		    <Cell><Data ss:Type="String">%{Category}</Data></Cell>
+		    <Cell><Data ss:Type="String">%{Amount}</Data></Cell>
+		    <Cell><Data ss:Type="String">%{ExpirationDate}</Data></Cell>
+		   </Row>
+					]]>
+	</io:load>
+	<io:copy ><![CDATA[  </Table>
+		  <WorksheetOptions xmlns="urn:schemas-microsoft-com:office:excel">
+		   <Selected/>
+		   <ProtectObjects>False</ProtectObjects>
+		   <ProtectScenarios>False</ProtectScenarios>
+		  </WorksheetOptions>
+		 </Worksheet>
+		</Workbook>
+]]></io:copy>
+</io:Filter>
+
+	<!--  If old diff's appear on FTP site, remove them and keep lastUploadFile unchanged 
+			locally;
+		otherwise move the current lastUploadFile to the archive and move the just
+		generated data file to lastUploadFile
+	 -->
+	<ftp:ftp iff="${diff.different}">
+		<ftp:execute connection="ecampus">
+			<ftp:list name="remoteFiles" filename="diff.*\.csv"/>
+			<core:executer iff="javascript: !remoteFiles.getFound()">
+				<io:Move dir="${toDir}" file="${lastSentCsvFile}" 
+						toDir="${archive}" toFile="sentArchive#{yyyy-MM-dd}.csv" 
+						force="true" />
+				<io:Move dir="${dir}" file="${csvFile}" toDir="${toDir}" toFile="${lastSentCsvFile}" 
+						force="true" />
+			</core:executer>
+			<core:executer iff="javascript: remoteFiles.getFound()">
+				<ftp:rm dir="." file="diff.*\.csv"></ftp:rm>
+			</core:executer>
+			
+		<ftp:put dir="${dir}" file="studentExportList.xsl" toDir="." toFile="people#{yyyy-MM-dd}.xls" />
+		<ftp:put dir="${dir}" file="diff.csv" toDir="." toFile="diff#{yyyy-MM-dd}.csv" />
+		<ftp:list/>
+	</ftp:execute>
+	<ftp:connection name="ecampus" host="ftp.ecampus.com" 
+		login="Lubbock" password="LCUf1l3s" channelType="ftp"/>
+</ftp:ftp>
+
+
+</core:executer>

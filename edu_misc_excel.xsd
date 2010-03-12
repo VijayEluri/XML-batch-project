@@ -1,0 +1,943 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="qualified"
+  elementFormDefault="qualified" id="query"
+  targetNamespace="edu.misc.Excel" xmlns="edu.misc.Excel"
+  xmlns:app0="com.browsexml.core" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="com.browsexml.core" schemaLocation="com_browsexml_core.xsd"/>
+  <xs:complexType name="WorkbookType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="AcceptLabelsInFormulasType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ActivePaneType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ActiveRowType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="AlignmentType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="AuthorType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="BType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="BorderType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="BordersType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="CellType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ColumnType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="CompanyType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="CreatedType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType mixed="true" name="DataType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="Date1904Type">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="DocumentPropertiesType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="DoNotDisplayGridlinesType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ExcelWorkbookType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FontType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FooterType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="HeaderType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="HideWorkbookTabsType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="HorizontalResolutionType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="IType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="InteriorType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="LastAuthorType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="LastPrintedType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="LastSavedType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="NamedCellType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="NamedRangeType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="NamesType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="NumberType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="NumberFormatType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="PageBreakZoomType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="PageMarginsType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="PageSetupType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="PaneType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="PanesType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="PrintType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ProtectionType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ProtectObjectsType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ProtectScenariosType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ProtectStructureType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ProtectWindowsType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="RangeSelectionType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="RowType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="SelectedType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="SplitHorizontalType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="StyleType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="StylesType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="TableType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="TopRowBottomPaneType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="TopRowVisibleType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ValidPrinterInfoType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="VersionType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="VerticalResolutionType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="WindowHeightType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="WindowTopXType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="WindowTopYType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="WindowWidthType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="WorksheetType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="WorksheetOptionsType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="workbook" substitutionGroup="app0:xmlObject" type="WorkbookType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="acceptLabelsInFormulas"
+    substitutionGroup="app0:xmlObject" type="AcceptLabelsInFormulasType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="activePane" substitutionGroup="app0:xmlObject" type="ActivePaneType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="activeRow" substitutionGroup="app0:xmlObject" type="ActiveRowType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="alignment" substitutionGroup="app0:xmlObject" type="AlignmentType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="author" substitutionGroup="app0:xmlObject" type="AuthorType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="b" substitutionGroup="app0:xmlObject" type="BType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="border" substitutionGroup="app0:xmlObject" type="BorderType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="borders" substitutionGroup="app0:xmlObject" type="BordersType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="cell" substitutionGroup="app0:xmlObject" type="CellType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="column" substitutionGroup="app0:xmlObject" type="ColumnType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="company" substitutionGroup="app0:xmlObject" type="CompanyType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="created" substitutionGroup="app0:xmlObject" type="CreatedType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="data" substitutionGroup="app0:xmlObject" type="DataType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="date1904" substitutionGroup="app0:xmlObject" type="Date1904Type">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="documentProperties"
+    substitutionGroup="app0:xmlObject" type="DocumentPropertiesType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="doNotDisplayGridlines"
+    substitutionGroup="app0:xmlObject" type="DoNotDisplayGridlinesType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="excelWorkbook" substitutionGroup="app0:xmlObject" type="ExcelWorkbookType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="font" substitutionGroup="app0:xmlObject" type="FontType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="footer" substitutionGroup="app0:xmlObject" type="FooterType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="header" substitutionGroup="app0:xmlObject" type="HeaderType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="hideWorkbookTabs" substitutionGroup="app0:xmlObject" type="HideWorkbookTabsType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="horizontalResolution"
+    substitutionGroup="app0:xmlObject" type="HorizontalResolutionType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="i" substitutionGroup="app0:xmlObject" type="IType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="interior" substitutionGroup="app0:xmlObject" type="InteriorType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="lastAuthor" substitutionGroup="app0:xmlObject" type="LastAuthorType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="lastPrinted" substitutionGroup="app0:xmlObject" type="LastPrintedType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="lastSaved" substitutionGroup="app0:xmlObject" type="LastSavedType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="namedCell" substitutionGroup="app0:xmlObject" type="NamedCellType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="namedRange" substitutionGroup="app0:xmlObject" type="NamedRangeType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="names" substitutionGroup="app0:xmlObject" type="NamesType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="number" substitutionGroup="app0:xmlObject" type="NumberType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="numberFormat" substitutionGroup="app0:xmlObject" type="NumberFormatType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="pageBreakZoom" substitutionGroup="app0:xmlObject" type="PageBreakZoomType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="pageMargins" substitutionGroup="app0:xmlObject" type="PageMarginsType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="pageSetup" substitutionGroup="app0:xmlObject" type="PageSetupType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="pane" substitutionGroup="app0:xmlObject" type="PaneType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="panes" substitutionGroup="app0:xmlObject" type="PanesType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="print" substitutionGroup="app0:xmlObject" type="PrintType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="protection" substitutionGroup="app0:xmlObject" type="ProtectionType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="protectObjects" substitutionGroup="app0:xmlObject" type="ProtectObjectsType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="protectScenarios" substitutionGroup="app0:xmlObject" type="ProtectScenariosType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="protectStructure" substitutionGroup="app0:xmlObject" type="ProtectStructureType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="protectWindows" substitutionGroup="app0:xmlObject" type="ProtectWindowsType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="rangeSelection" substitutionGroup="app0:xmlObject" type="RangeSelectionType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="row" substitutionGroup="app0:xmlObject" type="RowType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="selected" substitutionGroup="app0:xmlObject" type="SelectedType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="splitHorizontal" substitutionGroup="app0:xmlObject" type="SplitHorizontalType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="style" substitutionGroup="app0:xmlObject" type="StyleType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="styles" substitutionGroup="app0:xmlObject" type="StylesType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="table" substitutionGroup="app0:xmlObject" type="TableType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="topRowBottomPane" substitutionGroup="app0:xmlObject" type="TopRowBottomPaneType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="topRowVisible" substitutionGroup="app0:xmlObject" type="TopRowVisibleType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="validPrinterInfo" substitutionGroup="app0:xmlObject" type="ValidPrinterInfoType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="version" substitutionGroup="app0:xmlObject" type="VersionType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="verticalResolution"
+    substitutionGroup="app0:xmlObject" type="VerticalResolutionType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="windowHeight" substitutionGroup="app0:xmlObject" type="WindowHeightType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="windowTopX" substitutionGroup="app0:xmlObject" type="WindowTopXType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="windowTopY" substitutionGroup="app0:xmlObject" type="WindowTopYType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="windowWidth" substitutionGroup="app0:xmlObject" type="WindowWidthType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="worksheet" substitutionGroup="app0:xmlObject" type="WorksheetType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="worksheetOptions" substitutionGroup="app0:xmlObject" type="WorksheetOptionsType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Specify the query that needs formatting
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+</xs:schema>
+

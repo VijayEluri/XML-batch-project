@@ -1,0 +1,13 @@
+<example>
+<description>Copy a file from web/header to standard out replacing ${DATE} with 
+the date formatted year-month-day 'T' hour:minute:second
+</description>
+<code><pre><![CDATA[
+		<io:copy dir="web" file="header" xmlns="edu.bxml.format" xmlns:io='edu.bxml.io'>
+			<replace expression="\$\{DATE\}" replacement="{yyyy-MM-dd}T{HH:mm:ss}" />
+		</io:copy>
+]]></pre></code>
+<note>Replace comes from the edu.bxml.format namespace.
+</note>
+</example>
+

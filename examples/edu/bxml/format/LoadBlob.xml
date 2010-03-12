@@ -1,0 +1,17 @@
+<example>
+<description>Load pdf files into a table called studentAgreementPDF
+which has the fields filename (varchar) and data (blob).  Delete any records that
+have the same filename first.
+</description>
+<code><pre><![CDATA[
+	<loadBlob name="loadPDF" dir="Y:\outgoing\stuagr_pdf" 
+			file=".*\.pdf" 
+			archive="archive"
+			filenameField="filename"
+			dataField="data"
+			deleteFirst="true"
+			table="studentAgreementPDF" connection="eArmyU"/>
+]]></pre></code>
+<note>Elsewhere you would need a connection called eAmryU.
+</note>
+</example>

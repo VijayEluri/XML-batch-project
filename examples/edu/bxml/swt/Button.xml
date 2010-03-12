@@ -1,0 +1,28 @@
+<example>
+<description>Add a push button to a grid layout with a shortcut on the 'c' character of its lable 'Search'.  When pushed an http get will be run.
+</description>
+<code><pre><![CDATA[
+<button name="btnPeopleSearch" text="Sear&amp;ch" style="PUSH">
+	<gridData style="HORIZONTAL_ALIGN_END"/>
+	<listener mask="Selection">
+		<http:get url="${root}/servlet/Controller?service=StudentSearchService&amp;target=/studentSearch.jsp">
+			<http:parameter key="name" value="findWhat"/>
+			<http:parameter key="year" value="txtFindYear"/>
+			<http:parameter key="campus" value="cmbFindCampus"/>
+			<http:parameter key="cat" value="cmbFindCat"/>
+		</http:get>
+	</listener>
+</button>
+]]></pre></code>
+<note>
+</note>
+</example>
+<example>
+<description>Add a check box to an interface
+</description>
+<code><pre><![CDATA[
+<button style="CHECK" name="ckAppAccepted" text="Accepted"/>
+]]></pre></code>
+<note>
+</note>
+</example>

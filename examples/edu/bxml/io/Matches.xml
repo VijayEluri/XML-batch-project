@@ -1,0 +1,34 @@
+<example>
+<description>Load the results of a pgp decrypt into a template.  Process only lines
+that start with the character 'E'.
+</description>
+<code><pre><![CDATA[
+		<pipe dir="C:/Users/geoff.ritchey/Desktop/PGP" file=".*\.dat\.pgp"
+				archive="C:/Users/geoff.ritchey/Desktop/PGP/archive">
+			<pgp privateArmouredKeyFile = "C:/pgp262i/LCU.asc" 
+				passPhrase = "changeit"/>
+			<io:load xmlns="edu.bxml.format"
+					delimit="\|" header="false">
+				<io:matches expression="^E">
+					<io:skipField count="15"/>
+					<charField name="PeopleId" size="9" />
+					<charField name="id" size="20" />
+					<charField name="name" size="50" />
+					<charField name="description" size="20" />
+					<numberField name="cost" type="MONEY" decimals="2">
+						<replace expression="([0-9][0-9]) *$" replacement=".$1" />
+					</numberField><![CDATA[<Row>
+	    <Cell><Data ss:Type="String">%{PeopleId}</Data></Cell>
+	    <Cell><Data ss:Type="String">%{id}</Data></Cell>
+	    <Cell><Data ss:Type="String">%{name}</Data></Cell>
+	    <Cell><Data ss:Type="String">%{description}</Data></Cell>
+	    <Cell><Data ss:Type="Number">%{cost}</Data></Cell>
+	   </Row>
+	] ]></io:matches>
+			</io:load>
+		</pipe>
+]]></pre></code>
+<note>
+</note>
+</example>
+

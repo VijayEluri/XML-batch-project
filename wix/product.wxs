@@ -1,0 +1,66 @@
+<?xml version='1.0'?>
+<Wix xmlns='http://schemas.microsoft.com/wix/2003/01/wi'>
+   <Product Id='6784347F-31B4-4B9E-B494-8FDED0864595' Name='BrowseXML Package' Language='1033' 
+            Version='1.0.0.0' Manufacturer='BrowseXML'>
+      <Package Id='CC1E3B25-1A8D-4F96-AB2F-0A092D08C990'
+               Description='Organize and execute objects with XML'
+               Comments='Organize and execute objects with XML'
+               Manufacturer='BrowseXML' InstallerVersion='200' Compressed='yes' />
+
+	<Media Id='1' Cabinet='product.cab' EmbedCab='yes' />
+
+      <Directory Id='TARGETDIR' Name='SourceDir'>
+         <Directory Id='ProgramFilesFolder' Name='PFiles'>
+            <Directory Id='MyDir' Name='BrwseXML' LongName='BrowseXML'>
+               <Component Id='MyComponent' Guid='08467642-9A2B-49E8-8777-6B12ADDD56A8'>
+		  <File Id='commons_codec_1.3' Name='cmnscode.jar' LongName='commons-codec-1.3.jar' DiskId='1' src='C:\x86\commons-codec-1.3.jar' />
+		  <File Id='commons_httpclient_3.1' Name='cmnshttp.jar' LongName='commons-httpclient-3.1.jar' DiskId='1' src='C:\x86\commons-httpclient-3.1.jar' />
+		  <File Id='commons_logging_1.1.1' Name='cmnslog.jar' LongName='commons-logging-1.1.1.jar' DiskId='1' src='C:\x86\commons-logging-1.1.1.jar' />
+		  <File Id='iText' Name='iText.jar' LongName='iText-2.1.4.jar' DiskId='1' src='C:\x86\iText-2.1.4.jar' />
+		  <File Id='jaxen_core' Name='jaxcore.jar' LongName='jaxen-core.jar' DiskId='1' src='C:\x86\jaxen-core.jar' />
+		  <File Id='jaxen_jdom' Name='jaxjdom.jar' LongName='jaxen-jdom.jar' DiskId='1' src='C:\x86\jaxen-jdom.jar' />
+		  <File Id='jdom' Name='jdom.jar' LongName='jdom.jar' DiskId='1' src='C:\x86\jdom.jar' />
+		  <File Id='jsch' Name='jsch.jar' LongName='jsch.jar' DiskId='1' src='C:\x86\jsch.jar' />
+		  <File Id='log4j' Name='log4j.jar' LongName='log4j.jar' DiskId='1' src='C:\x86\log4j.jar' />
+		  <File Id='saxpath' Name='saxpath.jar' LongName='saxpath.jar' DiskId='1' src='C:\x86\saxpath.jar' />
+		  <File Id='sql' Name='sql.jar' LongName='sql.jar' DiskId='1' src='C:\x86\sql.jar' />
+		  <File Id='swt' Name='swt.jar' LongName='swt.jar' DiskId='1' src='C:\x86\swt.jar' />
+		  <File Id='swt_win32' Name='swt_win.dll' LongName='swt-win32-3349.dll' DiskId='1' src='C:\x86\swt-win32-3349.dll' />
+		  
+               </Component>
+       <Component Id="R_MyRegistry1" Guid="DB8CA2EB-3838-48A8-92FB-C6D8D3365717">
+        <Registry Id="_MyRegistry1" Root="HKCR" Key="bxml\shell\open\command" Type="string" KeyPath="yes" Value="javaw -jar &quot;[ProgramFilesFolder][Manufacturer]\sql.jar&quot; &quot;%1&quot;" />
+      </Component>
+      <Component Id="R_MyRegistry3" Guid="C97B5859-E97C-D8DE-4C2B-401EE8295AB8">
+        <Registry Id="_MyRegistry3" Root="HKCR" Key="bxml" Type="string" KeyPath="yes" Value="URL:Bxml Protocol Handler" />
+      </Component>
+      <Component Id="R_MyRegistry2" Guid="ED54B358-78DC-41A3-ACB8-E504247793B7">
+        <Registry Id="_MyRegistry2" Root="HKCR" Key="bxml" Name="URL Protocol" KeyPath="yes" />
+      </Component>
+           
+       <Component Id="R_MyRegistry10" Guid="00CFF154-D744-4F14-A40C-104527B2D969">
+        <Registry Id="_MyRegistry10" Root="HKCR" Key="bxmls\shell\open\command" Type="string" KeyPath="yes" Value="javaw -jar &quot;[ProgramFilesFolder][Manufacturer]\sql.jar&quot; &quot;%1&quot;" />
+      </Component>
+      <Component Id="R_MyRegistry30" Guid="0881D39A-27F2-47D2-9CC2-8FBEB004DCFE">
+        <Registry Id="_MyRegistry30" Root="HKCR" Key="bxmls" Type="string" KeyPath="yes" Value="URL:Bxmls Protocol Handler" />
+      </Component>
+      <Component Id="R_MyRegistry20" Guid="D985E758-D3AF-478F-B0D6-053BC57E1C0E">
+        <Registry Id="_MyRegistry20" Root="HKCR" Key="bxmls" Name="URL Protocol" KeyPath="yes" />
+      </Component>
+        	
+            </Directory>
+         </Directory>
+      </Directory>
+
+      <Feature Id='MyFeature' Title='My 1st Feature' Level='1'  ConfigurableDirectory="TARGETDIR">
+         <ComponentRef Id='MyComponent' />
+         <ComponentRef Id='R_MyRegistry1' />
+         <ComponentRef Id='R_MyRegistry3' />
+         <ComponentRef Id='R_MyRegistry2' />
+         
+         <ComponentRef Id='R_MyRegistry10' />
+         <ComponentRef Id='R_MyRegistry30' />
+         <ComponentRef Id='R_MyRegistry20' />
+      </Feature>
+   </Product>
+</Wix>

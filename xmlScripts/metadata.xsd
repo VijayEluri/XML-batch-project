@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="query" targetNamespace="edu.bxml.format" xmlns:mstns="edu.bxml.format" xmlns="edu.bxml.format" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" attributeFormDefault="qualified" elementFormDefault="qualified" xmlns:app1="edu.bxml.io">
+  <xs:import namespace="edu.bxml.io" schemaLocation="metadata_app1.xsd" />
+  <xs:element name="resultMetadata">
+    <xs:complexType>
+      <xs:attribute name="queryName" form="unqualified" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="charField">
+    <xs:complexType>
+      <xs:attribute name="name" form="unqualified" type="xs:string" />
+      <xs:attribute name="size" form="unqualified" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="query" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msdata:Prefix="format">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="app1:pipe" />
+        <xs:element name="connection">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="sql" nillable="true" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:simpleContent msdata:Prefix="format" msdata:ColumnName="sql_Text" msdata:Ordinal="1">
+                    <xs:extension base="xs:string">
+                      <xs:attribute name="name" form="unqualified" type="xs:string" />
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="name" form="unqualified" type="xs:string" />
+            <xs:attribute name="login" form="unqualified" type="xs:string" />
+            <xs:attribute name="password" form="unqualified" type="xs:string" />
+            <xs:attribute name="class" form="unqualified" type="xs:string" />
+            <xs:attribute name="url" form="unqualified" type="xs:string" />
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

@@ -1,0 +1,11 @@
+<example>
+<description>Decrypt standard input (from a pipeline).
+</description>
+<code><pre><![CDATA[
+	<pgp privateArmouredKeyFile = "C:/pgp262i/LCU.asc" 
+		passPhrase = "changeit"/>
+]]></pre></code>
+<note>
+</note>
+</example>
+

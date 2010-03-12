@@ -1,0 +1,20 @@
+<example>
+<description>Create a table with 4 columns as part of a grid layout
+</description>
+<code><pre><![CDATA[
+<table name="tblApplications" style="SINGLE|BORDER|FULL_SELECTION" 
+			linesVisible="true" headerVisible="true">
+	<gridData style="FILL_BOTH" horizontalSpan="4"/>
+	<tableColumn text="Date">
+	</tableColumn>
+	<tableColumn name="colAppType" text="Type">
+	</tableColumn>
+	<tableColumn text="Acpt">
+	</tableColumn>
+	<tableColumn text="Comment">
+	</tableColumn>
+</table>
+]]></pre></code>
+<note>See also Apply to set data.
+</note>
+</example>

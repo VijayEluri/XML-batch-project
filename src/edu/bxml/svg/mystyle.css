@@ -1,0 +1,16 @@
+.handle {
+  fill: brown;
+  stroke: brown;
+}
+.ball {
+  fill: red;
+  stroke: blue;
+  stroke-width: 3
+}
+.link {
+  stroke: red;
+}
+.rect {
+	fill:red;
+}
+

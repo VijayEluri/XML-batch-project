@@ -1,0 +1,34 @@
+<?xml version="1.0" standalone="yes"?>
+<xs:schema targetNamespace="edu.bxml.io" xmlns:mstns="edu.bxml.format" xmlns="edu.bxml.io" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" attributeFormDefault="qualified" elementFormDefault="qualified" xmlns:app1="edu.bxml.io">
+  <xs:import namespace="edu.bxml.format" schemaLocation="metadata.xsd" />
+  <xs:element name="pipe" msdata:Prefix="io">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="mstns:resultMetadata" />
+        <xs:element name="load" msdata:Prefix="io" minOccurs="0" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element ref="mstns:charField" />
+              <xs:element name="matches" msdata:Prefix="io" nillable="true" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:simpleContent msdata:Prefix="io" msdata:ColumnName="matches_Text" msdata:Ordinal="1">
+                    <xs:extension base="xs:string">
+                      <xs:attribute name="expression" form="unqualified" type="xs:string" />
+                    </xs:extension>
+                  </xs:simpleContent>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+            <xs:attribute name="delimit" form="unqualified" type="xs:string" />
+            <xs:attribute name="header" form="unqualified" type="xs:string" />
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="name" form="unqualified" type="xs:string" />
+      <xs:attribute name="dir" form="unqualified" type="xs:string" />
+      <xs:attribute name="file" form="unqualified" type="xs:string" />
+      <xs:attribute name="toDir" form="unqualified" type="xs:string" />
+      <xs:attribute name="toFile" form="unqualified" type="xs:string" />
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

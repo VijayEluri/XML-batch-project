@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet href="mystyle.css" type="text/css"?>
+<!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.0//EN' 'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
+<svg contentScriptType="text/ecmascript" width="1500" xmlns:xlink="http://www.w3.org/1999/xlink" zoomAndPan="magnify" contentStyleType="text/css" height="1500" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" xml:space="preserve" version="1.0"> 
+<title>BallAndChain.svg</title> 
+<desc>mouse moves one ball; other ball tied to it with elastic</desc>
+	<defs> 
+		<linearGradient id="blue_title" x1="0%" y1="0%" x2="0%" y2="100%">
+			<stop offset="0%" style="stop-color:#eeffff;
+				stop-opacity:1"/>
+			<stop offset="20%" style="stop-color:#ccffff;
+				stop-opacity:1"/>
+			<stop offset="100%" style="stop-color:white;
+				stop-opacity:1"/>
+		</linearGradient>
+
+
+		<symbol id="table">
+		  <rect x="0" y="0" width="250" height="50" rx="10" fill="url(#blue_title)"
+			 stroke="black" stroke-width="1px" />
+
+		  <rect x="0" y="30" width="250" height="250" fill="white"
+			 stroke="black" stroke-width="1px" />
+
+		  <text id="hello" x ="10" y="25" font-size="16" fill="#333333">
+			Hello
+		  </text>
+
+		  <text x ="50" y="45" font-size="14" fill="black">ID</text>
+		  <text x ="50" y="63" font-size="14" fill="black">Company</text>
+		  <text x ="50" y="81" font-size="14" fill="black">Last Name </text>
+		</symbol>
+	</defs> 
+
+	<rect width="1500" style="opacity:0" id="canvas" height="1500"/> 
+	<g class="link" d="gStroke">
+		<line y2="255" id="eStroke" x1="140" x2="112" y1="214"/>
+	</g> 
+
+	<g class="handle" id="gBall" cx="112" cy="255" transform="matrix(1 0 0 1 112 255)">
+		<ellipse rx="10" ry="10" id="eBall" cx="0" cy="0"/>
+	</g> 
+
+	<g class="ball" id="gHandle" cx="140" cy="214" transform="matrix(1 0 0 1 140 214)">
+		<ellipse rx="10" ry="10" id="eHandle" cx="0" cy="0"/>
+	</g> 	
+
+
+</svg>

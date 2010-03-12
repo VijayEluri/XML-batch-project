@@ -1,0 +1,21 @@
+<example>
+<description>A connection that contains a stored procedure and a select.
+</description>
+<code><pre><![CDATA[
+	<connection name="Campus6" login="theLogin" password="thePass"
+			class="sun.jdbc.odbc.JdbcOdbcDriver"
+			url="jdbc:odbc:PC1_pinky_Campus6" 
+			>
+		<sql name="generateData">
+			exec wbu_bb_GetSnapShot_All_geoff
+		</sql>
+		<sql name="USR">
+SELECT SYSTEM_ROLE, INSTITUTION_ROLE, EXTERNAL_PERSON_KEY, USER_ID, PASSWD, FIRSTNAME, LASTNAME, EMAIL
+FROM wbu_bb_user_all_geoff
+		</sql>
+	</connetion>
+]]></pre></code>
+<note>Elsewhere you would have an execute object that runs 'generateData' and 
+a Select object that references 'USR'.
+</note>
+</example>

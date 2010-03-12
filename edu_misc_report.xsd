@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="qualified"
+  elementFormDefault="qualified" id="query"
+  targetNamespace="edu.misc.report" xmlns="edu.misc.report"
+  xmlns:app0="com.browsexml.core" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="com.browsexml.core" schemaLocation="com_browsexml_core.xsd"/>
+  <xs:complexType name="ReportObjectType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="DefaultCellType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+    <xs:attribute form="unqualified" name="border" type="xs:integer">
+      <xs:annotation>
+        <xs:documentation><![CDATA[ 
+				NO COMMENT
+			]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="FieldType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+  </xs:complexType>
+  <xs:complexType name="FontType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+    <xs:attribute form="unqualified" name="size" type="xs:float">
+      <xs:annotation>
+        <xs:documentation><![CDATA[ 
+				The font point size
+ @param face
+			]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute form="unqualified" name="face" type="xs:string">
+      <xs:annotation>
+        <xs:documentation><![CDATA[ 
+				The font face (HELVETICA, TIMES_ROMAN...)
+ @param face
+			]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute form="unqualified" name="style" type="xs:string">
+      <xs:annotation>
+        <xs:documentation><![CDATA[ 
+				Font style (BOLD, ITALIC, NORMAL)
+ @param style
+ @throws XMLBuildException
+			]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="HeaderType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+  </xs:complexType>
+  <xs:complexType name="NewpageType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+  </xs:complexType>
+  <xs:complexType name="PageFooterType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+  </xs:complexType>
+  <xs:complexType name="ParagraphType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+  </xs:complexType>
+  <xs:complexType name="PdfType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0">
+      <xs:element ref="font"/>
+    </xs:choice>
+    <xs:attribute form="unqualified" name="size" type="xs:string">
+      <xs:annotation>
+        <xs:documentation><![CDATA[ 
+				Set the size to one of the predefined page sizes; LETTER, LEGAL..
+ @param size
+ @throws XMLBuildException
+			]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute form="unqualified" name="landscape" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation><![CDATA[ 
+				NO COMMENT
+			]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType mixed="true" name="PhraseType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+    <xs:attribute form="unqualified" name="leading" type="xs:float">
+      <xs:annotation>
+        <xs:documentation><![CDATA[ 
+				NO COMMENT
+			]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="TrType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+  </xs:complexType>
+  <xs:complexType name="TableType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0">
+      <xs:element ref="newpage"/>
+      <xs:element ref="tr"/>
+    </xs:choice>
+    <xs:attribute form="unqualified" name="width" type="xs:float">
+      <xs:annotation>
+        <xs:documentation><![CDATA[ 
+				NO COMMENT
+			]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute form="unqualified" name="percentage" type="xs:integer">
+      <xs:annotation>
+        <xs:documentation><![CDATA[ 
+				The percentage of the page this table will occupy as a percentage
+ @param percentage
+ @throws XMLBuildException
+			]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute form="unqualified" name="widths" type="xs:string">
+      <xs:annotation>
+        <xs:documentation><![CDATA[ 
+				Command separated list of integers specifying the width of
+ each column of the table as a percentage where the total of all
+ the numbers is 100%.  The number of columns the table will have 
+ is determined by the number of widths specified.
+ @param widths
+			]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="TdType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0">
+      <xs:element ref="phrase"/>
+    </xs:choice>
+    <xs:attribute form="unqualified" name="border" type="xs:integer">
+      <xs:annotation>
+        <xs:documentation><![CDATA[ 
+				NO COMMENT
+			]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute form="unqualified" name="colSpan" type="xs:integer">
+      <xs:annotation>
+        <xs:documentation><![CDATA[ 
+				How many columns this element spans.
+ @param colSpan
+ @throws XMLBuildException
+			]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute form="unqualified" name="noWrap" type="xs:boolean">
+      <xs:annotation>
+        <xs:documentation><![CDATA[ 
+				NO COMMENT
+			]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute form="unqualified" name="padding" type="xs:float">
+      <xs:annotation>
+        <xs:documentation><![CDATA[ 
+				NO COMMENT
+			]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute form="unqualified" name="padBottom" type="xs:float">
+      <xs:annotation>
+        <xs:documentation><![CDATA[ 
+				NO COMMENT
+			]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute form="unqualified" name="padTop" type="xs:float">
+      <xs:annotation>
+        <xs:documentation><![CDATA[ 
+				NO COMMENT
+			]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute form="unqualified" name="padLeft" type="xs:float">
+      <xs:annotation>
+        <xs:documentation><![CDATA[ 
+				NO COMMENT
+			]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute form="unqualified" name="padRight" type="xs:float">
+      <xs:annotation>
+        <xs:documentation><![CDATA[ 
+				NO COMMENT
+			]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute form="unqualified" name="height" type="xs:integer">
+      <xs:annotation>
+        <xs:documentation><![CDATA[ 
+				NO COMMENT
+			]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+    <xs:attribute form="unqualified" name="image" type="xs:string">
+      <xs:annotation>
+        <xs:documentation><![CDATA[ 
+				NO COMMENT
+			]]></xs:documentation>
+      </xs:annotation>
+    </xs:attribute>
+  </xs:complexType>
+  <xs:complexType name="TestReportType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+  </xs:complexType>
+  <xs:element name="reportObject" substitutionGroup="app0:xmlObject" type="ReportObjectType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="defaultCell" type="DefaultCellType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="field" type="FieldType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="font" type="FontType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="header" type="HeaderType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="newpage" type="NewpageType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="pageFooter" type="PageFooterType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="paragraph" type="ParagraphType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="pdf" type="PdfType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="phrase" type="PhraseType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="tr" type="TrType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="table" type="TableType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="td" type="TdType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="testReport" type="TestReportType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+</xs:schema>
+

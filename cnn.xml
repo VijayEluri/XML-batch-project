@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<http name="http" xmlns='edu.bxml.http' xmlns:http='edu.bxml.http' 
+		multiThreaded="false" 
+		trustStore="C:\Program Files\Java\jdk1.6.0\jre\lib\security\cacerts"
+		timeout="30000" cookiePolity="RFC_2109" encode="UTF-8">
+	<get name="getter"/>
+	<format:property name="root" text="http://127.0.0.1:8080/education" xmlns:format='edu.bxml.format'/>
+<interface xmlns='edu.bxml.swt' xmlns:gui='edu.bxml.swt' >
+	<shell name="shell">
+		<gridLayout numColumns="3"/>
+		<toolBar style="SWT.NONE">
+			<gridData style="HORIZONTAL_ALIGN_FILL" horizontalSpan="3"/>
+			<toolItem text="Back" style="PUSH">
+				<listener mask="Selection">
+					<apply object="browser" navigate="back"/>
+				</listener>
+			</toolItem>
+			<toolItem text="Forward" style="PUSH">
+				<listener mask="Selection">
+					<apply object="browser" navigate="forward"/>
+				</listener>
+			</toolItem>
+			<toolItem text="Stop" style="PUSH">
+				<listener mask="Selection">
+					<apply object="browser" navigate="stop"/>
+				</listener>
+			</toolItem>
+			<toolItem text="Refresh" style="PUSH">
+				<listener mask="Selection">
+					<apply object="browser" navigate="refresh"/>
+				</listener>
+			</toolItem>
+			<toolItem text="Go" style="PUSH">
+				<listener mask="Selection">
+					<apply object="browser">
+						<parameter key="url" value="location"/>
+					</apply>
+				</listener>
+			</toolItem>
+			<toolItem text="Bxml" style="PUSH">
+				<listener mask="Selection">
+					<apply object="getter" url="${location}"/>
+				</listener>
+			</toolItem>
+		</toolBar>
+		<label text="Address:">
+			<gridData style="HORIZONTAL_ALIGN_FILL"/>
+		</label>
+		<text name="location" style="BORDER" >
+			<gridData style="HORIZONTAL_ALIGN_FILL" horizontalSpan="2"/>
+		</text>
+		<browser name="browser" url="file:///C:/Users/geoff.ritchey/work/course/launch.html">
+			<gridData style="FILL_BOTH" horizontalSpan="3"/>
+			<locationListener name="event">
+				<apply object="getter" url="${event.url}"/>
+			</locationListener>
+		</browser>
+	</shell>
+</interface>
+</http>

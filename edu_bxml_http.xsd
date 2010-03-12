@@ -1,0 +1,418 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema attributeFormDefault="qualified"
+  elementFormDefault="qualified" id="query"
+  targetNamespace="edu.bxml.http" xmlns="edu.bxml.http"
+  xmlns:app0="com.browsexml.core" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="com.browsexml.core" schemaLocation="com_browsexml_core.xsd"/>
+  <xs:complexType mixed="true" name="ParameterType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="value" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the value of the variable
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="type" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the type of the variable
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="key" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the name of the variable
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="GetType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="parameter"/>
+        </xs:choice>
+        <xs:attribute form="unqualified" name="http" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				the name of the 'Http' object.  
+ @param http
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="followRedirects" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				If the page redirects, go to the redirection
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="url" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The URL of the page to get
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="newSymbolTable" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				All predefined symbols are hidden.
+ @param newSymbolTable
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="toFile" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Save the response in a file
+ 
+ @param file
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="tempFilePrefix" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Prefix for a temporary file name
+ @param toTemp
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="tempFileSuffix" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Suffix for a temporary file name
+ @param toTempL
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="print" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Print the response to standard error
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="parse" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Interpret the results of the get; that is, assume the file is a 
+ browseXML document and execute it.  
+ @see setNewSymbolTable
+ @param parse
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="PostType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="timeout" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				NO COMMENT
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="followRedirects" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				If the page redirects, go to the redirection
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="url" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The URL of the page to get
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="print" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Print the response to standard error
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="parse" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Assuem the response is a browseXML document and execute it
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="CallType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="parameter"/>
+        </xs:choice>
+        <xs:attribute form="unqualified" name="method" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The Method of the call
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="url" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The URL of the page to get
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="uri" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The URI of the call
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="HttpType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0">
+          <xs:element ref="get"/>
+          <xs:element ref="post"/>
+          <xs:element ref="call"/>
+        </xs:choice>
+        <xs:attribute form="unqualified" name="multiThreaded" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Allow the client to run in the background
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="timeout" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				The maximum time the client will wait
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="encode" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the string encoding charater set
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="trustStore" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				File containing certificates of trusted sites
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="cookiePolity" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the cookie policy.
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="AttributeType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="BlindTrustManagerType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+  </xs:complexType>
+  <xs:complexType name="BooleanParameterType">
+    <xs:complexContent>
+      <xs:extension base="ParameterType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="EntityType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FileType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="SavingTrustManagerType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+  </xs:complexType>
+  <xs:complexType name="InstallCertType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+        <xs:attribute form="unqualified" name="host" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the host
+ @param host
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="port" type="xs:integer">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the port
+ @param port
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+        <xs:attribute form="unqualified" name="passphrase" type="xs:string">
+          <xs:annotation>
+            <xs:documentation><![CDATA[ 
+				Set the passphrase
+ @param passphrase
+			]]></xs:documentation>
+          </xs:annotation>
+        </xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="PartsType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="RequestHeaderType">
+    <xs:complexContent>
+      <xs:extension base="app0:XmlObjectType">
+        <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="WebItemType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+  </xs:complexType>
+  <xs:element name="parameter" substitutionGroup="app0:xmlObject" type="ParameterType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Get an http web page
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="get" substitutionGroup="app0:xmlObject" type="GetType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Get an http web page
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="post" substitutionGroup="app0:xmlObject" type="PostType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Get an http web page
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="call" substitutionGroup="app0:xmlObject" type="CallType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Get an http web page
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="http" substitutionGroup="app0:xmlObject" type="HttpType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Support connecting to a web server
+ 
+ @author ritcheyg
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="attribute" substitutionGroup="app0:xmlObject" type="AttributeType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Get an http web page
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="blindTrustManager" type="BlindTrustManagerType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="booleanParameter" substitutionGroup="parameter" type="BooleanParameterType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Get an http web page
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="entity" substitutionGroup="app0:xmlObject" type="EntityType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Get an http web page
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="file" substitutionGroup="app0:xmlObject" type="FileType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Get an http web page
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="savingTrustManager" type="SavingTrustManagerType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="installCert" substitutionGroup="app0:xmlObject" type="InstallCertType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="parts" substitutionGroup="app0:xmlObject" type="PartsType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Get an http web page
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="requestHeader" substitutionGroup="app0:xmlObject" type="RequestHeaderType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ 
+		Get an http web page
+	]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+  <xs:element name="webItem" type="WebItemType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
+</xs:schema>
+
