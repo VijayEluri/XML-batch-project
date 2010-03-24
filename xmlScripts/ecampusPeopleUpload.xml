@@ -69,7 +69,7 @@ GROUP BY dbo.TRANSCRIPTDETAIL.ACADEMIC_YEAR, dbo.TRANSCRIPTDETAIL.ACADEMIC_TERM,
                       dbo.PEOPLE.FIRST_NAME + ' ' + dbo.PEOPLE.MIDDLE_NAME + ' ' + + dbo.PEOPLE.LAST_NAME, LEFT(dbo.PEOPLE.FIRST_NAME, 1) 
                       + dbo.PEOPLE.LAST_NAME + RIGHT(dbo.PEOPLE.PEOPLE_ID, 4) + '@LCU.EDU', LEFT(dbo.PEOPLE.FIRST_NAME, 1) + LOWER(LEFT(dbo.PEOPLE.LAST_NAME, 1)) 
                       + '$' + RIGHT(dbo.PEOPLE.GOVERNMENT_ID, 4), dbo.ACADEMIC.PROGRAM, dbo.ACADEMIC.PRIMARY_FLAG
-order by people.people_id
+order by people.people_id, dbo.ACADEMIC.PROGRAM
 		]]>
 				</sql>
 			</connection>
@@ -203,8 +203,8 @@ order by people.people_id
 		<ftp:put dir="${dir}" file="diff.csv" toDir="." toFile="diff#{yyyy-MM-dd}.csv" />
 		<ftp:list/>
 	</ftp:execute>
-	<ftp:connection name="ecampus" host="ftp.ecampus.com" 
-		login="Lubbock" password="LCUf1l3s" channelType="ftp"/>
+	<ftp:connection name="ecampus" trust="true" host="marketplace.ecampus.com" 
+		login="Lubbock" password="LCUf1l3s" channelType="sftp"/>
 </ftp:ftp>
 
 
