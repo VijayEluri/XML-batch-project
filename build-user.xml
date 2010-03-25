@@ -338,24 +338,7 @@
 		<jvmarg line="-splash:splash.jpg -Djava.library.path=C:/x86 -Dsun.awt.noerasebackground=true"/>
 	</java>
 </target>
-	<target name="eCampusPeople" depends="build" description="query ecampus people">
-		<java jvm="javaw" dir="." logError="true" fork="true" classname="com.browsexml.core.Main">
-			<classpath refid="${ant.project.name}.classpath" />
-			<arg value="xmlScripts/ecampusPeopleUpload.xml" />
-		</java>
-	</target>
-	<target name="ftpTest" depends="build" description="query ecampus people">
-		<java jvm="javaw" dir="." logError="true" fork="true" classname="com.browsexml.core.Main">
-			<classpath refid="${ant.project.name}.classpath" />
-			<arg value="xmlScripts/ftp.xml" />
-		</java>
-	</target>
-	<target name="meta" depends="build" description="get query metadata">
-		<java jvm="javaw" dir="." logError="true" fork="true" classname="com.browsexml.core.Main">
-			<classpath refid="${ant.project.name}.classpath" />
-			<arg value="xmlScripts/metadata.xml" />
-		</java>
-	</target>
+
 <target name="https" depends="build" description="education program">
 	<java jvm="javaw" dir="." logError="true" fork="true" classname="com.browsexml.core.Main">
 		<classpath refid="course.classpath" />

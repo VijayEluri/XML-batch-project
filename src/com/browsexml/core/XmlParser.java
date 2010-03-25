@@ -230,7 +230,7 @@ public class XmlParser {
 	
 	/**
      * Iterate through all the attributes of the 
-     * curent object and call set[attributeName] on
+     * current object and call set[attributeName] on
      * the currentObject.
      * @param attrs
      */
