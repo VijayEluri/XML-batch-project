@@ -6,103 +6,84 @@
               as the first entry and export the buildfile again. -->
 <project basedir="." default="build" name="browsexml">
     <property environment="env"/>
-    <property name="ECLIPSE_HOME" value="../../Downloads/eclipse-reporting-galileo-SR1-win32/eclipse"/>
+    <property name="ECLIPSE_HOME" value="../../../Applications/eclipse"/>
     <property name="javalobby.location" value="../javalobby"/>
     <property name="debuglevel" value="source,lines,vars"/>
-    <property name="target" value="1.6"/>
-    <property name="source" value="1.6"/>
+    <property name="target" value="1.5"/>
+    <property name="source" value="1.5"/>
     <import file="build-user.xml"/>
-    <path id="javalobby.classpath">
-        <pathelement location="${javalobby.location}/build"/>
-        <pathelement location="${javalobby.location}/../../../../Sun/SDK/jdk/lib/tools.jar"/>
+    <path id="Maven Dependencies.libraryclasspath">
+        <pathelement location="../../../.m2/repository/org/bouncycastle/bcpg-jdk16/1.46/bcpg-jdk16-1.46.jar"/>
+        <pathelement location="../../../.m2/repository/org/bouncycastle/bcprov-jdk16/1.46/bcprov-jdk16-1.46.jar"/>
+        <pathelement location="../../../.m2/repository/org/bouncycastle/bcprov-ext-jdk16/1.46/bcprov-ext-jdk16-1.46.jar"/>
+        <pathelement location="../../../.m2/repository/commons-codec/commons-codec/1.5/commons-codec-1.5.jar"/>
+        <pathelement location="../../../.m2/repository/org/apache/commons/commons-email/1.1/commons-email-1.1.jar"/>
+        <pathelement location="../../../.m2/repository/javax/mail/mail/1.4/mail-1.4.jar"/>
+        <pathelement location="../../../.m2/repository/javax/activation/activation/1.1/activation-1.1.jar"/>
+        <pathelement location="../../../.m2/repository/commons-httpclient/commons-httpclient/3.1/commons-httpclient-3.1.jar"/>
+        <pathelement location="../../../.m2/repository/commons-logging/commons-logging/1.1.1/commons-logging-1.1.1.jar"/>
+        <pathelement location="../../../.m2/repository/commons-net/commons-net/2.2/commons-net-2.2.jar"/>
+        <pathelement location="../../../.m2/repository/com/lowagie/itext/2.1.7/itext-2.1.7.jar"/>
+        <pathelement location="../../../.m2/repository/bouncycastle/bcmail-jdk14/138/bcmail-jdk14-138.jar"/>
+        <pathelement location="../../../.m2/repository/bouncycastle/bcprov-jdk14/138/bcprov-jdk14-138.jar"/>
+        <pathelement location="../../../.m2/repository/org/bouncycastle/bctsp-jdk14/1.38/bctsp-jdk14-1.38.jar"/>
+        <pathelement location="../../../.m2/repository/org/bouncycastle/bcprov-jdk14/1.38/bcprov-jdk14-1.38.jar"/>
+        <pathelement location="../../../.m2/repository/org/bouncycastle/bcmail-jdk14/1.38/bcmail-jdk14-1.38.jar"/>
+        <pathelement location="../../../.m2/repository/oro/oro/2.0.8/oro-2.0.8.jar"/>
+        <pathelement location="../../../.m2/repository/org/jdom/jdom/1.1/jdom-1.1.jar"/>
+        <pathelement location="../../../.m2/repository/com/jcraft/jsch/0.1.44-1/jsch-0.1.44-1.jar"/>
+        <pathelement location="../../../.m2/repository/net/sourceforge/jtds/jtds/1.2.4/jtds-1.2.4.jar"/>
+        <pathelement location="../../../.m2/repository/xerces/xercesImpl/2.9.1/xercesImpl-2.9.1.jar"/>
+        <pathelement location="../../../.m2/repository/xml-apis/xml-apis/1.3.04/xml-apis-1.3.04.jar"/>
+        <pathelement location="../../../.m2/repository/batik/batik/1.5/batik-1.5.jar"/>
+        <pathelement location="../../../.m2/repository/batik/batik-svggen/1.6-1/batik-svggen-1.6-1.jar"/>
+        <pathelement location="../../../.m2/repository/batik/batik-svg-dom/1.6-1/batik-svg-dom-1.6-1.jar"/>
+        <pathelement location="../../../.m2/repository/batik/batik-parser/1.6-1/batik-parser-1.6-1.jar"/>
+        <pathelement location="../../../.m2/repository/batik/batik-dom/1.6-1/batik-dom-1.6-1.jar"/>
+        <pathelement location="../../../.m2/repository/batik/batik-css/1.6-1/batik-css-1.6-1.jar"/>
+        <pathelement location="../../../.m2/repository/batik/batik-util/1.6-1/batik-util-1.6-1.jar"/>
+        <pathelement location="../../../.m2/repository/batik/batik-gui-util/1.6-1/batik-gui-util-1.6-1.jar"/>
+        <pathelement location="../../../.m2/repository/batik/batik-ext/1.6-1/batik-ext-1.6-1.jar"/>
+        <pathelement location="../../../.m2/repository/xml-apis/xmlParserAPIs/2.0.2/xmlParserAPIs-2.0.2.jar"/>
+        <pathelement location="../../../.m2/repository/batik/batik-xml/1.6-1/batik-xml-1.6-1.jar"/>
+        <pathelement location="../../../.m2/repository/batik/batik-gvt/1.6-1/batik-gvt-1.6-1.jar"/>
+        <pathelement location="../../../.m2/repository/batik/batik-awt-util/1.6-1/batik-awt-util-1.6-1.jar"/>
+        <pathelement location="../../../.m2/repository/cryptix/cryptix/3.2.0/cryptix-3.2.0.jar"/>
+        <pathelement location="../../../.m2/repository/log4j/log4j/1.2.12/log4j-1.2.12.jar"/>
+        <pathelement location="../../../.m2/repository/cryptix/cryptix-message/1.0.0/cryptix-message-1.0.0.jar"/>
+        <pathelement location="../../../.m2/repository/cryptix/cryptix-pki-api/1.0.0/cryptix-pki-api-1.0.0.jar"/>
+        <pathelement location="../../../.m2/repository/cryptix/cryptix-jce-provider/1.0.0/cryptix-jce-provider-1.0.0.jar"/>
+        <pathelement location="../../../.m2/repository/cryptix/cryptix-openpgp/1.0.0/cryptix-openpgp-1.0.0.jar"/>
+        <pathelement location="../../../.m2/repository/batik/batik-script/1.6-1/batik-script-1.6-1.jar"/>
+        <pathelement location="../../../.m2/repository/batik/batik-bridge/1.6-1/batik-bridge-1.6-1.jar"/>
+        <pathelement location="../../../.m2/repository/rhino/js/1.5R4.1/js-1.5R4.1.jar"/>
+        <pathelement location="../../../.m2/repository/batik/batik-swing/1.6-1/batik-swing-1.6-1.jar"/>
     </path>
     <path id="JUnit 3.libraryclasspath">
-        <pathelement location="${ECLIPSE_HOME}/plugins/org.junit_3.8.2.v20090203-1005/junit.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.junit_3.8.2.v3_8_2_v20100427-1100/junit.jar"/>
     </path>
     <path id="AspectJ Runtime Library.libraryclasspath">
-        <pathelement location="${ECLIPSE_HOME}/plugins/org.aspectj.runtime_1.6.7.20100105084524/aspectjrt.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.aspectj.runtime_1.6.11.20110304135300/aspectjrt.jar"/>
+    </path>
+    <path id="javalobby.classpath">
+        <pathelement location="${javalobby.location}/build"/>
+        <pathelement location="${javalobby.location}/../../../Library/Java/JavaVirtualMachines/1.7.0.jdk"/>
     </path>
     <path id="browsexml.classpath">
+        <path refid="Maven Dependencies.libraryclasspath"/>
+        <path refid="JUnit 3.libraryclasspath"/>
+        <path refid="AspectJ Runtime Library.libraryclasspath"/>
         <pathelement location="build"/>
         <path refid="javalobby.classpath"/>
-        <pathelement location="../../../../x86/swt.jar"/>
-        <pathelement location="../../../../x86/commons-logging-1.1.1.jar"/>
-        <pathelement location="../../../../x86/batik/batik.jar"/>
-        <pathelement location="../../../../x86/batik/batik-anim.jar"/>
-        <pathelement location="../../../../x86/batik/batik-awt-util.jar"/>
-        <pathelement location="../../../../x86/batik/batik-bridge.jar"/>
-        <pathelement location="../../../../x86/batik/batik-codec.jar"/>
-        <pathelement location="../../../../x86/batik/batik-css.jar"/>
-        <pathelement location="../../../../x86/batik/batik-dom.jar"/>
-        <pathelement location="../../../../x86/batik/batik-ext.jar"/>
-        <pathelement location="../../../../x86/batik/batik-extension.jar"/>
-        <pathelement location="../../../../x86/batik/batik-gui-util.jar"/>
-        <pathelement location="../../../../x86/batik/batik-gvt.jar"/>
-        <pathelement location="../../../../x86/batik/batik-parser.jar"/>
-        <pathelement location="../../../../x86/batik/batik-script.jar"/>
-        <pathelement location="../../../../x86/batik/batik-svg-dom.jar"/>
-        <pathelement location="../../../../x86/batik/batik-svggen.jar"/>
-        <pathelement location="../../../../x86/batik/batik-swing.jar"/>
-        <pathelement location="../../../../x86/batik/batik-transcoder.jar"/>
-        <pathelement location="../../../../x86/batik/batik-util.jar"/>
-        <pathelement location="../../../../x86/batik/batik-xml.jar"/>
-        <pathelement location="../../../../x86/batik/js.jar"/>
-        <pathelement location="../../../../x86/batik/pdf-transcoder.jar"/>
-        <pathelement location="../../../../x86/batik/xalan-2.6.0.jar"/>
-        <pathelement location="../../../../x86/batik/xerces_2_5_0.jar"/>
-        <pathelement location="../../../../x86/batik/xml-apis.jar"/>
-        <pathelement location="../../../../x86/batik/xml-apis-ext.jar"/>
-        <pathelement location="../../../../x86/jdbc/sqljdbc.jar"/>
-        <pathelement location="../../../../x86/cryptix/certpath-api-compat.jar"/>
-        <pathelement location="../../../../x86/cryptix/cryptix-jce-api.jar"/>
-        <pathelement location="../../../../x86/cryptix/cryptix-jce-compat.jar"/>
-        <pathelement location="../../../../x86/cryptix/cryptix-jce-provider.jar"/>
-        <pathelement location="../../../../x86/cryptix/cryptix-message-api.jar"/>
-        <pathelement location="../../../../x86/cryptix/cryptix-openpgp-provider.jar"/>
-        <pathelement location="../../../../x86/cryptix/cryptix-pki-api.jar"/>
-        <path refid="JUnit 3.libraryclasspath"/>
-        <pathelement location="../../../../x86/jsch.jar"/>
-        <pathelement location="../../../../x86/bouncycastle/bcpg-jdk16-141.jar"/>
-        <pathelement location="../../../../x86/bouncycastle/bcprov-ext-jdk16-141.jar"/>
-        <pathelement location="../../../../x86/bouncycastle/bcprov-jdk16-141.jar"/>
-        <pathelement location="../../../../x86/iText-2.1.4.jar"/>
-        <pathelement location="../../../../x86/commons-codec-1.3.jar"/>
-        <pathelement location="../../../../x86/log4j.jar"/>
-        <pathelement location="../../../../x86/jdom.jar"/>
-        <pathelement location="../../../../x86/commons-httpclient-3.1.jar"/>
-        <pathelement location="../../../../x86/jdbc/jtds-1.2.3.jar"/>
-        <pathelement location="../../../../x86/commons-email-1.2.jar"/>
-        <pathelement location="../../../../Sun/SDK/lib/activation.jar"/>
-        <pathelement location="../../../../Sun/SDK/lib/mail.jar"/>
-        <pathelement location="../../../../x86/commons-net-2.0.jar"/>
-        <pathelement location="../../../../x86/jakarta-oro-2.0.8.jar"/>
-        <pathelement location="../../../../x86"/>
-        <path refid="AspectJ Runtime Library.libraryclasspath"/>
     </path>
-    <target name="init">
-        <mkdir dir="build"/>
-        <copy includeemptydirs="false" todir="build">
-            <fileset dir="src">
-                <exclude name="**/*.launch"/>
-                <exclude name="**/*.java"/>
-            </fileset>
-        </copy>
-        <copy includeemptydirs="false" todir="build">
-            <fileset dir="test">
-                <exclude name="**/*.launch"/>
-                <exclude name="**/*.java"/>
-            </fileset>
-        </copy>
-    </target>
-    <target name="clean">
-        <delete dir="build"/>
-    </target>
+    <target name="init"/>
+    <target name="clean"/>
     <target depends="clean" name="cleanall">
-        <ant antfile="${javalobby.location}/build.xml" dir="${javalobby.location}" inheritAll="false" target="clean"/>
+        <ant antfile="build.xml" dir="${javalobby.location}" inheritAll="false" target="clean"/>
     </target>
     <target depends="build-subprojects,build-project" name="build"/>
     <target name="build-subprojects">
-        <ant antfile="${javalobby.location}/build.xml" dir="${javalobby.location}" inheritAll="false" target="build-project">
+        <ant antfile="build.xml" dir="${javalobby.location}" inheritAll="false" target="build-project">
             <propertyset>
                 <propertyref name="build.compiler"/>
             </propertyset>
@@ -110,14 +91,6 @@
     </target>
     <target depends="init" name="build-project">
         <echo message="${ant.project.name}: ${ant.file}"/>
-        <javac debug="true" debuglevel="${debuglevel}" destdir="build" source="${source}" target="${target}">
-            <src path="src"/>
-            <classpath refid="browsexml.classpath"/>
-        </javac>
-        <javac debug="true" debuglevel="${debuglevel}" destdir="build" source="${source}" target="${target}">
-            <src path="test"/>
-            <classpath refid="browsexml.classpath"/>
-        </javac>
     </target>
     <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
     <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
@@ -132,11 +105,5 @@
     <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
         <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
         <antcall target="build"/>
-    </target>
-    <target name="New_configuration (6)">
-        <java classname="com.browsexml.core.Main" failonerror="true" fork="yes">
-            <arg line="xmlScripts/ecampusPeopleUpload.xml"/>
-            <classpath refid="browsexml.classpath"/>
-        </java>
     </target>
 </project>

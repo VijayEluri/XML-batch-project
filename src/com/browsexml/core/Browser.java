@@ -18,7 +18,7 @@ import javax.swing.JTextField;
 import javax.swing.event.HyperlinkEvent;
 import javax.swing.event.HyperlinkListener;
 
-import com.javalobby.tnt.annotation.attribute;
+//import com.javalobby.tnt.annotation.attribute;
 
 public class Browser extends JFrame implements HyperlinkListener, 
 		ActionListener {

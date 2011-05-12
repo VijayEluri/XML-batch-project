@@ -1,22 +1,17 @@
 <?eclipse.ant.import?>
 <project name="Browsexml" basedir="." default="deploy" xmlns:dn="antlib:org.apache.ant.dotnet"
     xmlns="antlib:org.apache.tools.ant">
-    <taskdef name="dir" classname="org.apache.tools.ant.taskdefs.Dir"
-        classpath="C:\customAnt\DirTask.jar"/>
+    <!--taskdef name="dir" classname="org.apache.tools.ant.taskdefs.Dir"
+        classpath="C:\customAnt\DirTask.jar"/-->
 	
 	<property name="JAVA_HOME" value="C:/Sun/SDK/jdk"></property>
 	
-	<taskdef resource="org/apache/ant/dotnet/antlib.xml" uri="antlib:org.apache.ant.dotnet">
-	    <classpath>
-	      <pathelement location="C:/customAnt/ant-dotnet-1.0.jar"/>
-	    </classpath>
-	  </taskdef>
       
     <target name="deploy" depends="build">
         <echo message="${ant.project.name}: ${ant.file}"/>
         <javac destdir="build" debug="true">
             <src path="src" />
-            <classpath refid="course.classpath"/>
+            <classpath refid="browsexml.classpath"/>
         </javac>
 	    <copy todir="build" >
 	  		<fileset file="images/splash.jpg"/>
@@ -36,7 +31,7 @@
 <target name="snapshot" depends="build" description="generate blackboard snapshot files">
 	<java dir="." logError="true" fork="true"
 		classname="edu.bxml.format.format">
-		<classpath refid="course.classpath" />
+		<classpath refid="browsexml.classpath" />
 		<arg value="snapshot.xml" />
 	</java>
 </target>
@@ -95,121 +90,121 @@
 <target name="run courses" depends="build" description="generate a course list">
 	<java dir="." logError="true" fork="true"
 		classname="com.browsexml.core.Main">
-		<classpath refid="course.classpath" />
+		<classpath refid="browsexml.classpath" />
 		<arg value="courseData.xml" />
 	</java>
 </target>
 <target name="new Project" depends="build" description="generate a new BrowseXML project">
 	<java dir="." logError="true" fork="true"
 		classname="com.browsexml.core.Main">
-		<classpath refid="course.classpath" />
+		<classpath refid="browsexml.classpath" />
 		<arg value="newproject.xml" />
 	</java>
 </target>
 <target name="run student Agreements" depends="build" description="generate student agreement upload file">
 	<java dir="." output="stuagr.txt" logError="true" fork="true"
 		classname="edu.bxml.format.format">
-		<classpath refid="course.classpath" />
+		<classpath refid="browsexml.classpath" />
 		<arg value="studentAgreement.xml" />
 	</java>
 </target>
 <target name="run classes" depends="build" description="run the application">
 	<java dir="." output="class.txt" logError="true" fork="true"
 		classname="com.browsexml.core.Main">
-		<classpath refid="course.classpath" />
+		<classpath refid="browsexml.classpath" />
 		<arg value="classData.xml" />
 	</java>
 </target>
 <target name="load class errors" depends="build" description="load errors">
 	<java dir="." output="load.log" logError="true" fork="true"
 		classname="com.browsexml.core.Main">
-		<classpath refid="course.classpath" />
+		<classpath refid="browsexml.classpath" />
 		<arg value="loadCourseClassErrors.xml" />
 	</java>
 </target>
 <target name="load graduation errors" depends="build" description="load errors">
 	<java dir="." output="load.log" logError="true" fork="true"
 		classname="com.browsexml.core.Main">
-		<classpath refid="course.classpath" />
+		<classpath refid="browsexml.classpath" />
 		<arg value="loadGraduationErrors.xml" />
 	</java>
 </target>
 <target name="run degree verify" depends="build" description="degree verify">
 	<java dir="." output="load.log" logError="true" fork="true"
 		classname="com.browsexml.core.Main">
-		<classpath refid="course.classpath" />
+		<classpath refid="browsexml.classpath" />
 		<arg value="degreeVerify.xml" />
 	</java>
 </target>
 <target name="load AD" depends="build" description="load errors">
 	<java dir="." output="AD.log" logError="true" fork="true"
 		classname="edu.bxml.format.format">
-		<classpath refid="course.classpath" />
+		<classpath refid="browsexml.classpath" />
 		<arg value="loadAD.xml" />
 	</java>
 </target>
 <target name="load roster" depends="build" description="load class roster report">
 	<java dir="." output="loadRoster.log" logError="true" fork="true"
 		classname="com.browsexml.core.Main">
-		<classpath refid="course.classpath" />
+		<classpath refid="browsexml.classpath" />
 		<arg value="loadRosterReport.xml" />
 	</java>
 </target>
 	<target name="run grades" depends="build" description="generate list of grades">
 		<java dir="." logError="true" fork="true" classname="com.browsexml.core.Main">
-			<classpath refid="course.classpath" />
+			<classpath refid="browsexml.classpath" />
 			<arg value="grades.xml" />
 		</java>
 	</target>
 	<target name="run graduation" depends="build" description="generate list of grades">
 		<java dir="." logError="true" fork="true" classname="com.browsexml.core.Main">
-			<classpath refid="course.classpath" />
+			<classpath refid="browsexml.classpath" />
 			<arg value="graduation.xml" />
 		</java>
 	</target>
 	<target name="load AI grades" depends="build" description="load airforce portal XML grades">
 		<java dir="." logError="true" fork="true" classname="com.browsexml.core.Main">
-			<classpath refid="course.classpath" />
+			<classpath refid="browsexml.classpath" />
 			<arg value="aigrades.xml" />
 		</java>
 	</target>
 	<target name="load late grades" depends="build" description="load late grades report">
 		<java dir="." logError="true" fork="true" classname="com.browsexml.core.Main">
-			<classpath refid="course.classpath" />
+			<classpath refid="browsexml.classpath" />
 			<arg value="loadLateGrades.xml" />
 		</java>
 	</target>
 		<target name="load sent grades" depends="build" description="load sent grades">
 		<java dir="." logError="true" fork="true" classname="com.browsexml.core.Main">
-			<classpath refid="course.classpath" />
+			<classpath refid="browsexml.classpath" />
 			<arg value="loadSentGrades.xml" />
 		</java>
 	</target>
 		<target name="load reg req" depends="build" description="load regreq report">
 	<java dir="." output="regreq.log" logError="true" fork="true"
 		classname="com.browsexml.core.Main">
-		<classpath refid="course.classpath" />
+		<classpath refid="browsexml.classpath" />
 		<arg value="regreq.xml" />
 	</java>
 	</target>
 <target name="load commonapp" depends="build" description="load common application report">
 	<java dir="." output="commonapp.log" logError="true" fork="true"
 		classname="com.browsexml.core.Main">
-		<classpath refid="course.classpath" />
+		<classpath refid="browsexml.classpath" />
 		<arg value="commonapp.xml" />
 	</java>
 </target>
 <target name="load classes" depends="build" description="load classes">
 	<java dir="." output="classes.log" logError="true" fork="true"
 		classname="edu.bxml.format.format">
-		<classpath refid="course.classpath" />
+		<classpath refid="browsexml.classpath" />
 		<arg value="loadTAClasses.xml" />
 	</java>
 </target>
 <target name="load TX Grant" depends="build" description="load Texas Grant">
 	<java dir="." output="txgrant.log" logError="true" fork="true"
 		classname="com.browsexml.core.Main">
-		<classpath refid="course.classpath" />
+		<classpath refid="browsexml.classpath" />
 		<arg value="loadTXGrant.xml" />
 	</java>
 </target>
@@ -217,121 +212,121 @@
 		description="eArmyU registration Report">
 	<java dir="." output="txgrant.log" logError="true" fork="true"
 		classname="edu.bxml.format.format">
-		<classpath refid="course.classpath" />
+		<classpath refid="browsexml.classpath" />
 		<arg value="report.xml" />
 	</java>
 </target>
 <target name="load list cleanup" depends="build" description="load list cleanup">
 	<java dir="." output="cleanup.log" logError="true" fork="true"
 		classname="edu.bxml.format.format">
-		<classpath refid="course.classpath" />
+		<classpath refid="browsexml.classpath" />
 		<arg value="loadListCleanup.xml" />
 	</java>
 </target>
 <target name="load stuagr errors" depends="build" description="load list cleanup">
 	<java dir="." output="stuagr.txt" logError="true" fork="true"
 		classname="edu.bxml.format.format">
-		<classpath refid="course.classpath" />
+		<classpath refid="browsexml.classpath" />
 		<arg value="loadStuAgrErrors.xml" />
 	</java>
 </target>
 <target name="load Invoices" depends="build" description="load invoices">
 	<java dir="." output="invoices.log" logError="true" fork="true"
 		classname="com.browsexml.core.Main">
-		<classpath refid="course.classpath" />
+		<classpath refid="browsexml.classpath" />
 		<arg value="loadInvoices.xml" />
 	</java>
 </target>
 <target name="load Invoice History" depends="build" description="load list cleanup">
 	<java dir="." output="stuagr.txt" logError="true" fork="true"
 		classname="edu.bxml.format.format">
-		<classpath refid="course.classpath" />
+		<classpath refid="browsexml.classpath" />
 		<arg value="loadInvoiceHistory.xml" />
 	</java>
 </target>
 <target name="mba" depends="build" description="get list for MBNA">
 	<java dir="." output="mba.txt" logError="true" fork="true"
 		classname="edu.bxml.format.format">
-		<classpath refid="course.classpath" />
+		<classpath refid="browsexml.classpath" />
 		<arg value="mba.xml" />
 	</java>
 </target>
 <target name="meals" depends="build" description="get meals">
 	<java dir="." output="meals.txt" logError="true" fork="true"
 		classname="edu.bxml.format.format">
-		<classpath refid="course.classpath" />
+		<classpath refid="browsexml.classpath" />
 		<arg value="meals.xml" />
 	</java>
 </target>
 <target name="FADS" depends="build" description="Texas Financial Aid Database">
 	<java dir="." logError="true" fork="true"
 		classname="edu.bxml.format.format">
-		<classpath refid="course.classpath" />
+		<classpath refid="browsexml.classpath" />
 		<arg value="FADS.xml" />
 	</java>
 </target>
 <target name="termproc" depends="build" description="Term processing">
 	<java dir="." logError="true" fork="true"
 		classname="edu.bxml.format.format">
-		<classpath refid="course.classpath" />
+		<classpath refid="browsexml.classpath" />
 		<arg value="termproc.xml" />
 	</java>
 </target>
 <target name="mealsnew" depends="build" description="get meals">
 	<java dir="." output="mealsnew.txt" logError="true" fork="true"
 		classname="edu.bxml.format.format">
-		<classpath refid="course.classpath" />
+		<classpath refid="browsexml.classpath" />
 		<arg value="mealsnew.xml" />
 	</java>
 </target>
 <target name="SOCAD" depends="build" description="get meals">
 	<java dir="." output="SOCAD.txt" logError="true" fork="true"
 		classname="edu.bxml.format.format">
-		<classpath refid="course.classpath" />
+		<classpath refid="browsexml.classpath" />
 		<arg value="SOCAD.xml" />
 	</java>
 </target>
 <target name="stuagrPDF" depends="build" description="load pdfs">
 	<java dir="." output="stuagrpdf.txt" logError="true" fork="true"
 		classname="edu.bxml.format.format">
-		<classpath refid="course.classpath" />
+		<classpath refid="browsexml.classpath" />
 		<arg value="stuagrpdf.xml" />
 	</java>
 </target>
 <target name="http" depends="build" description="test http">
 	<java dir="." logError="true" fork="true" classname="com.browsexml.core.Main">
-		<classpath refid="course.classpath" />
+		<classpath refid="browsexml.classpath" />
 		<arg value="http.xml" />
 	</java>
 </target>
 <target name="ai_http" depends="build" description="test http">
 	<java dir="." logError="true" fork="true" classname="com.browsexml.core.Main">
-		<classpath refid="course.classpath" />
+		<classpath refid="browsexml.classpath" />
 		<arg value="aihttp.xml" />
 	</java>
 </target>
 <target name="ai_interface_http" depends="build" description="test http">
 	<java dir="." logError="true" fork="true" classname="com.browsexml.core.Main">
-		<classpath refid="course.classpath" />
+		<classpath refid="browsexml.classpath" />
 		<arg value="aiportal.xml" />
 	</java>
 </target>
 <target name="education App" depends="build" description="education app report">
 	<java dir="." logError="true" fork="true" classname="com.browsexml.core.Main">
-		<classpath refid="course.classpath" />
+		<classpath refid="browsexml.classpath" />
 		<arg value="educationApplied.xml" />
 	</java>
 </target>
 <target name="education" depends="build" description="education program">
-	<java jvm="javaw" dir="." logError="true" fork="true" classname="com.browsexml.core.Main">
-		<classpath refid="course.classpath" />
+	<java jvm="java" dir="." logError="true" fork="true" classname="com.browsexml.core.Main">
+		<classpath refid="browsexml.classpath" />
 		<arg value="education.xml" />
 		<!--arg value="http://127.0.0.1:8080/education/servlet/Controller?service=GradeLevelCodeTableService&amp;target=/education.jsp"/-->
 		<jvmarg line="-splash:splash.jpg -Djava.library.path=C:/x86 -Dsun.awt.noerasebackground=true"/>
 	</java>
 </target>
 <target name="cnn" depends="build" description="cnn program">
-	<java jvm="javaw" dir="." logError="true" fork="true" classname="com.browsexml.core.Main">
+	<java jvm="java" dir="." logError="true" fork="true" classname="com.browsexml.core.Main">
 		<classpath refid="${ant.project.name}.classpath" />
 		<arg value="cnn.xml" />
 		<!--arg value="http://127.0.0.1:8080/education/servlet/Controller?service=GradeLevelCodeTableService&amp;target=/education.jsp"/-->
@@ -341,7 +336,7 @@
 
 <target name="https" depends="build" description="education program">
 	<java jvm="javaw" dir="." logError="true" fork="true" classname="com.browsexml.core.Main">
-		<classpath refid="course.classpath" />
+		<classpath refid="browsexml.classpath" />
 		<arg value="http://localhost:8080/" />
 		<jvmarg line="-Djava.library.path=C:/x86"/>
 	</java>
@@ -349,7 +344,7 @@
 <target name="movePDF" depends="build" description="move pdf files on army site">
 	<java dir="." output="stuagrpdfapp.txt" logError="true" fork="true"
 		classname="edu.bxml.format.format">
-		<classpath refid="course.classpath" />
+		<classpath refid="browsexml.classpath" />
 		<arg value="ftpMovePDF.xml" />
 	</java>
 </target>
@@ -379,7 +374,7 @@
 </target>
 <target name="doc" depends="init">
 	<javadoc destdir="build/docs/javadoc">
-		<classpath refid="course.classpath" />
+		<classpath refid="browsexml.classpath" />
 		<fileset dir="src">
 			<include name="**/*.java" />
 		</fileset>
@@ -430,7 +425,7 @@
 <target name="moodle" depends="build" description="moodle">
 	<java dir="." logError="true" fork="true"
 		classname="com.browsexml.core.Main">
-		<classpath refid="course.classpath" />
+		<classpath refid="browsexml.classpath" />
 		<arg value="MoodleTest.xml" />
 	</java>
 </target>
@@ -439,7 +434,7 @@
         <junit fork="yes" printsummary="withOutAndErr">
             <formatter type="xml"/>
             <test name="edu.bxml.io.TestIo" todir="${junit.output.dir}"/>
-            <classpath refid="course.classpath"/>
+            <classpath refid="browsexml.classpath"/>
         </junit>
     </target>
     <target name="TestReport" depends="build">
@@ -447,7 +442,7 @@
         <junit fork="yes" printsummary="withOutAndErr" showoutput="true">
             <formatter type="xml"/>
             <test name="edu.misc.report.TestReport" todir="${junit.output.dir}"/>
-            <classpath refid="course.classpath"/>
+            <classpath refid="browsexml.classpath"/>
         </junit>
     </target>
     <target name="run basic report"  
