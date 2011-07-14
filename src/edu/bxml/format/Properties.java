@@ -54,10 +54,6 @@ public class Properties extends XmlObject {
 	public void setQueryName(String queryName) {
 		this.queryName = queryName;
 	}
-
-	public Connection getConnection() {
-		return (Connection)this.getParent();
-	}
 	
 	/**
 	 * check that all the fields are set correctly, especially
@@ -84,6 +80,7 @@ public class Properties extends XmlObject {
 			for (Enumeration e = p.keys();e.hasMoreElements();) {
 				String key = (String) e.nextElement();
 				String value = p.getProperty(key);
+				log.debug("put " + key + ": '" + value + "'");
 				m.put("_#" + key, value);
 			}
 		}
