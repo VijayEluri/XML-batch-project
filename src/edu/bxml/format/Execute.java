@@ -9,8 +9,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlParser;
 import com.javalobby.tnt.annotation.attribute;
 
 /**
@@ -21,6 +25,8 @@ import com.javalobby.tnt.annotation.attribute;
  */
 @attribute(value = "", required = true)
 public class Execute extends XmlObject {
+	private static Log log = LogFactory.getLog(Execute.class);
+	
 	public String mainSql = null;
 	public String alternateSql = null;
 	private Query query = null;
@@ -121,7 +127,7 @@ public class Execute extends XmlObject {
 	 * Called after complete parsing of XML document to evaluate the document.
 	 */
 	public void execute() throws XMLBuildException {
-		System.err.println("EXECUTE ");
+		log.debug("EXECUTE ");
 		if ((file != null && dir != null) && files.size() == 0 ){
 			System.err.println(file + ": no matching files exist" + System.getProperty("line.separator") + "*** Error from object in XML at line " + this.getLocator().getLineNumber());
 			return;
@@ -139,23 +145,23 @@ public class Execute extends XmlObject {
 		
 		String alt = null;
 		if (s != null) 
-			alt = s.query;
-		doExecute(connection, sql.query, alt);
+			alt = s.getQuery();
+		doExecute(connection, sql.getQuery(), alt);
 	}
 	
 	public void doExecute(Connection connection, String query, String altQuery) 
 			throws XMLBuildException {
-		System.err.println("EXECUTE query=" + query);
+		log.debug("EXECUTE query=" + query);
 		Statement stmt = null;
 		try {
 			//java.sql.Connection con = connection.getConnection();
 			/* TODO put dataoutput into sub objects */
 			stmt = connection.getStatement();//con.createStatement();
 	
-			System.err.println("queryX = " + query);
+			log.debug("queryX = " + query);
 			int recordCount =  stmt.executeUpdate(query);
-			System.err.println("record count = " + recordCount);
-			System.err.println("alt = " + altQuery);
+			log.debug("record count = " + recordCount);
+			log.debug("alt = " + altQuery);
 			if (recordCount == 0 && altQuery != null) {
 				System.err.println("here");
 				if (altQuery.trim().toLowerCase().equals("exit")) {

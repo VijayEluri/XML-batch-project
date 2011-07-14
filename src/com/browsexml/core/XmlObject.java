@@ -18,6 +18,7 @@ public abstract class XmlObject {
 	private XmlParser parser = null;
 	private String iff = "true";
 	private HashMap<Method, String> variableParameters = new HashMap<Method, String>();
+	private String value;
 	
 	public HashMap<Method, String> getVariableParameters() {
 		return variableParameters;
@@ -85,7 +86,7 @@ public abstract class XmlObject {
 	 */
 	public abstract void execute() throws XMLBuildException;
 	public void setFromTextContent(String text) throws XMLBuildException {
-		
+		this.value = text;
 	}
 	
 	protected Locator locator = null;
@@ -193,7 +194,13 @@ public abstract class XmlObject {
 		return parser;
 	}
 	
-	public Object getValue() throws XMLBuildException {
-		return null;
+	public String getValue() throws XMLBuildException {
+		log.debug("get value = '" + value + "'");
+		return value;
+	}
+	
+	public void setValue(String value) {
+		log.debug("set value = '" + value + "'");
+		this.value = value;
 	}
 }

@@ -42,6 +42,9 @@ public class Main {
 		Protocol.registerProtocol( "bxmls", Protocol.getProtocol("https") );
 
 		URL x = getClass().getClassLoader().getResource("log4j.xml");
+		if (x == null) 
+			x = getClass().getClassLoader().getResource("log4j.xml");
+
 		try {
 			System.err.println(new java.io.File(".").getCanonicalPath());
 		} catch (IOException e1) {

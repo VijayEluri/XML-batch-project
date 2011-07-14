@@ -27,8 +27,11 @@ public aspect Execute {
 	    
 	void around(XmlObject x): execute() && target(x) {
 		Log log = LogFactory.getLog(this.getClass().getName());
+		log.debug("AJ Execute");
 	    try {
+	    	if (x.isIff()){
 		    	Set c = x.getVariableParameters().entrySet();   
+		    	log.debug("size of variable parameters = " + c.size());
 		    	Iterator itr = c.iterator();
 		    	
 		    	while(itr.hasNext()) {
@@ -53,6 +56,7 @@ public aspect Execute {
 		    	else {
 		    		log.debug(x.getName() + ": " + x.getClass().getName() + ": NOT EXECUTED: iff is false");
 		    	}
+	    	}
 		} catch (XMLBuildException e) {
 			e.printStackTrace();
 		}
@@ -64,6 +68,12 @@ public aspect Execute {
 	 * rather than Filter
 	 */
 	void around(FilterAJ x) throws XMLBuildException: execute() && target(x) {
+		if (x.getLock()) {
+			System.err.println("LOCK");
+			proceed(x);
+			x.setLock(false);
+			return;
+		}
 		Boolean closeIn = false;
 		Boolean closeOut = false;
 		InputStream in = x.getIn();

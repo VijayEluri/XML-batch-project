@@ -5,6 +5,7 @@ import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlParser;
 import com.javalobby.tnt.annotation.attribute;
 /**
  * Specify the query that needs formatting
@@ -15,8 +16,16 @@ import com.javalobby.tnt.annotation.attribute;
 public class Sql extends XmlObject {
 	private static Log log = LogFactory.getLog(Sql.class);
 
-	public String query = "";
+	private String query = "";
 	
+	public String getQuery() throws XMLBuildException {
+		return XmlParser.processMacros(this.getSymbolTable(), XmlParser.replacePoundMacros(query));
+	}
+
+	public String getRawQuery() {
+		return query;
+	}
+
 	public Connection getConnection() {
 		return (Connection)this.getParent();
 	}

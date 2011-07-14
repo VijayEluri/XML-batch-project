@@ -20,9 +20,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
-import com.browsexml.core.XmlParser;
-import com.browsexml.core.XmlObject;
 import com.javalobby.tnt.annotation.attribute;
+
+import edu.bxml.io.FilterAJ;
 /**
  * Load data from a flat file into a database table
  * 
@@ -30,7 +30,7 @@ import com.javalobby.tnt.annotation.attribute;
  * 
  */
 @attribute(value = "", required = true)
-public class Load extends XmlObject {
+public class Load extends FilterAJ {
 	private static Log log = LogFactory.getLog(Load.class);
 	public String delimit = "\t";
 	public boolean fixedWidth = false;
@@ -45,11 +45,30 @@ public class Load extends XmlObject {
 	String file = null;
 	List<File>files = null;
 	String archive = null;
-	
+	private String sqlOpenQuote = "[";
+	private String sqlCloseQuote = "]";
+
+
 	public String table = null;
 	public HashMap<String, Field> fields = new HashMap<String, Field>();
 	String connectionString = null;
 	Connection connection = null;
+	public String getSqlOpenQuote() {
+		return sqlOpenQuote;
+	}
+
+	public void setSqlOpenQuote(String sqlOpenQuote) {
+		this.sqlOpenQuote = sqlOpenQuote;
+	}
+
+	public String getSqlCloseQuote() {
+		return sqlCloseQuote;
+	}
+
+	public void setSqlCloseQuote(String sqlCloseQuote) {
+		this.sqlCloseQuote = sqlCloseQuote;
+	}
+
 	int fieldCount = 0;
 	private boolean truncate = false;
 	private int errCount = 0;
@@ -355,14 +374,14 @@ public class Load extends XmlObject {
 	}
 	
 	public void printCreateTable() {
-		log.debug("create table [" + table + "] (");
+		System.err.println("create table [" + table + "] (");
 		for (int i = 0; i < fieldCount; i++) {
 			Field f = fields.get("" + i);
 			System.err.print("[" + f.getFieldName() + "] ");
-			log.debug(f.getSQLType() + ", ");
+			System.err.println(f.getSQLType() + ", ");
 		}
 		
-		log.debug(")");
+		System.err.println(")");
 		System.exit(1);
 	}
 	
@@ -613,7 +632,7 @@ public class Load extends XmlObject {
 			while ((line = br.readLine()) != null) {
 				lineCount++;
 				
-				// System.out.println(line);
+				System.out.println(line);
 				if (fixedWidth) {
 					log.debug("fixedWidth");
 					values = splitFixedWidth(line);
@@ -628,9 +647,13 @@ public class Load extends XmlObject {
 				sql.append(" values (");
 				StringBuffer fieldListSql = new StringBuffer();
 				for (int i = 0; i < values.length; i++) {
+					
 					String fieldName = null;
 					try {
+						if (i >= headers.length) 
+							continue;
 						fieldName = headers[i];
+						log.debug(fieldName + "  value [ " + i + "] = " + values[i]);
 						if (fieldName == null) 
 							continue;
 					} catch (RuntimeException e1) {
@@ -679,7 +702,8 @@ public class Load extends XmlObject {
 								try {pstmt.setObject(parm.index, value, parm.type);}
 								catch (SQLException s) {throw new XMLBuildException(s.getMessage());};
 						}
-						fieldListSql.append("[").append(f.getFieldName()).append("],");
+						
+						fieldListSql.append(sqlOpenQuote).append(f.getFieldName()).append(sqlCloseQuote).append(",");
 						sql.append(f.insertFormat(value));
 					} catch (NullPointerException e) {
 						e.printStackTrace();
@@ -820,7 +844,7 @@ public class Load extends XmlObject {
 			throw new XMLBuildException(e1.getMessage());
 		}
 		
-		String strQuery = sql.query.replace("{error}", "'" + msg + "'");
+		String strQuery = sql.getQuery().replace("{error}", "'" + msg + "'");
 		log.debug("run query = " + strQuery);
 		
 		try {

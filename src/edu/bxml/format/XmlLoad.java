@@ -685,7 +685,7 @@ public class XmlLoad extends XmlObject {
 			throw new XMLBuildException(e1.getMessage());
 		}
 		
-		String strQuery = sql.query.replace("{error}", "'" + msg + "'");
+		String strQuery = sql.getQuery().replace("{error}", "'" + msg + "'");
 		log.debug("run query = " + strQuery);
 		
 		try {

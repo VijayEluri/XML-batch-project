@@ -10,28 +10,28 @@
         </layout>
     </appender>
     
-    <logger name="com.browsexml.core.XmlObject">
+    <logger name="edu.bxml.format.Load">
     	<level value="WARN"/>
     </logger>
     
     <logger name="com.browsexml">
-    	<level value="DEBUG"/>
-    </logger>
-
-    <logger name="edu.bxml.swt">
     	<level value="WARN"/>
     </logger>
 
-    <logger name="edu.bxml">
+    <logger name="edu.bxml.format.FootField">
     	<level value="DEBUG"/>
     </logger>
 
-    <logger name="edu.misc.report.Pdf">
+    <logger name="edu.bxml">
+    	<level value="WARN"/>
+    </logger>
+
+    <logger name="edu.bxml.format.Header">
     	<level value="DEBUG"/>
     </logger>
     
-    <logger name="edu.misc.report.Newpage">
-    	<level value="DEBUG"/>
+    <logger name="com.browsexml.core.XmlParser">
+    	<level value="WARN"/>
     </logger>
 
     <root>

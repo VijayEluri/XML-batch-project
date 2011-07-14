@@ -307,7 +307,7 @@ public class XmlSelect extends XmlObject {
 				e.printStackTrace();
 				throw new XMLBuildException("The connection '" + queryName + "' could not be found");
 			}
-			log.debug("sql = " + sql.query);
+			log.debug("sql = " + sql.getQuery());
 			//java.sql.Connection con = connection.getConnection();
 			/* TODO put dataoutput into sub objects */
 			stmt = connection.getStatement();//con.createStatement();
@@ -317,7 +317,7 @@ public class XmlSelect extends XmlObject {
 			// log.debug(sql.query);
 
 			try {
-			rs = stmt.executeQuery(sql.query);
+			rs = stmt.executeQuery(sql.getQuery());
 			setMD(rs.getMetaData());
 			log.debug("filename = " + filename);
 			printHeader(workingValues);

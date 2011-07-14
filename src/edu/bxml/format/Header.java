@@ -12,6 +12,8 @@ import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
 import com.javalobby.tnt.annotation.attribute;
 
+import edu.bxml.io.FilterAJ;
+
 /**
  * Hold information about how to format the header
  * @author ritcheyg
@@ -20,12 +22,14 @@ import com.javalobby.tnt.annotation.attribute;
 @attribute(value = "", required = true)
 public class Header extends XmlObject {
 	private static Log log = LogFactory.getLog(Header.class);
+	
+	private StringBuffer outBuffer;
 	boolean setToColumnNames = false;
 	String separator = null;
 	private Vector<Field> columns = new Vector<Field>();
 	private Vector<FootField> footerFields = new Vector<FootField>();
-	PrintStream out = System.out;
 	Query s = null;
+	HashMap workingValues;
 	
 	
 	/**
@@ -97,9 +101,52 @@ public class Header extends XmlObject {
 	/**
 	 * Called after complete parsing of XML document
 	 * to evaluate the document.
+	 * @throws XMLBuildException 
 	 */
-	public void execute() {
-		
+	public void execute() throws XMLBuildException {
+		log.debug("print header for working = " + workingValues);
+		//s = (Query) getAncestorOfType(Query.class);
+		log.debug(" s = " + s);
+		outBuffer = new StringBuffer();
+		String delimit = null;
+		if (footerFields.size() > 0) {
+			for (FootField field:footerFields){
+				field.execute();  // All fields macro-replacement done by aspectj
+				if (field.subField != null) {
+					log.debug("subField not null");
+					String name = field.subField.getName();
+					Object object = workingValues.get(name);
+					String thisOut = field.subField.format(object);
+					outBuffer.append(thisOut);
+				}
+				else {
+					log.debug("append");
+					outBuffer.append(field.getValue());
+				}
+				delimit = field.getDelimit();
+				if (delimit == null) {
+					delimit = separator;
+				}
+				outBuffer.append(delimit);
+			}
+			if (outBuffer.length() > 1) {
+				outBuffer.setLength(outBuffer.length()-delimit.length());
+				outBuffer.append("\n");
+				log.debug("output header as '" + outBuffer.toString() + "'");
+			}
+		}
+		if (setToColumnNames) {
+			for (Field column:columns){
+				log.debug("colunn = " + column);
+				if (!(column instanceof HiddenField)) {
+					outBuffer.append(separator);
+					outBuffer.append(column.getFieldName());
+				}
+			}
+			if (outBuffer.length() > delimit.length()) {
+				outBuffer.delete(0, delimit.length());
+			}
+		}
 	}
 	/**
 	 * Retrieve the text that was contained inside the tag
@@ -138,47 +185,9 @@ public class Header extends XmlObject {
 	 * generate the header to standard out
 	 *
 	 */
-	public void output(HashMap workingValues) throws XMLBuildException {
-		log.debug("print header for working = " + workingValues);
-		s = (Query) getAncestorOfType(Query.class);
-		log.debug(" s = " + s);
-		out = new PrintStream(s.getOut());
-		StringBuffer outBuffer = new StringBuffer();
-		String delimit = null;
-		if (footerFields.size() > 0) {
-			for (FootField field:footerFields){
-				if (field.subField != null) {
-					String name = field.subField.getName();
-					Object object = workingValues.get(name);
-					String thisOut = field.subField.format(object);
-					outBuffer.append(thisOut);
-				}
-				else
-					outBuffer.append(field.getValue());
-				delimit = field.getDelimit();
-				if (delimit == null) {
-					delimit = separator;
-				}
-				outBuffer.append(delimit);
-			}
-			if (outBuffer.length() > 1) {
-				outBuffer.setLength(outBuffer.length()-delimit.length());
-				out.println(outBuffer);
-				log.debug("output header as " + outBuffer.toString());
-				outBuffer.setLength(0);
-			}
-		}
-		if (setToColumnNames) {
-			for (Field column:columns){
-				log.debug("colunn = " + column);
-				if (!(column instanceof HiddenField)) {
-					outBuffer.append(separator);
-					outBuffer.append(column.getFieldName());
-				}
-			}
-			if (outBuffer.length() > 1) {
-				out.println(outBuffer.toString().substring(1));
-			}
-		}
+	public String output(HashMap workingValues) throws XMLBuildException {
+		this.workingValues = workingValues;
+		execute();
+		return outBuffer.toString();
 	}
 }

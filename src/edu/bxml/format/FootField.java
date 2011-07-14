@@ -3,6 +3,8 @@ package edu.bxml.format;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -46,7 +48,6 @@ public class FootField extends XmlObject {
 	public String name = null;
 
 	public FootFieldTypes type = null;
-	String constantValue = null;
 
 	public int size = -1;
 	private int add = 0;
@@ -178,7 +179,7 @@ public class FootField extends XmlObject {
 		if (outDateFormat == null && type.equals(FootFieldTypes.DATE)) {
 			throw new XMLBuildException("No date format given");
 		}
-		if (type.equals(FootFieldTypes.CONSTANT) && constantValue == null) {
+		if (type.equals(FootFieldTypes.CONSTANT) && super.getValue() == null) {
 			throw new XMLBuildException("Constant value specified but never set");
 		}
 		if (padLeft != null && padRight != null) {
@@ -214,11 +215,12 @@ public class FootField extends XmlObject {
 	 * FIXME: getValue() returns 0 for data connected fields (??).
 	 */
 	public String getValue() throws XMLBuildException {
+		log.debug("type = " + type);
 		if (subField != null) {
 			return subField.format("0");
 		}
 		if (type.equals(FootFieldTypes.CONSTANT)) {
-			return constantValue;
+			return (String) super.getValue();
 		}
 		if (type.equals((FootFieldTypes.DATE))) {
 			return 	outDateFormat.format(new Date());			
@@ -236,6 +238,7 @@ public class FootField extends XmlObject {
 		}
 		if (type.equals(FootFieldTypes.LENGTH)) {
 			String value = ""+getParentSelect().getLength();
+			log.debug("length = " + value);
 			if (leftPadding != null) {
 				return (leftPadding + value).substring(value.length());
 			}
@@ -255,18 +258,13 @@ public class FootField extends XmlObject {
 				try {baos.close();}
 				catch (IOException io) {io.printStackTrace();}
 				String returnString =  baos.toString();
-				return returnString.toString().substring(0, returnString.length()-
-						System.getProperty("line.separator").length());
+				int len = returnString.length()- System.getProperty("line.separator").length();
+				if (len < 1) 
+					return returnString;
+				return returnString.substring(0, len);
 			}
 		}
 		return "";
-	}
-
-	/**
-	 * Retrieve the text that was contained inside the tag
-	 */
-	public void setText(String text) {
-		constantValue = text;
 	}
 	
 	/**
@@ -278,8 +276,4 @@ public class FootField extends XmlObject {
 		this.select = select;
 	}
 	
-	public void setFromTextContent(String text) {
-		if (text != null)
-			constantValue = text;
-	}
 }

@@ -53,7 +53,7 @@ public class ResultMetadata extends Filter  {
 		}
 		try {
 			stmt = connection.getStatement();
-			rs = stmt.executeQuery(sql.query);
+			rs = stmt.executeQuery(sql.getQuery());
 			PrintStream out = new PrintStream(this.out);
             if (this.out == null && this.toFile==null) {
             	out = System.out;
