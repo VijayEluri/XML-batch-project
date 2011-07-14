@@ -1,0 +1,515 @@
+<?xml version="1.0"?>
+<?classpath
+        file:/Users/geoffreyritchey/Documents/workspace/x86_bookstore/aspectjrt.jar;
+        file:/Users/geoffreyritchey/Documents/workspace/x86_bookstore/cryptix/cryptix-message-api.jar;
+        file:/Users/geoffreyritchey/Documents/workspace/x86_bookstore/jsch.jar;
+        file:/Users/geoffreyritchey/Documents/workspace/x86_bookstore/commons-net-2.0.jar;
+        file:/Users/geoffreyritchey/Documents/workspace/x86_bookstore/jdbc/sqljdbc.jar;
+?>
+<query xmlns='edu.bxml.format' xmlns:io='edu.bxml.io'
+                        xmlns:core='com.browsexml.core'
+                        xmlns:ftp='edu.bxml.ftp'
+                        xmlns:format='edu.bxml.format'
+                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                        xsi:schemaLocation="
+                        edu.bxml.format file:///C:/Users/geoff.ritchey/workspace/browsexml/edu_bxml_format.xsd
+                        edu.bxml.io file:///C:/Users/geoff.ritchey/workspace/browsexml/edu_bxml_io.xsd
+                        edu.bxml.ftp file:///C:/Users/geoff.ritchey/workspace/browsexml/edu_bxml_ftp.xsd
+                        com.browsexml.core file:///C:/Users/geoff.ritchey/workspace/browsexml/com_browsexml_core.xsd">
+	<property name="year" text="2010"/>
+	<property name="fice" text="003586"/>
+	<property name="selectionSetToken" text="1565"/> 
+
+	<!--  find the table and column values for custom data locations -->
+	<properties queryName="properties" separator="," file="passwords.properties"> 
+		<property name="county" text="2503"/> <!-- user_date.value_03 -->
+		<property name="ethnic" text="2805"/> <!-- user_string.value_05 -->
+	</properties>
+	
+	<properties queryName="getSelSelDefinition" separator=","> 
+		<property name="selectionSetQuery" text="${selectionSetToken}"/> <!-- -->
+	</properties>
+	
+	<!--  Grants -->
+	<property name="_TOP10PCT" text="0"/>   <!-- 2010 -->
+	<property name="_TUIT_EXEMPT_WAIV" text="0"/><!-- 2010 -->
+	<property name="_CATEGORICAL_AID" text="2607,2608,2609,2610,2653"/><!-- 2010 -->
+	<property name="_FEDERAL_PELL" text="2575"/><!-- 2010 -->
+	<property name="_FEDERAL_SEOG" text="2576"/><!-- 2010 -->
+	<property name="_TPEG_ON_CAMPUS" text="0"/> <!-- 2010 -->
+	<property name="_SMART_GRANT" text="2805"/>  <!-- 2010 -->
+	<property name="_TEG_PRIVATE_SCHL" text="2584"/> <!-- 2010 -->
+	<property name="_LEAP" text="2585"/> <!-- 2010 -->
+	<property name="_HB3015_GRANTS" text="0"/>
+	<property name="_PRIVATESCH" text="2589,2590,2591,2592,2622,2626,2628,2629,2631,2635,2638,2639,2640,2641,2642,2643,2644,2645,2646,2647,2648,2649,2650,2651,2652,2654,2655,2656,2657,2658,2660,2661,2662,2663,2664,2665,2666,2667,2668,2670,2671,2672,2673,2674,2675,2676,2677,2678,2679,2680,2681,2682,2684,2685,2686,2687,2688,2689,2690,2691,2692,2693,2694,2695,2696,2697,2698,2699,2700,2701,2702,2703,2705,2706,2707,2708,2709,2710,2711,2712,2713,2714,2715,2716,2717,2718,2719,2722,2723,2724,2725,2726,2727,2728,2729,2731,2732,2733,2734,2735,2736,2737,2738,2739,2740,2741,2742,2743,2744,2745,2746,2747,2748,2749,2750,2752,2753,2754,2755,2756,2757,2759,2760,2763,2764,2765,2766,2767,2768,2769,2772,2773,2775,2777,2778,2779,2780,2782,2785,2786,2787,2788,2789,2790,2791,2792,2794,2795,2799,2800,2801,2802,2803,2807,2808,2809,2813,2814,2815,2816,2817,2818,2819,2825,2826,2827,2828,2838,2839,2841,2843"/>
+	<property name="_MERIT_BY_INST" text="2588,2594,2596,2597,2598,2599,2600,2601,2602,2603,2604,2605,2606,2611,2612,2613,2614,2615,2616,2617,2618,2619,2620,2621,2623,2624,2625,2627,2630,2632,2633,2636,2637,2751,2761,2762,2770,2771,2774,2776,2783,2784,2793,2797,2798,2810,2812,2820,2821,2822,2824,2829,2830,2831,2832,2833,2834,2835,2836,2840,2595"/> <!-- 2010 -->
+	<property name="_BYRD_SCHOLARSHIP" text="2587"/> <!-- 2010 -->
+	<property name="_STATE_NURSE_SCHLR" text="2796"/> <!-- 2010 -->
+	<property name="_STUDENT_DEP_SCHLR" text="0"/><!-- 2010 -->
+	<property name="_ACG" text="2804"/><!-- 2010 -->
+	<property name="_OTHER_SCHLR_GRANT" text="2586,2842"/> <!-- 2010 -->
+	<property name="_TEXAS_GRANT_PGM" text="2669"/> <!-- 2010 -->
+	<property name="_TEOG" text="0"/>
+	<property name="_FEDERAL_SLEAP" text="2730"/> <!-- 2010 -->
+	<property name="_TEACH" text="2823"/> <!-- 2010 -->
+	
+	<!--  Work Study  -->
+	<property name="_FEDERAL_WK_STUDY" text="2577"/> <!-- 2010 -->
+	<property name="_TEXAS_WORK_STUDY" text="2582"/> <!-- 2010 -->
+	<property name="_NEED_BASED_INST" text="0"/> <!-- 2010 -->
+	<property name="_AMERICORPS" text="0"/> <!-- 2010 -->
+	<property name="_HB3015_WS" text="0"/> <!-- 2010 -->
+	<property name="_TXWS_MENTORSHIP" text="0"/> <!-- 2010 -->
+	
+	<!-- Loans -->
+	<property name="_SUBS_STAFFORD_LN" text="2579"/> <!--FFELP 2010 -->
+	<property name="_UNSUB_STAFFORD_LN" text="2580"/> <!-- 2010 -->
+	<property name="_PERKINS_LOAN" text="2578"/> <!-- 2010 -->
+	<property name="_FEDERAL_PLUS_LNS" text="2581,2806"/> <!-- 2010 -->
+	<property name="_HELP" text="0"/> <!-- 2010 -->
+	<property name="_COLLEGE_ACCESS_LN" text="0"/><!-- 2010 -->
+	<property name="_PRIM_CARE_STD_LN" text="0"/><!-- 2010 -->
+	<property name="_FDSLP_PLUS" text="0"/><!-- 2010 -->
+	<property name="_FDSLP_SUB" text="0"/>
+	<property name="_OTHER_LT_LOANS" text="2583"/> <!-- 2010 -->
+	<property name="_UNSUB_FED_DIR_LNS" text="0"/>
+	<property name="_BOT" text="2781"/> <!-- 2010 -->
+	<property name="_HB3015_LOANS" text="0"/><!-- 2010 -->
+	<property name="_HB3015_OTHER" text="0"/><!-- 2010 -->
+	<!-- select name="selectionSet" queryName="selset" delimit="\n" toDir="." toFile="selset.sql">
+		<charField name="sel_set" type="CHAR" size="5000"/>
+	</select-->
+	<execute sql="generateData"/>
+	<select name="selectFADS" queryName="fads" delimit="" toDir="." toFile="fads.txt">
+		<header columnsNames="false">
+			<footField type="CONSTANT">HY2K</footField>
+			<footField type="CONSTANT">${fice}</footField>
+			<footField type="CONSTANT">FAD001</footField>
+			<footField type="CONSTANT">1</footField> <!--semester fall=1-->
+			<footField type="CONSTANT">${year}</footField>
+			<footField type="CONSTANT">C</footField> <!-- Complete report -->
+			<footField type="LENGTH" size="4" padleft="0"/> <!-- total of all size values in body-->
+			<!-- number of aid applicants 05059-->
+			<footField type="SQL">              
+				<select name="aidApps" queryName="aidapps">
+					<numberField name="AidApps" type="CHAR" size="5" padleft="0"/>
+				</select>
+			</footField>
+		</header>
+		<key name="key" field="SOC_SEC_NUMBER"/>
+		<charField name="TYPE" type="CHAR" size="1" />                                    <!-- 1 -->
+		<charField name="FICE" type="CHAR" size="6" padleft="0"/>                                    <!-- 1 -->
+		<charField name="YEAR" type="CHAR" size="4" padleft="0"/>                                    <!-- 1 -->
+		<charField name="SOC_SEC_NUMBER" type="CHAR" size="9"/>                                    <!-- 1 -->
+		<numberField name="STDNT_SPOUSE_AGI" type="NUMBER" size="6" padleft="0" default="000000"  min="0" max="300000"/>                                    <!-- 1 -->
+		<numberField name="PARENT_AGI" type="NUMBER" size="6" padleft="0" default="000000" min="0" max="300000"/>                                    <!-- 1 -->
+		<numberField name="TOP10PCT" type="NUMBER" size="5" padleft="0" default="00000"/>                                    <!-- 1 -->
+		<numberField name="fill1" type="NUMBER" size="5" padleft="0" default="00000"/>                                    <!-- 1 -->
+		<numberField name="fill2" type="NUMBER" size="5" padleft="0" default="00000"/>                                    <!-- 1 -->
+		<numberField name="fill3" type="NUMBER" size="5" padleft="0" default="00000"/>                                    <!-- 1 -->
+		<numberField name="fill4" type="NUMBER" size="6" padleft="0" default="000000"/>                                    <!-- 1 -->
+		<charField name="RACE" type="CHAR" size="6" padleft="0" default="000000"/>
+		<numberField name="fill5" type="NUMBER" size="5" padleft="0" default="00000"/>
+		<numberField name="fill6" type="NUMBER" size="5" padleft="0" default="00000"/>
+		<numberField name="fill7" type="NUMBER" size="1" padleft="0" default="0"/>
+		<numberField name="ISIR_VALID" type="NUMBER" size="1" padleft="0" default="0"/>
+		<numberField name="HOUSING" type="NUMBER" size="1" padleft="0" default="0"/>
+		<numberField name="ETHNIC" type="NUMBER" size="1" padleft="0" default="0"/>
+		<charField name="RACE_CODE" type="CHAR" size="7" default="0000000"/>
+		<charField name="CLASSIFICATION" type="CHAR" size="1" default=" "/>                       <!-- 15 -->
+		<charField name="DEPENDENCY_STATUS" type="CHAR" size="1" default=" "/>                    <!-- 16 -->
+		<dateField name="DATE_OF_BIRTH" type="DATE" format="MMddyyyy"/>                           <!-- 17 -->
+		<charField name="RESIDENCY" type="CHAR" size="1" default=" "/>                            <!-- 18 -->
+		<charField name="fill8" type="CHAR" size="53" padleft=" "/>                            <!-- 18 -->
+		<charField name="ZIP_ADDRESS" type="CHAR" size="9" default="000000000" padright="0" />                        <!-- 22 -->
+		<charField name="ENROLLMENT_STATUS" type="CHAR" size="1" default=" "/>                    <!-- 23 -->
+		<charField name="GENDER" type="CHAR" size="1" default=" "/>  
+		<charField name="MOTHER_HIGH_GRADE" type="CHAR" size="1" default=" "/>                    <!-- 25 -->
+		<charField name="FATHER_HIGH_GRADE" type="CHAR" size="1" default=" "/>                    <!-- 26 -->
+		<numberField name="COST_OF_ATTEND" type="NUMBER" size="5" default="00000" padleft="0"/>   <!-- 27 -->
+		<numberField name="TOTAL_FAMILY_CONT" type="NUMBER" size="6" default="000000" padleft="0"/><!--28 -->
+		<numberField name="TUIT_EXEMPT_WAIV" type="NUMBER" size="5" default="00000" padleft="0"/> <!-- 29 -->
+		<numberField name="CATEGORICAL_AID" type="NUMBER" size="5" default="00000" padleft="0"/>  <!-- 30 -->
+		<numberField name="FEDERAL_PELL" type="NUMBER" size="5" default="00000" padleft="0"/>     <!-- 31 a -->
+		<numberField name="FEDERAL_SEOG" type="NUMBER" size="5" default="00000" padleft="0"/>     <!-- 31 b -->
+		<numberField name="TPEG_ON_CAMPUS" type="NUMBER" size="5" default="00000" padleft="0"/>   <!-- 31 c -->
+		<numberField name="SMART_GRANT" type="NUMBER" size="5" default="00000" padleft="0"/>      <!-- 31 d -->
+		<numberField name="TEG_PRIVATE_SCHL" type="NUMBER" size="5" default="00000" padleft="0"/> <!-- 31 e -->
+		<numberField name="LEAP" type="NUMBER" size="5" default="00000" padleft="0"/>             <!-- 31 f -->
+		<numberField name="HB3015_GRANTS" type="NUMBER" size="5" default="00000" padleft="0"/>    <!-- 31 g -->
+		<numberField name="PRIVATESCH" type="NUMBER" size="5" default="00000" padleft="0"/>    <!-- 31 h -->
+		<numberField name="MERIT_BY_INST" type="NUMBER" size="5" default="00000" padleft="0"/>    <!-- 31 i -->
+		<numberField name="BYRD_SCHOLARSHIP" type="NUMBER" size="5" default="00000" padleft="0"/> <!-- 31 j -->
+		<numberField name="STATE_NURSE_SCHLR" type="NUMBER" size="5" default="00000" padleft="0"/><!-- 31 k -->
+		<numberField name="STUDENT_DEP_SCHLR" type="NUMBER" size="5" default="00000" padleft="0"/><!-- 31 l -->
+		<numberField name="ACG" type="NUMBER" size="5" default="00000" padleft="0"/><!-- 31 m -->
+		<numberField name="OTHER_SCHLR_GRANT" type="NUMBER" size="5" default="00000" padleft="0"/><!-- 31 n -->
+		<numberField name="TEXAS_GRANT_PGM" type="NUMBER" size="5" default="00000" padleft="0"/>  <!-- 31 o -->
+		<numberField name="TEOG" type="NUMBER" size="5" default="00000" padleft="0"/>             <!-- 31 p -->
+		<numberField name="FEDERAL_SLEAP" type="NUMBER" size="5" default="00000" padleft="0"/>    <!-- 31 q -->
+		<numberField name="FEDERAL_WK_STUDY" type="NUMBER" size="5" default="00000" padleft="0"/> <!-- 32 a -->
+		<numberField name="TEXAS_WORK_STUDY" type="NUMBER" size="5" default="00000" padleft="0"/> <!-- 32 b -->
+		<numberField name="NEED_BASED_INST" type="NUMBER" size="5" default="00000" padleft="0"/>  <!-- 32 c -->
+		<numberField name="AMERICORPS" type="NUMBER" size="5" default="00000" padleft="0"/>       <!-- 32 d -->
+		<numberField name="HB3015_WS" type="NUMBER" size="5" default="00000" padleft="0"/>        <!-- 32 e -->
+		<numberField name="TXWS_MENTORSHIP" type="NUMBER" size="5" default="00000" padleft="0"/>  <!-- 32 f -->
+		<numberField name="SUBS_STAFFORD_LN" type="NUMBER" size="5" default="00000" padleft="0"/> <!-- 33 a -->
+		<numberField name="UNSUB_STAFFORD_LN" type="NUMBER" size="5" default="00000" padleft="0"/><!-- 33 b -->
+		<numberField name="PERKINS_LOAN" type="NUMBER" size="5" default="00000" padleft="0"/>     <!-- 33 c -->
+		<numberField name="FEDERAL_PLUS_LNS" type="NUMBER" size="5" default="00000" padleft="0"/> <!-- 33 d -->
+		<numberField name="HELP" type="NUMBER" size="5" default="00000" padleft="0"/>             <!-- 33 e -->
+		<numberField name="COLLEGE_ACCESS_LN" type="NUMBER" size="5" default="00000" padleft="0"/><!-- 33 f -->
+		<numberField name="PRIM_CARE_STD_LN" type="NUMBER" size="5" default="00000" padleft="0"/> <!-- 33 g -->
+		<numberField name="FDSLP_PLUS" type="NUMBER" size="5" default="00000" padleft="0"/><!-- 33 h -->
+		<numberField name="FDSLP_SUB" type="NUMBER" size="5" default="00000" padleft="0"/>  <!-- 33 i -->
+		<numberField name="OTHER_LT_LOANS" type="NUMBER" size="5" default="00000" padleft="0"/>   <!-- 33 j -->
+		<numberField name="UNSUB_FED_DIR_LNS" type="NUMBER" size="5" default="00000" padleft="0"/><!-- 33 k -->
+		<numberField name="BOT" type="NUMBER" size="5" default="00000" padleft="0"/>              <!-- 33 l -->
+		<numberField name="HB3015_LOANS" type="NUMBER" size="5" default="00000" padleft="0"/>     <!-- 33 m -->
+		<numberField name="TEACH" type="NUMBER" size="5" default="00000" padleft="0"/>           <!-- 34 a -->
+		<numberField name="HB3015_OTHER" type="NUMBER" size="5" default="00000" padleft="0"/>     <!-- 34 b -->
+		<numberField name="ENROLL_ADJ_COA" type="NUMBER" size="3" padleft="0"/>                   <!-- 35 a -->
+		<numberField name="ENROLL_ADJ_TFC" type="NUMBER" size="3" padleft="0"/>                   <!-- 35 b -->
+		<charField name="ALT_ID" type="CHAR" size="9" padleft=" " default="         "/>                   <!-- 35 b -->
+		<footer>
+			<footField type="CONSTANT">EOF1</footField>
+			<footField type="COUNT" size="5" padleft="0"/>
+			<footField type="CONSTANT">                                                                       </footField>
+		</footer>
+	</select>
+	<execute sql="clean"/>
+		<connection name="Campus6" login="${pf_user}" password="${pf_password}"
+				class="com.microsoft.sqlserver.jdbc.SQLServerDriver"
+				url="${pf_url}">
+		<sql name="aidapps">
+<![CDATA[
+SELECT COUNT(*) as AidApps FROM stu_award_year WHERE award_year_token = ${year}-1
+]]>
+		</sql>
+<sql name="properties">
+<![CDATA[
+SELECT dict_token as name, tabname + '.' + colname as value
+from dict_stu
+where dict_token in (${text})
+]]>
+		</sql>
+		<sql name="getSelSelDefinition">
+<![CDATA[
+
+select sel_set_year_token as name, 
+	'select distinct stu_award_year.stu_award_year_token into lcu_fads_students from ' + ' ' + cast(sel_set_from as varchar(max)) + ' where ' + cast(sel_set_where as varchar(max)) as value 
+from sel_set_year
+where award_year_token = ${year}-1
+	and sel_set_year_token in (${selectionSetToken})
+
+]]>
+		</sql>
+		<sql name="selset">
+${selectionSetQuery}
+		</sql>
+		<sql name="generateData">
+<![CDATA[
+--exec lcu_fads
+
+if exists (select * from dbo.sysobjects where id = object_id(N'[lcu_fads_selection_set]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [lcu_fads_selection_set];
+
+if exists (select * from dbo.sysobjects where id = object_id(N'[lcu_fads_amounts]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [lcu_fads_amounts];
+
+if exists (select * from dbo.sysobjects where id = object_id(N'[lcu_fads_base_info]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [lcu_fads_base_info];
+
+if exists (select * from dbo.sysobjects where id = object_id(N'[lcu_fads_students]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [lcu_fads_students];
+
+if exists (select * from dbo.sysobjects where id = object_id(N'[lcu_fads_totals]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [lcu_fads_totals];
+
+--select distinct stu_award_year.stu_award_year_token  
+--into lcu_fads_students
+--from student, stu_award_year, say_fm_stu, stu_award, stu_ay_sum_data
+--where (student.student_token = stu_award_year.student_token) 
+--	AND (say_fm_stu.stu_award_year_token = stu_award_year.stu_award_year_token) 
+--	AND (stu_award.stu_award_year_token = stu_award_year.stu_award_year_token) 
+--	AND (stu_ay_sum_data.stu_award_year_token = stu_award_year.stu_award_year_token) 
+--	AND (stu_award_year.award_year_token = ${year}-1) 
+--	AND ((say_fm_stu.data_valid = 'Y' AND stu_award.actual_amt > 0) 
+--		AND (stu_award_year.tracking_status = 'DR' 
+--			OR stu_award_year.tracking_status = 'DS' OR stu_award_year.tracking_status = 'DM' 
+--			OR stu_award_year.tracking_status = 'PD') 
+--		/*AND (stu_ay_sum_data.tot_fed_funds_awd > 0 
+--			OR stu_ay_sum_data.tot_state_funds_awd > 0 
+--			OR stu_ay_sum_data.tot_inst_funds_awd > 0)*/);
+
+${selectionSetQuery}
+
+select s.student_ssn as ssn,
+	coalesce(f.fund_source, ' ') + coalesce(f.fund_type, ' ') + coalesce(f.fund_gov_id, ' ') as type, 
+	f.fund_token as token, 
+	CASE WHEN sa.disbursed_amt > 0 THEN disbursed_amt 
+		WHEN sa.status IN ('A','P') AND (f.fund_disbursement = 'N' OR f.fund_disbursement IS Null) 
+			AND disbursed_amt = 0 THEN sa.actual_amt 
+		ELSE 0 END as amount
+into lcu_fads_amounts
+from student s
+	join stu_award_year say on say.student_token = s.student_token
+	join stu_award sa on say.stu_award_year_token = sa.stu_award_year_token
+	join funds f on f.fund_token = sa.fund_ay_token
+	join lcu_fads_students ss 
+		on say.stu_award_year_token = ss.stu_award_year_token;
+
+
+select ssn, 
+	SUM(case when type like '[SI]G_' AND token IN (${_TOP10PCT}) then amount else 0 end) as TOP10PCT, 
+	SUM(case when type like 'IG_' AND token IN (${_TUIT_EXEMPT_WAIV}) then amount else 0 end) as TUIT_EXEMPT_WAIV, 
+	SUM(case when type like '[SIFOP]G_' AND token IN (${_CATEGORICAL_AID}) then amount else 0 end) as CATEGORICAL_AID,
+	SUM(case when type like 'FGL' AND token IN (${_FEDERAL_PELL}) then amount else 0 end) as FEDERAL_PELL, -- 31a
+	SUM(case when type like 'FGS' AND token IN (${_FEDERAL_SEOG})then amount else 0 end) as FEDERAL_SEOG, -- 31b
+	SUM(case when type like 'SG_' AND token IN (${_TPEG_ON_CAMPUS}) then amount else 0 end) as TPEG_ON_CAMPUS, --31c   PUBLIC check  puborpriv
+	SUM(case when type like 'FGT' AND token IN (${_SMART_GRANT}) then amount else 0 end) as SMART_GRANT, --31d   PUBLIC
+	SUM(case when type like 'SG_' AND token IN (${_TEG_PRIVATE_SCHL}) then amount else 0 end) as TEG_PRIVATE_SCHL, -- 31e  PUBLIC
+	SUM(case when type like 'SG_' AND token IN (${_LEAP}) then amount else 0 end) as LEAP, -- 31f
+	SUM(case when type like 'SG_' AND token IN (${_HB3015_GRANTS}) then amount else 0 end) as HB3015_GRANTS, --31g
+	SUM(case when type like '[PO]G_' AND token IN (${_PRIVATESCH}) then amount else 0 end) as PRIVATESCH, --31h  PrivateSch
+	SUM(case when type like '[IPO]G_' AND token IN (${_MERIT_BY_INST}) then amount else 0 end) as MERIT_BY_INST, --31i  InstPrivateMerit
+	SUM(case when type like '[SFO]G_' AND token IN (${_BYRD_SCHOLARSHIP}) then amount else 0 end) as BYRD_SCHOLARSHIP, -- 31j
+	SUM(case when type like 'SG_' AND token IN (${_STATE_NURSE_SCHLR}) then amount else 0 end) as STATE_NURSE_SCHLR, -- 31k
+	SUM(case when type like 'SG_' AND token IN (${_STUDENT_DEP_SCHLR}) then amount else 0 end) as STUDENT_DEP_SCHLR, --31l  PUBLIC
+	SUM(case when type like 'FGA' AND token IN (${_ACG}) then amount else 0 end) as ACG, --31m
+	SUM(case when type like 'SG_' AND token IN (${_OTHER_SCHLR_GRANT}) then amount else 0 end) as OTHER_SCHLR_GRANT, -- 31n
+	SUM(case when type like 'SG_' AND token IN (${_TEXAS_GRANT_PGM}) then amount else 0 end) as TEXAS_GRANT_PGM, --31o
+	SUM(case when type like 'SG_' AND token IN (${_TEOG}) then amount else 0 end)  as TEOG, -- 31p  PUBLIC
+	SUM(case when type like 'SG_' AND token IN (${_FEDERAL_SLEAP}) then amount else 0 end) as FEDERAL_SLEAP, -- 31q
+	SUM(case when type like 'FJW' then amount else 0 end) as FEDERAL_WK_STUDY, -- 32a
+	SUM(case when type like 'SJ_' AND token IN (${_TEXAS_WORK_STUDY}) then amount else 0 end) as TEXAS_WORK_STUDY, -- 32b
+	SUM(case when type like 'IJ_' AND token IN (${_NEED_BASED_INST}) then amount else 0 end) as NEED_BASED_INST, -- 32c
+	SUM(case when type like 'FJO' AND token IN (${_AMERICORPS}) then amount else 0 end) as AMERICORPS, -- 32d
+	SUM(case when type like 'SJ_' AND token IN (${_HB3015_WS}) then amount else 0 end) as HB3015_WS, --32e
+	SUM(case when type like 'SJ_' AND token IN (${_TXWS_MENTORSHIP}) then amount else 0 end) as TXWS_MENTORSHIP, -- 32f
+	SUM(case when type like 'FLG' AND token IN (${_SUBS_STAFFORD_LN}) then amount else 0 end) as SUBS_STAFFORD_LN, -- 33a
+	SUM(case when type like 'FLU' AND token IN (${_UNSUB_STAFFORD_LN}) then amount else 0 end) as UNSUB_STAFFORD_LN, -- 33b --1330
+	SUM(case when type like 'FLN' then amount else 0 end) as PERKINS_LOAN, -- 33c
+	SUM(case when type like 'FL[PB]' AND token IN (${_FEDERAL_PLUS_LNS}) then amount else 0 end) as FEDERAL_PLUS_LNS, -- 33d
+	SUM(case when type like '[FS]L_' AND token IN (${_HELP}) then amount else 0 end) as [HELP], -- 33e
+	SUM(case when type like 'SL_' AND token IN (${_COLLEGE_ACCESS_LN}) then amount else 0 end) as COLLEGE_ACCESS_LN, -- 33f
+	SUM(case when type like '[ISF]L_' AND token IN (${_PRIM_CARE_STD_LN}) then amount else 0 end) as PRIM_CARE_STD_LN, -- 33g
+	SUM(case when type like 'FL[PB]' AND token in (${_FDSLP_PLUS}) then amount else 0 end) as FDSLP_PLUS, -- 33h
+	SUM(case when type like 'FLG' AND token IN (${_FDSLP_SUB}) then amount else 0 end) as FDSLP_SUB, -- 33i
+	SUM(case when type like '[IPO]L_' AND token IN (${_OTHER_LT_LOANS}) then amount else 0 end) as OTHER_LT_LOANS, -- 33j --1386
+	SUM(case when type like 'FLU' AND token IN (${_UNSUB_FED_DIR_LNS}) then amount else 0 end) as UNSUB_FED_DIR_LNS, -- 33k
+	SUM(case when type like 'SL_' AND token IN (${_BOT}) then amount else 0 end) as BOT, -- 33l
+	SUM(case when type like 'SL_' AND token IN (${_HB3015_LOANS}) then amount else 0 end) as HB3015_LOANS, -- 33m
+	SUM(case when type like 'FGS' AND token IN (${_TEACH}) then amount else 0 end) as TEACH, -- 34a
+	SUM(case when type like '[SO]L_' AND token IN (${_HB3015_OTHER}) then amount else 0 end) as HB3015_OTHER, -- 34b
+	0 as ENROLL_ADJ_COA, -- 35a
+	0 as ENROLL_ADJ_TFC -- 35b 
+into lcu_fads_totals
+from lcu_fads_amounts 
+group by ssn;
+ 
+select s.student_ssn as SOC_SEC_NUMBER, 
+	s.last_name as last_name, 
+	s.first_name as first_name,
+	s.middle_init as middle_init, 
+	s.alternate_id as alt_id, 
+	case WHEN sfm.dependency_status IN ('I','Y') then isnull(isnull(sfm.agi, sffs.agi), 0) else 0 end as STDNT_SPOUSE_AGI,
+	case WHEN sfm.dependency_status IN ('I','Y') then 0 else isnull(isnull(sfp.agi, sffp.agi), 0) end as PARENT_AGI, 
+	isnull(
+		case when s.race=6 then '1' 
+			when s.race=4 then '2'
+			when s.race=3 then '4'
+			when s.race=2 then '5'
+			when s.race=8 then '6'
+			when s.race=9 then '7'
+			when s.race=5 then '8'
+			else null end, ${ethnic}) as RACE,
+	case when sfm.data_valid='Y' then 1 else 2 end as ISIR_VALID, 
+	case when sfm.housing = 1 and max(say.award_year_token) >= 2009 then 2
+		when sfm.housing = 2 and max(say.award_year_token) >= 2009 then 1
+		when sfm.housing = 3 and max(say.award_year_token) >= 2009 then 3
+		else 1
+	end as HOUSING, 
+	isnull(case when s.hispanic = '1' then '2' when s.hispanic='2' then '1' else '3' end, case when s.hispanic like 'Y%' then '1' when s.hispanic like 'N%' then '2' else '3' end) as ETHNIC, 
+	case 
+		case when s.race=6 then '1' 
+			when s.race=4 then '2'
+			when s.race=3 then '4'
+			when s.race=2 then '5'
+			when s.race=8 then '6'
+			when s.race=9 then '7'
+			when s.race=5 then '8'
+			else ${ethnic} end when '1' then '1000000' when '2' then '0200000' when '4' then '0040000' when '5' then '0005000' when '6' then '0000600' when '7' then '0000070' 
+				when '8' then '0000008' end as RACE_CODE, 
+	
+	CASE WHEN (sfm.fisap_income IS NOT Null) THEN sfm.fisap_income else sfm.income end as STDNT_WORK_INCOME, 
+	CASE WHEN (sfm.fisap_income IS NOT Null) THEN null else coalesce(spouse_income, 0) end as SPOUSE_WK_INCOME,
+	CASE WHEN (sfm.fisap_income IS NOT Null) THEN null else coalesce(sfm.soc_sec_benefits,0) end as SOC_SEC_BENEFITS, 
+	CASE WHEN (sfm.fisap_income IS NOT Null) THEN null else coalesce(sfm.afdc,0) end as AFDC_ADC,
+	CASE WHEN (sfm.fisap_income IS NOT Null) THEN null else coalesce(sfm.child_supp_rcvd,0) end as CHILD_SUPPORT,
+	CASE WHEN (sfm.fisap_income IS NOT Null) THEN null else coalesce(sfm.other_untax_income,0) end as OTHER_INCOME_BENE,
+	CASE WHEN (sfm.fisap_income IS NOT Null) THEN null else coalesce(sfp.father_income,0) end as FATHERS_WK_INCOME,
+	CASE WHEN (sfm.fisap_income IS NOT Null) THEN null else coalesce(sfp.mother_income,0) end as MOTHERS_WK_INCOME,
+	CASE WHEN (sfm.fisap_income IS NOT Null) THEN null else coalesce(sfp.soc_sec_benefits,0) end as PAR_SOC_SEC_BENE,
+	CASE WHEN (sfm.fisap_income IS NOT Null) THEN null else coalesce(sfp.afdc,0) end as PARENTS_AFDC_ADC,
+	CASE WHEN (sfm.fisap_income IS NOT Null) THEN null else coalesce(sfp.child_supp_rcvd,0) end as PARENT_CHILD_SUPP,
+	CASE WHEN (sfm.fisap_income IS NOT Null) THEN null else coalesce(sfp.other_untax_income,0) end as PAR_INCOME_BENEF,
+	coalesce(${ethnic}, 7) as ETHNIC_ORIGIN,
+	CASE 	WHEN (sfm.first_bachelor_by_7_1_96 = 'N' or sfm.first_bachelor_by_7_1_96 IS NULL) 
+			AND sfm.grad_prof_in_96_97 = 'N' 
+			AND sfm.year_in_school <> 1 AND sfm.year_in_school < 6 THEN 1 
+		WHEN (sfm.first_bachelor_by_7_1_96 = 'N' or sfm.first_bachelor_by_7_1_96 IS NULL) 
+			AND sfm.grad_prof_in_96_97 = 'N' AND sfm.year_in_school = 1 THEN 5
+		WHEN sfm.first_bachelor_by_7_1_96 = 'Y' AND sfm.grad_prof_in_96_97 = 'Y' 
+			AND (sfm.year_in_school > 5 OR sfm.year_in_school = 0) THEN 2
+		WHEN sfm.first_bachelor_by_7_1_96 = 'Y' AND sfm.grad_prof_in_96_97 = 'N' 
+			AND (sfm.year_in_school > 5 OR sfm.year_in_school = 0) THEN 4			
+		ELSE 3 END as CLASSIFICATION, 
+	CASE WHEN sfm.dependency_status IN ('D','X') THEN '1' 
+		WHEN sfm.dependency_status IN ('I','Y') THEN '2' 
+		WHEN say.award_year_token > 2004 AND sfm.dependency_status IS NULL THEN '3' 
+		ELSE Null END as DEPENDENCY_STATUS,
+	sfm.date_of_birth as DATE_OF_BIRTH,
+	case (CASE WHEN dependency_status IN ('D','X') THEN coalesce(sfp.legal_residence,'TX') 
+		ELSE coalesce(sfm.legal_residence,'TX') END) when 'TX' then 1 else 2 end as RESIDENCY, 
+	user_int.value_02 as LOCATION_CODE,
+	s.primary_street1 as STREET_ADDRESS, 
+	s.primary_city as CITY_ADDRESS, 
+	left(s.primary_zipcode, 5) + '0000' as ZIP_ADDRESS, --FIXME 
+	min(poe.load_this_term) as ENROLLMENT_STATUS,
+	CASE WHEN sfm.are_you_male = 'Y' THEN 'M' 
+		WHEN sfm.are_you_male = 'N' THEN 'F' 
+		ELSE Null END as GENDER,
+	CASE WHEN sfm.mother_highest_grade_level = ' ' THEN '4' 
+		ELSE coalesce(sfm.mother_highest_grade_level,'4') END as MOTHER_HIGH_GRADE, 
+	CASE WHEN sfm.father_highest_grade_level = ' ' THEN '4' 
+		ELSE coalesce(sfm.father_highest_grade_level,'4') END as FATHER_HIGH_GRADE, 
+	sasd.tot_budget as COST_OF_ATTEND,
+	sfm.cc_tfc as TOTAL_FAMILY_CONT
+into lcu_fads_base_info
+from student s
+	join stu_award_year say on say.student_token = s.student_token
+	join stu_award sa on say.stu_award_year_token = sa.stu_award_year_token
+	join funds f on f.fund_token = sa.fund_ay_token
+	join say_fm_stu sfm on sfm.stu_award_year_token = say.stu_award_year_token
+	join say_fm_par sfp on sfp.stu_award_year_token = say.stu_award_year_token
+	join stu_ay_poe poe on poe.stu_award_year_token = say.stu_award_year_token
+	join stu_ay_sum_data [sasd] on [sasd].stu_award_year_token = say.stu_award_year_token
+	join say_fm_fnar_stu sffs on say.stu_award_year_token = sffs.stu_award_year_token
+	join say_fm_fnar_par sffp on say.stu_award_year_token = sffp.stu_award_year_token
+	left join user_int on say.stu_award_year_token = user_int.stu_award_year_token
+	left join user_string on user_string.stu_award_year_token = say.stu_award_year_token 
+	join ( select stu_award_year_token from lcu_fads_students ) ss 
+		on say.stu_award_year_token = ss.stu_award_year_token
+group by s.student_ssn, 
+	s.last_name, 
+	s.first_name,
+	s.middle_init, 
+	s.alternate_id, 
+	sfm.dependency_status, 
+	isnull(isnull(sfm.agi, sffs.agi), 0),
+	isnull(isnull(sfp.agi, sffp.agi), 0), 
+	s.race,
+	${ethnic}, 
+	sfm.data_valid, 
+	sfm.housing, 
+	s.hispanic, 
+	CASE WHEN (sfm.fisap_income IS NOT Null) THEN sfm.fisap_income else sfm.income end, 
+	CASE WHEN (sfm.fisap_income IS NOT Null) THEN null else coalesce(spouse_income, 0) end,
+	CASE WHEN (sfm.fisap_income IS NOT Null) THEN null else coalesce(sfm.soc_sec_benefits,0) end,
+	CASE WHEN (sfm.fisap_income IS NOT Null) THEN null else coalesce(sfm.afdc,0) end,
+	CASE WHEN (sfm.fisap_income IS NOT Null) THEN null else coalesce(sfm.child_supp_rcvd,0) end,
+	CASE WHEN (sfm.fisap_income IS NOT Null) THEN null else coalesce(sfm.other_untax_income,0) end,
+	CASE WHEN (sfm.fisap_income IS NOT Null) THEN null else coalesce(sfp.father_income,0) end,
+	CASE WHEN (sfm.fisap_income IS NOT Null) THEN null else coalesce(sfp.mother_income,0) end,
+	CASE WHEN (sfm.fisap_income IS NOT Null) THEN null else coalesce(sfp.soc_sec_benefits,0) end ,
+	CASE WHEN (sfm.fisap_income IS NOT Null) THEN null else coalesce(sfp.afdc,0) end,
+	CASE WHEN (sfm.fisap_income IS NOT Null) THEN null else coalesce(sfp.child_supp_rcvd,0) end,
+	CASE WHEN (sfm.fisap_income IS NOT Null) THEN null else coalesce(sfp.other_untax_income,0) end,
+	coalesce(user_string.value_06, 7),
+	CASE 	WHEN (sfm.first_bachelor_by_7_1_96 = 'N' or sfm.first_bachelor_by_7_1_96 IS NULL) 
+			AND sfm.grad_prof_in_96_97 = 'N' 
+			AND sfm.year_in_school <> 1 AND sfm.year_in_school < 6 THEN 1 
+		WHEN (sfm.first_bachelor_by_7_1_96 = 'N' or sfm.first_bachelor_by_7_1_96 IS NULL) 
+			AND sfm.grad_prof_in_96_97 = 'N' AND sfm.year_in_school = 1 THEN 5
+		WHEN sfm.first_bachelor_by_7_1_96 = 'Y' AND sfm.grad_prof_in_96_97 = 'Y' 
+			AND (sfm.year_in_school > 5 OR sfm.year_in_school = 0) THEN 2
+		WHEN sfm.first_bachelor_by_7_1_96 = 'Y' AND sfm.grad_prof_in_96_97 = 'N' 
+			AND (sfm.year_in_school > 5 OR sfm.year_in_school = 0) THEN 4			
+		ELSE 3 END, 
+	CASE WHEN sfm.dependency_status IN ('D','X') THEN '1' 
+		WHEN sfm.dependency_status IN ('I','Y') THEN '2' 
+		WHEN say.award_year_token > 2004 AND sfm.dependency_status IS NULL THEN '3' 
+		ELSE Null END,
+	sfm.date_of_birth,
+	CASE WHEN dependency_status IN ('D','X') THEN coalesce(sfp.legal_residence,'TX') 
+		ELSE coalesce(sfm.legal_residence,'TX') END, 
+	user_int.value_02,
+	s.primary_street1, 
+	s.primary_city, 
+	s.primary_zipcode, 
+	CASE WHEN sfm.are_you_male = 'Y' THEN 'M' 
+		WHEN sfm.are_you_male = 'N' THEN 'F' 
+		ELSE Null END,
+	CASE WHEN sfm.mother_highest_grade_level = ' ' THEN '4' 
+		ELSE coalesce(sfm.mother_highest_grade_level,'4') END, 
+	CASE WHEN sfm.father_highest_grade_level = ' ' THEN '4' 
+		ELSE coalesce(sfm.father_highest_grade_level,'4') END, 
+	sasd.tot_budget,
+	sfm.cc_tfc;
+]]>
+		</sql>
+		<sql name="fads">
+<![CDATA[
+select 'F' as [TYPE], ${fice} as [FICE], ${year} as [YEAR], 
+	[SOC_SEC_NUMBER], STDNT_SPOUSE_AGI, PARENT_AGI, TOP10PCT, 
+	0 as fill1, 0 as fill2, 0 as fill3, 0 as fill4,
+	s.race as RACE,
+	0 as fill5, 0 as fill6, 0 as fill7, ISIR_VALID, HOUSING, ETHNIC, RACE_CODE, 
+	[CLASSIFICATION], [DEPENDENCY_STATUS], [DATE_OF_BIRTH], [RESIDENCY], ' ' as fill8, ' ' as fill9, [ZIP_ADDRESS], 
+	[ENROLLMENT_STATUS], [GENDER], [MOTHER_HIGH_GRADE], [FATHER_HIGH_GRADE], [COST_OF_ATTEND], [TOTAL_FAMILY_CONT], 
+	
+	case when [STDNT_WORK_INCOME] < 0 then 0 else [STDNT_WORK_INCOME] end as [STDNT_WORK_INCOME], 
+	[SPOUSE_WK_INCOME], [SOC_SEC_BENEFITS], [AFDC_ADC], 
+	[CHILD_SUPPORT], [OTHER_INCOME_BENE], [FATHERS_WK_INCOME], [MOTHERS_WK_INCOME], 
+	[PAR_SOC_SEC_BENE], [PARENTS_AFDC_ADC], [PARENT_CHILD_SUPP], [PAR_INCOME_BENEF], 
+	[ETHNIC_ORIGIN],  
+	[LOCATION_CODE], [STREET_ADDRESS], [CITY_ADDRESS],  
+	[TUIT_EXEMPT_WAIV], [CATEGORICAL_AID], [FEDERAL_PELL], [FEDERAL_SEOG], 
+	[TPEG_ON_CAMPUS], [SMART_GRANT], [TEG_PRIVATE_SCHL], [LEAP], [HB3015_GRANTS], 
+	[PRIVATESCH], [MERIT_BY_INST], [BYRD_SCHOLARSHIP], [STATE_NURSE_SCHLR], 
+	[STUDENT_DEP_SCHLR], 
+	[ACG], 
+	[OTHER_SCHLR_GRANT], [TEXAS_GRANT_PGM], 
+	[TEOG], [FEDERAL_SLEAP], [FEDERAL_WK_STUDY], [TEXAS_WORK_STUDY], [NEED_BASED_INST], 
+	[AMERICORPS], [HB3015_WS], null as [TXWS_MENTORSHIP], [SUBS_STAFFORD_LN], [UNSUB_STAFFORD_LN], 
+	[PERKINS_LOAN], [FEDERAL_PLUS_LNS], [HELP], [COLLEGE_ACCESS_LN], [PRIM_CARE_STD_LN], 
+	null as [INCOME_CONTIG_LNS], [FDSLP_SUB], [OTHER_LT_LOANS], [UNSUB_FED_DIR_LNS], [BOT], 
+	[HB3015_LOANS], [TEACH], [HB3015_OTHER], [ENROLL_ADJ_COA], [ENROLL_ADJ_TFC], case when ssn is null or len(ssn) < 9 then alt_id else '' end as ALT_ID
+from lcu_fads_base_info s
+	join lcu_fads_totals t
+		on t.ssn = s.SOC_SEC_NUMBER
+order by s.last_name, s.first_name, s.middle_init
+
+]]>
+		</sql>
+		<sql name="clean">
+<![CDATA[
+if exists (select * from dbo.sysobjects where id = object_id(N'[lcu_fads_selection_set]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [lcu_fads_selection_set];
+
+if exists (select * from dbo.sysobjects where id = object_id(N'[lcu_fads_amounts]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [lcu_fads_amounts];
+
+if exists (select * from dbo.sysobjects where id = object_id(N'[lcu_fads_base_info]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [lcu_fads_base_info];
+
+if exists (select * from dbo.sysobjects where id = object_id(N'[lcu_fads_students]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [lcu_fads_students];
+
+if exists (select * from dbo.sysobjects where id = object_id(N'[lcu_fads_totals]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
+drop table [lcu_fads_totals];
+]]>
+		</sql>
+	</connection>
+</query>

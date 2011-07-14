@@ -6,6 +6,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
 import com.javalobby.tnt.annotation.attribute;
@@ -18,6 +21,7 @@ import com.javalobby.tnt.annotation.attribute;
  */
 @attribute(value = "", required = true)
 public class Connection extends XmlObject {
+	private static Log log = LogFactory.getLog(Connection.class);
 	public String login = null; 
 	public String password = null;
 	public String url = null;
@@ -90,6 +94,8 @@ public class Connection extends XmlObject {
 		java.sql.Connection con = null;
 		if (con == null) {
 			Class.forName(theClass);
+			this.execute();
+			log.debug("url = " + url);
 			con =  DriverManager.getConnection(url, login, password);
 		}
 		return con;
@@ -140,7 +146,7 @@ public class Connection extends XmlObject {
 	 * Called after complete parsing of XML document to evaluate the document.
 	 */
 	public void execute() {
-		this.toString();
+		
 	}
 	
 	public Sql find(String toFind) {

@@ -18,16 +18,16 @@
     	<level value="WARN"/>
     </logger>
 
-    <logger name="edu.bxml.format.FootField">
+    <logger name="edu.bxml.format.Properties">
+    	<level value="DEBUG"/>
+    </logger>
+    
+    <logger name="edu.bxml.format.Connection">
     	<level value="DEBUG"/>
     </logger>
 
     <logger name="edu.bxml">
     	<level value="WARN"/>
-    </logger>
-
-    <logger name="edu.bxml.format.Header">
-    	<level value="DEBUG"/>
     </logger>
     
     <logger name="com.browsexml.core.XmlParser">
