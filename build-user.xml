@@ -202,12 +202,29 @@
 	</java>
 </target>
 <target name="load TX Grant" depends="build" description="load Texas Grant">
-	<java dir="." output="txgrant.log" logError="true" fork="true"
+	<java dir="." logError="true" fork="true"
 		classname="com.browsexml.core.Main">
 		<classpath refid="browsexml.classpath" />
-		<arg value="loadTXGrant.xml" />
+		<arg value="TEG.xml" />
 	</java>
 </target>
+	
+<target name="run FADS" depends="build" description="load Texas Grant">
+	<java dir="." logError="true" fork="true"
+		classname="com.browsexml.core.Main">
+		<classpath refid="browsexml.classpath" />
+		<arg value="FADS.xml" />
+	</java>
+</target>
+	
+<target name="load FADS" depends="build" description="load Texas Grant">
+	<java dir="." logError="true" fork="true"
+		classname="com.browsexml.core.Main">
+		<classpath refid="browsexml.classpath" />
+		<arg value="loadFADS.xml" />
+	</java>
+</target>
+	
 <target name="Registration Request PDF Report" depends="build" 
 		description="eArmyU registration Report">
 	<java dir="." output="txgrant.log" logError="true" fork="true"

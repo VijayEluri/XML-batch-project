@@ -139,6 +139,8 @@ public class XmlParser {
 			}
 			String replace = "\\$\\{" + origVar + "\\}";
 			val = val.replaceAll("\\\\", "\\\\\\\\");
+			log.debug("replace = " + replace);
+			log.debug("val = " + val);
 			text = text.replaceAll(replace, val);
 		}
 		log.debug("return text = " + text);
@@ -240,6 +242,8 @@ public class XmlParser {
     	Class<?> c = currentObject.getClass();
     	for (int i = 0; i < attrs.getLength(); i++) {
 				String attName = attrs.getQName(i);
+				if (attName.contains("schemaLocation"))
+					continue;
 			String functionName = "set" + 
 				properName(attName);
 			Class<?>[] parameterTypes = new Class[1];
@@ -685,8 +689,22 @@ public class XmlParser {
                 	XmlObject o = object.pop();
                 	
 	        		 try {
-	        			 if (strBuffer != null)
+	        			 if (strBuffer != null) {
+	        				 if (strBuffer.contains("${") || strBuffer.contains("#{")) {
+	        					 try {
+	        							Class<?>[] parameterTypes = new Class[1];
+	        							parameterTypes[0] = String.class;
+									o.getVariableParameters().put(o.getClass().getMethod("setValue", parameterTypes), strBuffer);
+								} catch (SecurityException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								} catch (NoSuchMethodException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+	        				 }
 	        				 o.setFromTextContent(strBuffer);
+	        			 }
 	        			 o.check();
 	        		 }
 	        		 catch (XMLBuildException e) {

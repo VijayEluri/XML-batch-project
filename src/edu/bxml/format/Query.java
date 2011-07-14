@@ -170,8 +170,7 @@ public class Query extends Filter {
 	/**  */
 	@attribute(value = "", required = false)
 	public void addProperties(Properties p) {
-		// The property will automatically add its value to the symbol 
-		// table when it checks itself.
+		sqlCommands.add(p);
 	}
 	
 	/** Unix-like pipe streaming between input and output of children */

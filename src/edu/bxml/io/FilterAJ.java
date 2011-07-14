@@ -2,6 +2,7 @@ package edu.bxml.io;
 
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,7 +15,6 @@ import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
-import com.browsexml.core.XmlParser;
 import com.javalobby.tnt.annotation.attribute;
 
 /**
@@ -31,6 +31,15 @@ public class FilterAJ extends XmlObject implements Runnable {
 	protected InputStream in;
 	protected OutputStream out;
 	protected String text = null;
+	protected boolean lock = false;
+
+	public boolean getLock() {
+		return lock;
+	}
+
+	public void setLock(boolean lock) {
+		this.lock = lock;
+	}
 
 	protected String file = null;
 	protected String dir = null;
@@ -45,7 +54,8 @@ public class FilterAJ extends XmlObject implements Runnable {
 
 	protected String toDir = null;
 	protected String archive = null;
-	protected File currentFile = null;
+	protected File currentFile = null;  
+	protected File outFile = null;
 
 	protected List<Filter> filters = new ArrayList<Filter>();
 	
@@ -55,6 +65,23 @@ public class FilterAJ extends XmlObject implements Runnable {
 	}
 
 	public OutputStream getOut() {
+		if (out == null) {
+			try {
+				if (outFile == null) {
+					if (toDir == null && toFile == null) {
+						out = System.out;
+						return out;
+					}
+					else {
+						outFile = new File(toFile, toDir);
+					}
+				}
+				out = new FileOutputStream(outFile);
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		return out;
 	}
 
@@ -102,6 +129,9 @@ public class FilterAJ extends XmlObject implements Runnable {
 	public void setToDir(String toDir) {
 		log.debug("to dir set to " + toDir);
 		this.toDir = toDir;
+		if (toFile != null) {
+			outFile = new File(toDir, toFile);
+		}
 	}
 	
 	/**
@@ -112,6 +142,17 @@ public class FilterAJ extends XmlObject implements Runnable {
 	@attribute(value = "", required = false, defaultValue="output will go to the next class in the pipeline or standard output.")
 	public void setToFile(String toFile) {
 		this.toFile = toFile;
+		if (toDir != null) {
+			outFile = new File(toDir, toFile);
+		}
+	}
+
+	public File getOutFile() {
+		return outFile;
+	}
+
+	public void setOutFile(File outFile) {
+		this.outFile = outFile;
 	}
 
 	/**

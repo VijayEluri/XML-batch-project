@@ -8,6 +8,8 @@ import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
 import com.javalobby.tnt.annotation.attribute;
 
+import edu.bxml.io.FilterAJ;
+
 /**
  * Hold information about how to format the footer
  * @author ritcheyg
@@ -18,7 +20,6 @@ public class Footer extends XmlObject {
 	String separator = null;
 	private Vector<FootField> footerFields = new Vector<FootField>();
 	Select parent = null;
-	PrintStream out = System.out;
 	Query s = null;
 	
 	/**
@@ -53,13 +54,7 @@ public class Footer extends XmlObject {
 	 * to evaluate the document.
 	 */
 	public void execute() throws XMLBuildException {
-		s = (Query) getAncestorOfType(Query.class);
-		try {
-			output();
-		}
-		catch (SQLException sql) {
-			throw new XMLBuildException(sql.getMessage());
-		}
+
 	}
 	/**
 	 * Retrieve the text that was contained inside the tag
@@ -80,15 +75,17 @@ public class Footer extends XmlObject {
 	 * generate the footer to standard out
 	 *
 	 */
-	public void output() throws SQLException, XMLBuildException {
-		out = new PrintStream(s.getOut());
+	public String output() throws SQLException, XMLBuildException {
+		//out = new PrintStream(s.getOut());
 		StringBuffer outBuffer = new StringBuffer();
 		for (FootField field:footerFields){
+			field.execute(); //all fields containing variables up-to-date
 			outBuffer.append(separator);
 			outBuffer.append(field.getValue());
 		}
 		if (outBuffer.length() > 1) {
-			out.println(outBuffer.toString().substring(separator.length()));
+			outBuffer.delete(0, separator.length());
 		}
+		return outBuffer.toString();
 	}
 }

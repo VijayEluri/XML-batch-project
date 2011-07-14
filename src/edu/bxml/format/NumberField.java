@@ -20,7 +20,32 @@ import com.javalobby.tnt.annotation.attribute;
 public class NumberField extends Field {
 	private static Log log = LogFactory.getLog(NumberField.class);
 	Formatter f = null;
+	private Integer min = null;
+	private Integer max = null;
 	
+	public Integer getMin() {
+		return min;
+	}
+
+	public void setMin(String min) {
+		setMin(Integer.parseInt(min));
+	}
+	public void setMin(Integer min) {
+		this.min = min;
+	}
+
+	public Integer getMax() {
+		return max;
+	}
+
+	public void setMax(String max) {
+		setMax(Integer.parseInt(max));
+	}
+	
+	public void setMax(Integer max) {
+		this.max = max;
+	}
+
 	public NumberField() {
 		type = Types.NUMBER;
 	}
@@ -31,8 +56,15 @@ public class NumberField extends Field {
 		if (v == null) {
 			returnValue = defaultValue;
 		}
-		else {
+		if (min != null &&  ((Integer) v) < min) {
+			returnValue = defaultValue;
+		}
+		if (max != null &&  ((Integer) v) > max) {
+			returnValue = defaultValue;
+		}
+		if (returnValue == null) {
 			String value = v.toString();
+			
 			returnValue = noPadFormat(value);
 			boolean negative = false;
 			if (returnValue.length() < size) {

@@ -23,7 +23,6 @@ public class Connection extends XmlObject {
 	public String url = null;
 	public String theClass = null;
 	Vector<Sql> sqlQueries = new Vector<Sql>();
-	java.sql.Connection con = null;
 	Statement stmt = null;
 
 	/**
@@ -88,6 +87,7 @@ public class Connection extends XmlObject {
 	 */
 	public java.sql.Connection getConnection() throws SQLException,
 			ClassNotFoundException {
+		java.sql.Connection con = null;
 		if (con == null) {
 			Class.forName(theClass);
 			con =  DriverManager.getConnection(url, login, password);
@@ -96,20 +96,16 @@ public class Connection extends XmlObject {
 	}
 
 	public Statement getStatement() throws SQLException, ClassNotFoundException {
-		if (stmt == null) {
-			getConnection();
-			stmt = con.createStatement();
-		}
-		return stmt;
+		return getConnection().createStatement();
 	}
 	
 	public void close() throws SQLException {
-		if (stmt != null)
-			stmt.close();
-		if (con != null)
-			con.close();
-		stmt = null;
-		con = null;
+//		if (stmt != null)
+//			stmt.close();
+//		if (con != null)
+//			con.close();
+//		stmt = null;
+//		con = null;
 	}
 	public void check() throws XMLBuildException {
 		if (this.getName() == null) {

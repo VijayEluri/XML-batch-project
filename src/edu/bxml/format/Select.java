@@ -19,8 +19,9 @@ import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
-import com.browsexml.core.XmlParser;
 import com.javalobby.tnt.annotation.attribute;
+
+import edu.bxml.io.FilterAJ;
 /**
  * Represent how to format all the fields of a query.
  * 
@@ -28,7 +29,7 @@ import com.javalobby.tnt.annotation.attribute;
  * 
  */
 @attribute(value = "", required = true)
-public class Select extends XmlObject {
+public class Select extends FilterAJ {
 	private static Log log = LogFactory.getLog(Select.class);
 	public String delimit = "\t";
 	public Header header = null;
@@ -59,7 +60,6 @@ public class Select extends XmlObject {
 	String filename = null;
 	private String archive = null;
 	
-	File outFile = null;
 	File lastFileName = null;
 	File dir = null;
 	String filenameField = null;
@@ -271,10 +271,6 @@ public class Select extends XmlObject {
 			dir.mkdirs();
 			log.debug("The output directory " + dir + " did not exist.  It has been created.");
 		}
-		if (filename != null) {
-			outFile = new File(dir, filename);
-			log.debug("file = " + outFile.getAbsolutePath());
-		}
 		if (queryName == null)
 			throw new XMLBuildException("queryName can't be null");
 		/*if (key == null) {// && groupsExist) {
@@ -345,10 +341,6 @@ public class Select extends XmlObject {
 		return ".";
 	}
 	
-	/**
-	 * Change the file where output is being directed.
-	 * @param outFile
-	 */
 	public void setOutput(File outFile) {
 		if (outFile != null) {
 			try {
@@ -363,6 +355,7 @@ public class Select extends XmlObject {
 		}
 	}
 	public void setOutput(OutputStream outFile) {
+		setLock(true);
 		out = new PrintStream(outFile);
 	}
 	
@@ -383,41 +376,37 @@ public class Select extends XmlObject {
 	public void execute() throws XMLBuildException {
 		//log.debug("SELECT:");
 		File arch = null;
-		
-		if (outFile != null) {
-			setOutput(outFile);
+
+		if (!lock) {
+			if (outFile != null) {
+				setOutput(outFile);
+			}
+			else {
+				setOutput(query.getOut());
+			}
 		}
-		else {
-			setOutput(query.getOut());
-		}
+
 		try {
 			Sql sql = query.getSql(queryName);
 			
-			Connection connection = null;
-			ResultSet rs = null;
-			Statement stmt = null;
 			try {
-				connection = sql.getConnection();
-			} catch (RuntimeException e) {
-				e.printStackTrace();
-				throw new XMLBuildException("The connection '" + queryName + "' could not be found");
-			}
-			log.debug("sql = " + sql.query);
+			final Connection connection = sql.getConnection();
+			final Statement stmt = connection.getStatement();//con.createStatement();
+			final ResultSet rs = stmt.executeQuery(sql.getQuery());
+
+			log.debug("sql = " + sql.getQuery());
 			//java.sql.Connection con = connection.getConnection();
 			/* TODO put dataoutput into sub objects */
-			stmt = connection.getStatement();//con.createStatement();
-
+			
 			recordCount = 0;
 
 			// log.debug(sql.query);
 
-			try {
-			rs = stmt.executeQuery(sql.query);
 			setMD(rs.getMetaData());
-			checkHeader(rs);
+			checkHeader();
 			log.debug("filename = " + filename);
 			if (filenameField == null) {
-				printHeader(workingValues);
+				printHeader(out, workingValues);//PROBLEM LINE
 			}
 			while (rs.next()) {
 				recordCount++;
@@ -445,9 +434,6 @@ public class Select extends XmlObject {
 		} catch (IOException io) {
 			io.printStackTrace();
 			throw new XMLBuildException(arch.getAbsolutePath() + ": " + io.getMessage());
-		} catch (SQLException sqle) {
-			sqle.printStackTrace();
-			throw new XMLBuildException(sqle.getMessage());
 		}
 		finally {
 		}
@@ -467,7 +453,6 @@ public class Select extends XmlObject {
 		// log.debug("this key = " + thisKey);
 		// log.debug("values = " + values);
 		// log.debug("working values = " + workingValues);
-
 		if (key == null || thisKey == null || lastKey == null || !lastKey.equals(thisKey)) {
 			flushWorkingValues();
 			// log.debug("WORKING VALUES NULL(this,last):" + thisKey +
@@ -489,14 +474,14 @@ public class Select extends XmlObject {
 						printFooter();
 					setOutput(outFile);
 					//System.out.println("out output was " + lastFileName);
-					printHeader(workingValues);
+					printHeader(out, workingValues);
 					//System.out.println("just printed header 2");
 				}
 			}
 			String outLine = format(workingValues);
 			if (outLine != null) {
 				out.println(outLine);
-				//log.debug("printed: " + out);
+				log.debug("printed (" + out + "): " + outLine);
 			}
 			else
 				log.debug("out is null");
@@ -507,12 +492,18 @@ public class Select extends XmlObject {
 	/**
 	 * Print the footer.
 	 * @throws XMLBuildException
+	 * @throws SQLException 
 	 */
 	public void printFooter() throws XMLBuildException {
 		if (footer == null) {
 			return;
 		}
 		footer.execute();
+		try {
+			out.println(footer.output());
+		} catch (SQLException e) {
+			throw new XMLBuildException(e.getMessage());
+		}
 	}
 	
 	/**
@@ -522,7 +513,7 @@ public class Select extends XmlObject {
 	 * @param rs
 	 * @throws SQLException
 	 */
-	public void checkHeader(ResultSet rs) throws SQLException {
+	public void checkHeader() throws SQLException {
 
 		
 		try {
@@ -536,10 +527,10 @@ public class Select extends XmlObject {
 					continue;
 				}
 				else {
-					new Exception("column '" + name
+					log.warn("column '" + name
 							+ "'(" + i + ") was included in the select of the sql command but no format for it " +
-									"is specified in the 'select' XML object.").printStackTrace();
-					System.exit(1);
+									"is specified in the 'select' XML object.");
+					//System.exit(1);
 				}
 			}
 		} catch (SQLException se) {
@@ -552,8 +543,8 @@ public class Select extends XmlObject {
 	 * Print the header row.
 	 * @throws SQLException
 	 */
-	public void printHeader(HashMap workingValues) throws XMLBuildException {
-		getHeader().output(workingValues);
+	public void printHeader(PrintStream out, HashMap workingValues) throws XMLBuildException {
+		out.print(getHeader().output(workingValues));
 	}
 
 	/**
@@ -624,9 +615,9 @@ public class Select extends XmlObject {
 			else {
 				Object r = rs.getObject(i);
 				values.put(md.getColumnName(i), r);
+				//log.debug("value put(" + md.getColumnName(i) + ") = " + r);
 			}
-			// log.debug("value put(" + md.getColumnName(i) + ") = " +
-			// r);
+			
 		}
 		//log.debug("key = " + key.name);
 		if (key == null) {
