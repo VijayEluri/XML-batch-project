@@ -99,28 +99,30 @@ public class Properties extends XmlObject {
 					strbfrProperties.append(separator).append(x.getText());
 					properties.put(x.getText(), x.getName());
 				}
-				strProperties = strbfrProperties.substring(separator.length());
-				log.debug("strProperties = " + strProperties);
-				HashMap m = getSymbolTable(); 
-				Sql sql = (Sql) m.get(queryName);
-				final Connection connection = sql.getConnection();
-				final Statement stmt = connection.getStatement();//con.createStatement();
-				String strSql = sql.getRawQuery().replace("${text}", strProperties.toString());
-				log.debug("sql = " + strSql);
-				strSql = XmlParser.processMacros(m, XmlParser.replacePoundMacros(strSql));
-				log.debug("sql = " + strSql);
-				final ResultSet rs = stmt.executeQuery(strSql);
-				while (rs.next()) {
-					String key = rs.getString("name");
-					if (key == null) 
-						continue;
-					log.debug("key = " + key);
-					key = properties.get(key).toString();
-					String value = rs.getObject("value").toString();
-					m.put("_#" + key, value);
-					log.debug(key + " = '" + value + "'");
+				if (strbfrProperties.length() > separator.length()) {
+					strProperties = strbfrProperties.substring(separator.length());
+					log.debug("strProperties = " + strProperties);
+					HashMap m = getSymbolTable(); 
+					Sql sql = (Sql) m.get(queryName);
+					final Connection connection = sql.getConnection();
+					final Statement stmt = connection.getStatement();//con.createStatement();
+					String strSql = sql.getRawQuery().replace("${text}", strProperties.toString());
+					log.debug("sql = " + strSql);
+					strSql = XmlParser.processMacros(m, XmlParser.replacePoundMacros(strSql));
+					log.debug("sql = " + strSql);
+					final ResultSet rs = stmt.executeQuery(strSql);
+					while (rs.next()) {
+						String key = rs.getString("name");
+						if (key == null) 
+							continue;
+						log.debug("key = " + key);
+						key = properties.get(key).toString();
+						String value = rs.getObject("value").toString();
+						m.put("_#" + key, value);
+						log.debug(key + " = '" + value + "'");
+					}
+					connection.close();
 				}
-				connection.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {

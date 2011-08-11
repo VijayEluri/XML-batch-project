@@ -251,10 +251,10 @@ public class XmlParser {
 			parameterTypes[0] = String.class;
 			String message = "";
 			try {
-				arguments[0] = attrs.getValue(i);
+				arguments[0] = replacePoundMacros(attrs.getValue(i));
 				functionName = functionName.replace(':', '_');
 				Method m = c.getMethod(functionName, parameterTypes);
-				if (attrs.getValue(i).startsWith("javascript:") || attrs.getValue(i).contains("${") || attrs.getValue(i).contains("#{")) {
+				if (attrs.getValue(i).startsWith("javascript:") || attrs.getValue(i).contains("${")) {
 					log.debug("putting " + m.getName() + "  " + 
 							attrs.getValue(i) + " in object " + currentObject.getName());
 					currentObject.getVariableParameters().put(m, attrs.getValue(i));

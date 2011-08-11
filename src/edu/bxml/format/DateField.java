@@ -34,6 +34,13 @@ public class DateField extends Field {
 	@Override//java.sql.Timestamp
 	public String format(Object v) throws XMLBuildException {
 		String value = null;
+		String defaultValue = this.defaultValue;
+		if (leftPadding) {
+			log.debug("padding = '" + padding + "'  length = " + padding.length());
+			defaultValue = DateField.Right(padding + defaultValue, size);
+			log.debug("default value = '" + defaultValue + "'  length = " + defaultValue.length());
+		}
+		
 		if (v == null) 
 			return defaultValue;
 		if (v instanceof Timestamp) {
@@ -114,4 +121,9 @@ public class DateField extends Field {
 		}
 		return sqlDate;
 	}
+
+    public static String Right(String text, int length)
+    {
+          return text.substring(text.length() - length, text.length());
+    }  
 }

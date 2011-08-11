@@ -19,7 +19,29 @@ public class Property extends XmlObject {
 	private static Log log = LogFactory.getLog(Property.class);
 
 	public String value = "";
+	private String list[] = null;
+	private String index = null;
+
+	public String getIndex() {
+		return index;
+	}
+
+	public void setIndex(String index) {
+		this.index = index;
+	}
+
+	public String[] getList() {
+		return list;
+	}
+
+	public void setList(String list) {
+		setList(list.split(","));
+	}
 	
+	public void setList(String[] list) {
+		this.list = list;
+	}
+
 	public Connection getConnection() {
 		return (Connection)this.getParent();
 	}
@@ -41,6 +63,13 @@ public class Property extends XmlObject {
 	 */
 	public void execute() {
 		log.debug("EXECUTE PROPERTY " + this.getName() + " value = " + value);
+		if (list != null) {
+			for (int n = 0; n < list.length; n++) {
+				if (list[n].equals(value)) {
+					value = n+"";
+				}
+			}
+		}
 	}
 
 	/**

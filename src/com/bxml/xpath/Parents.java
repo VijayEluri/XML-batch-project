@@ -44,7 +44,10 @@ public class Parents {
 	public void evaluateDocument(File fileRoot) {
 		HashMap<String, HashSet<String>> hashMaps = new HashMap<String, HashSet<String>>();
 		HashMap<String, File> fileNames = new HashMap<String, File>();
+		System.err.println("fileRoot = " + fileRoot.getAbsolutePath() + "   exists: " +fileRoot.exists() + "  pwd: " + new File(".").getAbsolutePath());
+		
 		File[] files = fileRoot.listFiles();
+		System.err.println("files count = " + files.length);
 		for (int fileCount = 0; fileCount < files.length; fileCount ++) {
 			File xmlDocument = files[fileCount];
 		XPathFactory factory = XPathFactory.newInstance();
