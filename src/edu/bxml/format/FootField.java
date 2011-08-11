@@ -30,6 +30,7 @@ public class FootField extends XmlObject {
 	Vector <Select> selections = new Vector<Select>();
 	Select select = null;
 	PrintStream out = System.out;
+	Character padChar = null;
 
 	public FootField() {
 		
@@ -40,7 +41,7 @@ public class FootField extends XmlObject {
 	}
 	
 	public enum FootFieldTypes {
-		COUNT, CONSTANT, DATE, LENGTH, SQL
+		COUNT, CONSTANT, DATE, LENGTH, SQL, CHAR
 	};
 
 	public Field subField = null;
@@ -56,13 +57,12 @@ public class FootField extends XmlObject {
 
 	public int decimals = 0;
 
-	public String padLeft = null;
-	public String padRight = null;
+	public boolean padLeft = false;
+	public boolean padRight = false;
+	
+	private String strPadding = null;
 
 	public String defaultValue = null;
-
-	private String leftPadding = null;
-	private String rightPadding = null;
 	
 	
 	public String getDelimit() {
@@ -104,7 +104,8 @@ public class FootField extends XmlObject {
 	 */
 	@attribute(value = "", required = false, defaultValue="There must be a size specified.")
 	public void setPadleft(String padLeft) {
-		this.padLeft = padLeft;
+		this.padLeft = true;
+		this.padChar = padLeft.charAt(0);
 	}
 	
 	/**
@@ -113,7 +114,8 @@ public class FootField extends XmlObject {
 	 */
 	@attribute(value = "", required = false)
 	public void setPadright(String padRight) {
-		this.padRight = padRight;
+		this.padRight = true;
+		this.padChar = padRight.charAt(0);
 	}
 
 	public FootFieldTypes getType() {
@@ -182,18 +184,14 @@ public class FootField extends XmlObject {
 		if (type.equals(FootFieldTypes.CONSTANT) && super.getValue() == null) {
 			throw new XMLBuildException("Constant value specified but never set");
 		}
-		if (padLeft != null && padRight != null) {
+		if (padLeft  && padRight) {
 			throw new XMLBuildException("only one of padleft and padright may be specified");
 		}
-		if (size > 0 && padLeft != null) {
-			char[] x = new char[size];
-			Arrays.fill(x, padLeft.charAt(0));
-			leftPadding = new String(x);
-		}
-		if (size > 0 && padRight != null) {
-			char[] x = new char[size];
-			Arrays.fill(x, padRight.charAt(0));
-			rightPadding = new String(x);
+		if (size > 0 && padChar != null) {
+			StringBuffer buffer = new StringBuffer();
+			for (int i = 0; i < size; i++)
+				buffer.append(padChar);
+			strPadding = buffer.toString();
 		}
 	}
 
@@ -228,22 +226,26 @@ public class FootField extends XmlObject {
 		if (type.equals(FootFieldTypes.COUNT)) {
 			int count = getParentSelect().getCount()+add;
 			String value = "" + count;
-			if (leftPadding != null) {
-				return (leftPadding + value).substring(value.length());
+			if (padLeft) {
+				return (strPadding + value).substring(value.length());
 			}
-			if (rightPadding != null) {
-				return (value + rightPadding).substring(0, size);
+			if (padRight) {
+				return (value + strPadding).substring(0, size);
 			}
 			return value;
+		}
+		if (type.equals(FootFieldTypes.CHAR)) {
+			log.debug("CHAR = ");
+			return format(super.getValue());
 		}
 		if (type.equals(FootFieldTypes.LENGTH)) {
 			String value = ""+getParentSelect().getLength();
 			log.debug("length = " + value);
-			if (leftPadding != null) {
-				return (leftPadding + value).substring(value.length());
+			if (padLeft) {
+				return (strPadding + value).substring(value.length());
 			}
-			if (rightPadding != null) {
-				return (value + rightPadding).substring(0, size);
+			if (padRight) {
+				return (value + strPadding).substring(0, size);
 			}
 			return value;
 		}
@@ -266,6 +268,31 @@ public class FootField extends XmlObject {
 		}
 		return "";
 	}
+	
+	public String format(Object v) throws XMLBuildException {
+		String returnValue = null;
+		if (v == null)
+			returnValue = defaultValue;
+		else {
+			returnValue = v.toString();
+
+			if (returnValue.length() > size && size >= 0) {
+				log.debug(getName() + ": " + " truncated, value = '" + returnValue + "'.  size = " + size + "  len of data is " + returnValue.length());
+				returnValue = returnValue.substring(0, size);
+			}
+			
+			else if (returnValue.length() < size) {
+				if (padLeft) {
+					returnValue = (strPadding + returnValue).substring(returnValue.length());
+				} 
+				else if (padRight) {
+					returnValue = (returnValue + strPadding).substring(0, size);
+				}
+			}
+		}
+		return returnValue;
+	}
+	
 	
 	/**
 	 * Have the contents of a footer/header field come from a separate query 

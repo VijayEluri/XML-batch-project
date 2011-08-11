@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema attributeFormDefault="qualified"
   elementFormDefault="qualified" id="query"
-  targetNamespace="com.browsexml.core" xmlns="com.browsexml.core" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:app1="edu.bxml.io" xmlns:app2="edu.bxml.ftp" >
-  <xs:import namespace="edu.bxml.io" schemaLocation="edu_bxml_io.xsd"/>
-  <xs:import namespace="edu.bxml.ftp" schemaLocation="edu_bxml_ftp.xsd"/>
+  targetNamespace="com.browsexml.core" xmlns="com.browsexml.core" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:complexType name="XmlObjectType">
     <xs:choice maxOccurs="unbounded" minOccurs="0"/>
     <xs:attribute form="unqualified" name="name" type="xs:string">
       <xs:annotation>
-        <xs:documentation><![CDATA[ 
-				Add Processing of fields to a pipeline
- 
- @param file
-			]]></xs:documentation>
+        <xs:documentation><![CDATA[ ]]></xs:documentation>
       </xs:annotation>
     </xs:attribute>
   </xs:complexType>
@@ -21,8 +15,6 @@
       <xs:extension base="XmlObjectType">
         <xs:choice maxOccurs="unbounded" minOccurs="0">
           <xs:element ref="xmlObject"/>
-           <xs:element ref="app1:email"/>
-           <xs:element ref="app2:ftp"/>
         </xs:choice>
       </xs:extension>
     </xs:complexContent>
@@ -41,6 +33,9 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:complexType name="DumpMethodsType">
+    <xs:choice maxOccurs="unbounded" minOccurs="0"/>
+  </xs:complexType>
+  <xs:complexType name="ExecuteType">
     <xs:choice maxOccurs="unbounded" minOccurs="0"/>
   </xs:complexType>
   <xs:complexType mixed="true" name="ExitType">
@@ -80,18 +75,12 @@
   </xs:complexType>
   <xs:element name="xmlObject" type="XmlObjectType">
     <xs:annotation>
-      <xs:documentation><![CDATA[ 
-
-	]]></xs:documentation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="executer" substitutionGroup="xmlObject" type="ExecuterType">
     <xs:annotation>
-      <xs:documentation><![CDATA[ 
-		Call Execute on each immediate child.
- 
- @author ritcheyg
-	]]></xs:documentation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="browser" type="BrowserType">
@@ -115,13 +104,14 @@
       <xs:documentation><![CDATA[ ]]></xs:documentation>
     </xs:annotation>
   </xs:element>
+  <xs:element name="execute" type="ExecuteType">
+    <xs:annotation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
+    </xs:annotation>
+  </xs:element>
   <xs:element name="exit" substitutionGroup="xmlObject" type="ExitType">
     <xs:annotation>
-      <xs:documentation><![CDATA[ 
-		Call Execute on each immediate child.
- 
- @author ritcheyg
-	]]></xs:documentation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
     </xs:annotation>
   </xs:element>
   <xs:element name="main" type="MainType">
@@ -162,9 +152,7 @@
   </xs:element>
   <xs:element name="xmlParser" type="XmlParserType">
     <xs:annotation>
-      <xs:documentation><![CDATA[ 
-		Format a query's output
-	]]></xs:documentation>
+      <xs:documentation><![CDATA[ ]]></xs:documentation>
     </xs:annotation>
   </xs:element>
 </xs:schema>

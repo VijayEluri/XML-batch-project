@@ -392,9 +392,10 @@ public class Select extends FilterAJ {
 			try {
 			final Connection connection = sql.getConnection();
 			final Statement stmt = connection.getStatement();//con.createStatement();
+			log.debug("sql = " + sql.getQuery());
 			final ResultSet rs = stmt.executeQuery(sql.getQuery());
 
-			log.debug("sql = " + sql.getQuery());
+			
 			//java.sql.Connection con = connection.getConnection();
 			/* TODO put dataoutput into sub objects */
 			

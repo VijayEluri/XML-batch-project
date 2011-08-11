@@ -43,6 +43,7 @@ public class CharField extends Field {
 				returnValue = 
 					returnValue.replaceAll(r.getExpression(), r.getReplacement());
 			}
+		}
 
 			if (returnValue.length() > size && size >= 0) {
 				log.debug(getFieldName() + ": " + " truncated, value = '" + returnValue + "'.  size = " + size + "  len of data is " + returnValue.length());
@@ -57,7 +58,7 @@ public class CharField extends Field {
 					returnValue = (returnValue + padding).substring(0, size);
 				}
 			}
-		}
+		
 		if (pretext != null) {
 			returnValue = pretext + returnValue;
 		}

@@ -1,10 +1,15 @@
 <?eclipse.ant.import?>
 <project name="Browsexml" basedir="." default="deploy" xmlns:dn="antlib:org.apache.ant.dotnet"
     xmlns="antlib:org.apache.tools.ant">
-    <!--taskdef name="dir" classname="org.apache.tools.ant.taskdefs.Dir"
-        classpath="C:\customAnt\DirTask.jar"/-->
 	
-	<property name="JAVA_HOME" value="C:/Sun/SDK/jdk"></property>
+	<property name="JAVA_HOME" value="/usr/bin"></property>
+	<property name="CUSTOM" value="/Users/geoffreyritchey/Documents/workspace/customAnt"></property>
+	
+	
+    <taskdef name="dir" classname="org.apache.tools.ant.taskdefs.Dir"
+        classpath="${CUSTOM}\DirTask.jar"/>
+	
+	
 	
       
     <target name="deploy" depends="build">
@@ -208,6 +213,14 @@
 		<arg value="TEG.xml" />
 	</java>
 </target>
+
+<target name="run NSLC" depends="build" description="load Texas Grant">
+	<java dir="." logError="true" fork="true"
+		classname="com.browsexml.core.Main">
+		<classpath refid="browsexml.classpath" />
+		<arg value="NSLC.xml" />
+	</java>
+</target>
 	
 <target name="run FADS" depends="build" description="load Texas Grant">
 	<java dir="." logError="true" fork="true"
@@ -366,7 +379,7 @@
 	</java>
 </target>
 <target name="Annotation_Processing_Tool" description="process the annotations">
-	<apply executable="${JAVA_HOME}/bin/apt.exe" dir="." verbose="true"
+	<apply executable="apt" dir="." verbose="true"
 		parallel="true">
 		<arg value="-nocompile" />
 		<arg value="-s" />

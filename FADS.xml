@@ -6,6 +6,11 @@
         file:/Users/geoffreyritchey/Documents/workspace/x86_bookstore/commons-net-2.0.jar;
         file:/Users/geoffreyritchey/Documents/workspace/x86_bookstore/jdbc/sqljdbc.jar;
 ?>
+<!-- 
+	Texas College http://www.texascollege.edu/default.asp
+	Wayland 
+	LCU
+ -->
 <query xmlns='edu.bxml.format' xmlns:io='edu.bxml.io'
                         xmlns:core='com.browsexml.core'
                         xmlns:ftp='edu.bxml.ftp'
@@ -21,9 +26,10 @@
 	<property name="selectionSetToken" text="1565"/> 
 
 	<!--  find the table and column values for custom data locations -->
+	<!--  the Query defined in 'properties' will set the property VALUES below -->
 	<properties queryName="properties" separator="," file="passwords.properties"> 
-		<property name="county" text="2503"/> <!-- user_date.value_03 -->
-		<property name="ethnic" text="2805"/> <!-- user_string.value_05 -->
+		<property name="county" text="2503"/> <!-- this gets set to 'user_date.value_03' -->
+		<property name="ethnic" text="2805"/> <!-- this gets set to 'user_string.value_05' -->
 	</properties>
 	
 	<properties queryName="getSelSelDefinition" separator=","> 
@@ -97,38 +103,38 @@
 			</footField>
 		</header>
 		<key name="key" field="SOC_SEC_NUMBER"/>
-		<charField name="TYPE" type="CHAR" size="1" />                                    <!-- 1 -->
-		<charField name="FICE" type="CHAR" size="6" padleft="0"/>                                    <!-- 1 -->
-		<charField name="YEAR" type="CHAR" size="4" padleft="0"/>                                    <!-- 1 -->
-		<charField name="SOC_SEC_NUMBER" type="CHAR" size="9"/>                                    <!-- 1 -->
-		<numberField name="STDNT_SPOUSE_AGI" type="NUMBER" size="6" padleft="0" default="000000"  min="0" max="300000"/>                                    <!-- 1 -->
-		<numberField name="PARENT_AGI" type="NUMBER" size="6" padleft="0" default="000000" min="0" max="300000"/>                                    <!-- 1 -->
-		<numberField name="TOP10PCT" type="NUMBER" size="5" padleft="0" default="00000"/>                                    <!-- 1 -->
-		<numberField name="fill1" type="NUMBER" size="5" padleft="0" default="00000"/>                                    <!-- 1 -->
-		<numberField name="fill2" type="NUMBER" size="5" padleft="0" default="00000"/>                                    <!-- 1 -->
-		<numberField name="fill3" type="NUMBER" size="5" padleft="0" default="00000"/>                                    <!-- 1 -->
-		<numberField name="fill4" type="NUMBER" size="6" padleft="0" default="000000"/>                                    <!-- 1 -->
-		<charField name="RACE" type="CHAR" size="6" padleft="0" default="000000"/>
-		<numberField name="fill5" type="NUMBER" size="5" padleft="0" default="00000"/>
-		<numberField name="fill6" type="NUMBER" size="5" padleft="0" default="00000"/>
-		<numberField name="fill7" type="NUMBER" size="1" padleft="0" default="0"/>
-		<numberField name="ISIR_VALID" type="NUMBER" size="1" padleft="0" default="0"/>
-		<numberField name="HOUSING" type="NUMBER" size="1" padleft="0" default="0"/>
-		<numberField name="ETHNIC" type="NUMBER" size="1" padleft="0" default="0"/>
-		<charField name="RACE_CODE" type="CHAR" size="7" default="0000000"/>
-		<charField name="CLASSIFICATION" type="CHAR" size="1" default=" "/>                       <!-- 15 -->
-		<charField name="DEPENDENCY_STATUS" type="CHAR" size="1" default=" "/>                    <!-- 16 -->
-		<dateField name="DATE_OF_BIRTH" type="DATE" format="MMddyyyy"/>                           <!-- 17 -->
-		<charField name="RESIDENCY" type="CHAR" size="1" default=" "/>                            <!-- 18 -->
-		<charField name="fill8" type="CHAR" size="53" padleft=" "/>                            <!-- 18 -->
-		<charField name="ZIP_ADDRESS" type="CHAR" size="9" default="000000000" padright="0" />                        <!-- 22 -->
-		<charField name="ENROLLMENT_STATUS" type="CHAR" size="1" default=" "/>                    <!-- 23 -->
-		<charField name="GENDER" type="CHAR" size="1" default=" "/>  
-		<charField name="MOTHER_HIGH_GRADE" type="CHAR" size="1" default=" "/>                    <!-- 25 -->
-		<charField name="FATHER_HIGH_GRADE" type="CHAR" size="1" default=" "/>                    <!-- 26 -->
-		<numberField name="COST_OF_ATTEND" type="NUMBER" size="5" default="00000" padleft="0"/>   <!-- 27 -->
-		<numberField name="TOTAL_FAMILY_CONT" type="NUMBER" size="6" default="000000" padleft="0"/><!--28 -->
-		<numberField name="TUIT_EXEMPT_WAIV" type="NUMBER" size="5" default="00000" padleft="0"/> <!-- 29 -->
+		<charField name="TYPE" type="CHAR" size="1" />                                                                    <!-- 1a -->
+		<charField name="FICE" type="CHAR" size="6" padleft="0"/>                                                         <!-- 1b -->
+		<charField name="YEAR" type="CHAR" size="4" padleft="0"/>                                                         <!-- 1c -->
+		<charField name="SOC_SEC_NUMBER" type="CHAR" size="9"/>                                                           <!-- 1d -->
+		<numberField name="STDNT_SPOUSE_AGI" type="NUMBER" size="6" padleft="0" default="000000"  min="0" max="300000"/>  <!-- 2 -->
+		<numberField name="PARENT_AGI" type="NUMBER" size="6" padleft="0" default="000000" min="0" max="300000"/>         <!-- 3 -->
+		<numberField name="TOP10PCT" type="NUMBER" size="5" padleft="0" default="00000"/>                                 <!-- 4 -->
+		<numberField name="MISMATCH_RESON" type="NUMBER" size="2" padleft="0" default="00"/>                              <!-- 5 -->
+		<numberField name="TUITION_WAIVER_AWARD_1" type="NUMBER" size="5" padleft="0" default="00000"/>                   <!-- 6 FIXME START; we are private - all zero -->
+		<numberField name="TUITION_WAIVER_CODE_1" type="CHAR" size="2" padleft="0" default="00"/>                         <!-- 7 -->
+		<numberField name="TUITION_WAIVER_AWARD_2" type="NUMBER" size="5" padleft="0" default="00000"/>                   <!-- 8 -->
+		<numberField name="TUITION_WAIVER_CODE_2" type="CHAR" size="2" padleft="0" default="00"/>                         <!-- 9 -->
+		<numberField name="TUITION_WAIVER_AWARD_3" type="NUMBER" size="5" padleft="0" default="00000"/>                   <!-- 10 -->
+		<numberField name="TUITION_WAIVER_CODE_3" type="CHAR" size="2" padleft="0" default="00"/>                         <!-- 11 FIXME END-->
+		<numberField name="fill4" type="NUMBER" size="6" padleft="0" default="000000000000000"/>                          <!-- 12 -->
+		<numberField name="ISIR_VALID" type="NUMBER" size="1" padleft="0" default="0"/>                                   <!-- 13 Need Analysis? -->
+		<numberField name="HOUSING" type="NUMBER" size="1" padleft="0" default="0"/>                                   	  <!-- 14 -->
+		<numberField name="ETHNIC" type="NUMBER" size="1" padleft="0" default="0"/>                                       <!-- 15 -->	
+		<charField name="RACE_CODE" type="CHAR" size="7" default="0000000"/>                                              <!-- 16a-g -->
+		<charField name="CLASSIFICATION" type="CHAR" size="1" default=" "/>                                               <!-- 17 -->
+		<charField name="DEPENDENCY_STATUS" type="CHAR" size="1" default=" "/>                                            <!-- 18 -->
+		<dateField name="DATE_OF_BIRTH" type="DATE" format="MMddyyyy"/>                                                   <!-- 19 -->
+		<charField name="RESIDENCY" type="CHAR" size="1" default=" "/>                                                    <!-- 20 -->
+		<charField name="fill8" type="CHAR" size="53" padleft=" "/>                                                       <!-- 21 -->
+		<charField name="ZIP_ADDRESS" type="CHAR" size="9" default="000000000" padright="0" />                            <!-- 22 -->
+		<charField name="ENROLLMENT_STATUS" type="CHAR" size="1" default=" "/>                                            <!-- 23 -->
+		<charField name="GENDER" type="CHAR" size="1" default=" "/>                                                       <!-- 24 -->
+		<charField name="MOTHER_HIGH_GRADE" type="CHAR" size="1" default=" "/>                                            <!-- 25 -->
+		<charField name="FATHER_HIGH_GRADE" type="CHAR" size="1" default=" "/>                                            <!-- 26 -->
+		<numberField name="COST_OF_ATTEND" type="NUMBER" size="5" default="00000" padleft="0"/>                           <!-- 27 -->
+		<numberField name="TOTAL_FAMILY_CONT" type="NUMBER" size="6" default="000000" padleft="0"/>                       <!-- 28 -->
+		<numberField name="TUIT_EXEMPT_WAIV" type="NUMBER" size="5" default="00000" padleft="0"/>                         <!-- 29 -->
 		<numberField name="CATEGORICAL_AID" type="NUMBER" size="5" default="00000" padleft="0"/>  <!-- 30 -->
 		<numberField name="FEDERAL_PELL" type="NUMBER" size="5" default="00000" padleft="0"/>     <!-- 31 a -->
 		<numberField name="FEDERAL_SEOG" type="NUMBER" size="5" default="00000" padleft="0"/>     <!-- 31 b -->
@@ -157,7 +163,7 @@
 		<numberField name="UNSUB_STAFFORD_LN" type="NUMBER" size="5" default="00000" padleft="0"/><!-- 33 b -->
 		<numberField name="PERKINS_LOAN" type="NUMBER" size="5" default="00000" padleft="0"/>     <!-- 33 c -->
 		<numberField name="FEDERAL_PLUS_LNS" type="NUMBER" size="5" default="00000" padleft="0"/> <!-- 33 d -->
-		<numberField name="HELP" type="NUMBER" size="5" default="00000" padleft="0"/>             <!-- 33 e -->
+		<numberField name="HELP" type="NUMBER" size="5" default="00000" padleft="0"/>             <!-- 33 e FIXME FILLER-->
 		<numberField name="COLLEGE_ACCESS_LN" type="NUMBER" size="5" default="00000" padleft="0"/><!-- 33 f -->
 		<numberField name="PRIM_CARE_STD_LN" type="NUMBER" size="5" default="00000" padleft="0"/> <!-- 33 g -->
 		<numberField name="FDSLP_PLUS" type="NUMBER" size="5" default="00000" padleft="0"/><!-- 33 h -->
@@ -225,22 +231,6 @@ drop table [lcu_fads_students];
 
 if exists (select * from dbo.sysobjects where id = object_id(N'[lcu_fads_totals]') and OBJECTPROPERTY(id, N'IsUserTable') = 1)
 drop table [lcu_fads_totals];
-
---select distinct stu_award_year.stu_award_year_token  
---into lcu_fads_students
---from student, stu_award_year, say_fm_stu, stu_award, stu_ay_sum_data
---where (student.student_token = stu_award_year.student_token) 
---	AND (say_fm_stu.stu_award_year_token = stu_award_year.stu_award_year_token) 
---	AND (stu_award.stu_award_year_token = stu_award_year.stu_award_year_token) 
---	AND (stu_ay_sum_data.stu_award_year_token = stu_award_year.stu_award_year_token) 
---	AND (stu_award_year.award_year_token = ${year}-1) 
---	AND ((say_fm_stu.data_valid = 'Y' AND stu_award.actual_amt > 0) 
---		AND (stu_award_year.tracking_status = 'DR' 
---			OR stu_award_year.tracking_status = 'DS' OR stu_award_year.tracking_status = 'DM' 
---			OR stu_award_year.tracking_status = 'PD') 
---		/*AND (stu_ay_sum_data.tot_fed_funds_awd > 0 
---			OR stu_ay_sum_data.tot_state_funds_awd > 0 
---			OR stu_ay_sum_data.tot_inst_funds_awd > 0)*/);
 
 ${selectionSetQuery}
 
@@ -465,7 +455,7 @@ select 'F' as [TYPE], ${fice} as [FICE], ${year} as [YEAR],
 	[SOC_SEC_NUMBER], STDNT_SPOUSE_AGI, PARENT_AGI, TOP10PCT, 
 	0 as fill1, 0 as fill2, 0 as fill3, 0 as fill4,
 	s.race as RACE,
-	0 as fill5, 0 as fill6, 0 as fill7, ISIR_VALID, HOUSING, ETHNIC, RACE_CODE, 
+	0 as MISMATCH_REASON, 0 as fill6, 0 as fill7, ISIR_VALID, HOUSING, ETHNIC, RACE_CODE, 
 	[CLASSIFICATION], [DEPENDENCY_STATUS], [DATE_OF_BIRTH], [RESIDENCY], ' ' as fill8, ' ' as fill9, [ZIP_ADDRESS], 
 	[ENROLLMENT_STATUS], [GENDER], [MOTHER_HIGH_GRADE], [FATHER_HIGH_GRADE], [COST_OF_ATTEND], [TOTAL_FAMILY_CONT], 
 	

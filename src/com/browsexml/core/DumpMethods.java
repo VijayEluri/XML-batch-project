@@ -333,7 +333,13 @@ public class DumpMethods {
 							typeDef.append("<xs:simpleType> "); 
 							typeDef.append("<xs:restriction base=\"xs:string\"> "); 
 							       
-								Set enumerations = EnumSet.allOf(clazz);   
+								Set enumerations = null;
+								try {
+									enumerations = EnumSet.allOf(clazz);
+								} catch (Exception e) {
+									System.err.println("CLASS is " + clazz.getClass().getName());
+									e.printStackTrace();
+								}   
 								Iterator itt = enumerations.iterator();
 								while (itt.hasNext()) {  
 									Object o = itt.next();

@@ -47,7 +47,7 @@ public class Match extends XmlObject {
 		return value;
 	}
 
-	public void setValue(String value) throws XMLBuildException {
+	public void setValue(String value) {
 		this.value = value;
 	}
 	
