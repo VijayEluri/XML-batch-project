@@ -1,0 +1,171 @@
+<?xml version="1.0"?>
+<?classpath
+        file:/Users/geoffreyritchey/Documents/workspace/x86_bookstore/aspectjrt.jar;
+        file:/Users/geoffreyritchey/Documents/workspace/x86_bookstore/cryptix/cryptix-message-api.jar;
+        file:/Users/geoffreyritchey/Documents/workspace/x86_bookstore/jsch.jar;
+        file:/Users/geoffreyritchey/Documents/workspace/x86_bookstore/commons-net-2.0.jar;
+        file:/Users/geoffreyritchey/Documents/workspace/x86_bookstore/jdbc/sqljdbc.jar;
+?>
+<!-- 
+
+ -->
+<query xmlns='edu.bxml.format' xmlns:io='edu.bxml.io'
+                        xmlns:core='com.browsexml.core'
+                        xmlns:ftp='edu.bxml.ftp'
+                        xmlns:format='edu.bxml.format'
+                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                        xsi:schemaLocation="
+                        edu.bxml.format https://raw.github.com/geoffritchey/XML-batch-project/master/edu_bxml_format.xsd
+                        edu.bxml.io https://raw.github.com/geoffritchey/XML-batch-project/master/edu_bxml_io.xsd
+                        edu.bxml.ftp https://raw.github.com/geoffritchey/XML-batch-project/master/edu_bxml_ftp.xsd
+                        com.browsexml.core https://raw.github.com/geoffritchey/XML-batch-project/master/com_browsexml_core.xsd">
+	<property name="year" text="2010"/> 
+	<property name="yearTerms" text="2010:FALL"/> <!-- Limit report to these pipe separated year:term combinations -->
+	<property name="section" text="%"/>
+	<property name="standard" text="Y"/>
+	<property name="certDate" text="#{yyyyMMdd}"/>
+	<property name="fice" text="003586"/>
+	<property name="branchCode" text="00"/>
+	<property name="title" text="2011 Summer"/>
+
+	<property name="noBlock" text="'NO','INDNO','DEPNO'"/> <!-- comma separated list of blocking keys in code_releaseinfo -->
+
+	<!--  find the table and column values for custom data locations -->
+	<!--  the Query defined in 'properties' will set the property VALUES below -->
+	<properties queryName="properties" separator="," file="passwords.properties"/> 
+	
+	<properties queryName="properties" separator="," file="passwords.properties"> 
+		<property name="count" text="count"/> 
+		<property name="F" text="F"/> 
+		<property name="H" text="H"/> 
+		<property name="L" text="L"/> 
+		<property name="W" text="W"/> 
+		<property name="G" text="G"/> 
+		<property name="A" text="A"/> 
+		<property name="D" text="D"/> 
+	</properties>
+
+	<execute sql="generateData"/>
+	
+	<select name="selectNSC" queryName="nsc" delimit="" toDir="." toFile="nsc.txt">
+		<header columnsNames="false">
+			<footField type="CONSTANT">A2</footField>
+			<footField type="CONSTANT">${fice}</footField>
+			<footField type="CONSTANT">${branchCode}</footField>
+			<footField type="CHAR" size="15" padright=" ">${title}</footField> 
+			<footField type="CONSTANT">${standard}</footField>
+			<footField type="CONSTANT" >${certDate}</footField> 
+			<footField type="CONSTANT">F</footField> <!--  Full Report -->
+			<footField type="CHAR" size="216" padleft=" "> </footField> 
+		</header>
+		
+		<key name="key" field="people_id"/>
+		<charField name="rowType" type="CHAR" size="2" />                                                                  
+		<charField name="ssn" size="9" padright=" "/>                                                         
+		<charField name="first_name" size="20" padright=" " /> 
+		<charField name="middle_initial" size="1" padright=" " />
+		<charField name="last_name" size="20" padright=" " />   
+		<charField name="suffix" size="5" padright=" " default=" "/>  
+		<charField name="previous_ssn" size="9" padleft=" " default=" "/> 
+		<charField name="prev_last_name" size="20" padright=" " default=" "/> 
+		<charField name="status" size="1" padleft=" " default=" "/> 
+		<dateField name="status_change" format="yyyyMMdd" padleft=" " size="8" default=" "/> 
+		<charField name="street1" padright=" " size="30" default=" "/> 
+		<charField name="street2" padright=" " size="30" default=" "/> 
+		<charField name="city" padright=" " size="20" default=" "/> 
+		<charField name="state" padright=" " size="2" default=" "/> 
+		<charField name="zip" padright=" " size="9" default=" "/> 
+		<charField name="country" padright=" " size="15" default=" "/> 
+		<dateField name="anti_grad" padright=" " size="8" format="yyyyMMdd" default="        "/> 
+		<dateField name="birth" padright=" " size="8" format="yyyyMMdd" default="        "/> 
+		<dateField name="term_begin" padright=" " size="8" format="yyyyMMdd" default="        "/> 
+		<dateField name="term_end" padright=" " size="8" format="yyyyMMdd" default="        "/> 
+		<charField fieldName="filler" padright=" " size="1" default=" "/> 
+		<charField name="data_block" padright=" " size="1" default=" "/> 
+		<charField fieldName="cip" padright=" " size="6" default=" "/> <!--  major 1 cip code -->
+		<charField fieldName="filler" padright=" " size="6" default=" "/>  <!-- major 2 cip code -->
+		<charField name="curriculum_description" padright=" " size="80" default=" "/>  <!--  major course of study 1 -->
+		<charField fieldName="filler" padright=" " size="80" default=" "/> <!-- major course of study 2 -->
+		<charField name="level" padright=" " size="1" default=" "/>  
+		<charField name="first_time_fulltime" padright=" " size="1" default=" "/>  
+		<charField name="degreeSeeking" padright=" " size="1" default=" "/>  
+		<charField fieldName="highschool" padleft=" " size="6" default=" "/>  <!-- HS code -->
+		<charField fieldName="gender" padright=" " size="1" default=" "/>  
+		<charField fieldName="race" padright=" " size="2" default=" "/>  
+		<charField name="people_id" padright=" " size="20" default=" "/>  
+		<charField fieldName="filler" padright=" " size="30" default=" "/> <!-- state issued school id -->
+		<charField fieldName="email" padright=" " size="128" default=" "/>
+		<charField fieldName="good" padright=" " size="1" default=" "/>
+		<charField fieldName="middle_name" padright=" " size="35" default=" "/>
+		<charField fieldName="filler" padright=" " size="67" default=" "/>
+		<footer>
+			<footField type="CONSTANT">T1</footField>
+			<footField type="CHAR" size="6" padleft="0">${F}</footField> 
+			<footField type="CHAR" size="6" padleft="0">${H}</footField> 
+			<footField type="CHAR" size="6" padleft="0">${L}</footField> 
+			<footField type="CHAR" size="6" padleft="0">${W}</footField> 
+			<footField type="CHAR" size="6" padleft="0">${G}</footField> 
+			<footField type="CHAR" size="6" padleft="0">${A}</footField> 
+			<footField type="CHAR" size="6" padleft="0">0</footField> 
+			<footField type="CHAR" size="6" padleft="0">${D}</footField> 
+			<footField type="CHAR" size="6" padleft="0">${count}</footField> 
+			<footField type="CHAR" size="642" padleft=" "> </footField> 
+			<footField type="CONSTANT">                                                                       </footField>
+		</footer>
+	</select>
+
+		<connection name="Campus6" login="${login}" password="${password}"
+				class="com.microsoft.sqlserver.jdbc.SQLServerDriver"
+				url="${nsc_url}">
+		<sql name="generateData">
+<![CDATA[
+--exec lcu_nslc ${year}, ${yearTerms}, ${section}
+]]>
+		</sql>
+		<sql name="properties">
+<![CDATA[
+    select 'F' as name, sum(case when status = 'F' then 1 else 0 end) as value
+    from lcunslc
+    union 
+    select 'H' as name, sum(case when status = 'H' then 1 else 0 end) as value
+    from lcunslc
+    union 
+    select 'L' as name, sum(case when status = 'L' then 1 else 0 end) as value
+    from lcunslc
+    union 
+    select 'W' as name, sum(case when status = 'W' then 1 else 0 end) as value
+    from lcunslc
+    union 
+    select 'G' as name, sum(case when status = 'G' then 1 else 0 end) as value
+    from lcunslc
+    union 
+    select 'A' as name, sum(case when status = 'A' then 1 else 0 end) as value
+    from lcunslc
+    union 
+    select 'D' as name, sum(case when status = 'D' then 1 else 0 end) as value
+    from lcunslc
+    union 
+    select 'count' as name, sum(1)+2 as value
+    from lcunslc
+]]>
+		</sql>
+		<sql name="nsc">
+<![CDATA[
+SELECT 'D1' as rowType, [people_id] ,[error_warn] ,[condition_message] ,case when visa = 'I20' then 'NO SSN' else [ssn] end as ssn
+      ,[first_name] ,[middle_name], left(middle_name, 1) as middle_initial,[last_name] ,[suffix]
+      ,[previous_ssn] ,[prev_last_name] ,[street1] ,[street2]
+      ,[city] ,[state] ,[zip] ,[country]
+      ,[anti_grad] ,[birth] ,[term_begin] ,[term_end], ' ' as filler
+      ,[data_block] , cip, first_time_fulltime 
+      ,case degree when 'ND' then 'N' else 'Y' end as degreeSeeking
+      ,gender ,email , highschool
+      ,[deceased] , case when deceased = 'n' then null else [deceased_date] end as deceased_date,[credits]
+      ,[graduation_date] ,[level] ,[status] ,[status_change]
+      , case race when 1 then 'B' when 2 then 'IA' when 3 then 'AN' when 4 then 'H' when 5 then 'W' when 6 then 'A' when 8 then 'HP' else 'U' end as race
+      , good
+      ,[program] ,[degree] ,[curriculum], curriculum_description
+  FROM [lcunslc]
+]]>
+		</sql>
+	</connection>
+</query>
