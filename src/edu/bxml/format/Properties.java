@@ -117,7 +117,9 @@ public class Properties extends XmlObject {
 							continue;
 						log.debug("key = " + key);
 						key = properties.get(key).toString();
-						String value = rs.getObject("value").toString();
+						String value = null;
+						if (rs.getObject("value") != null) 
+							value = rs.getObject("value").toString();
 						m.put("_#" + key, value);
 						log.debug(key + " = '" + value + "'");
 					}

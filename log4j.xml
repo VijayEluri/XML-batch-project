@@ -18,11 +18,11 @@
     	<level value="WARN"/>
     </logger>
 
-    <logger name="edu.bxml.format.DateField">
-    	<level value="WARN"/>
+    <logger name="edu.bxml.format.Excel">
+    	<level value="DEBUG"/>
     </logger>
     
-    <logger name="edu.bxml.format.Select">
+    <logger name="edu.bxml.io.FilterAJ">
     	<level value="DEBUG"/>
     </logger>
 

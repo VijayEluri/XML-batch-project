@@ -60,6 +60,17 @@ public class Query extends Filter {
 	}
 	
 	/**
+	 * Execute queries (update/insert) or procedures not expected 
+	 * to return a resultset 
+	 */
+	@attribute(value = "", required = true)
+	public void addExcel(Excel execute) {
+		log.debug("EXCEL ADDED");
+		sqlCommands.add(execute);
+		execute.setParent(this);
+	}
+	
+	/**
 	 * Specify how to connect to a database.  Queries to run on the database
 	 * such as select, insert and update are children of the connect object.
 	 * A Select object used for formatting would get its data from one of these

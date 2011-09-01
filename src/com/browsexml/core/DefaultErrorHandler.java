@@ -8,7 +8,7 @@ import javax.swing.JLabel;
 
 import org.eclipse.swt.layout.FillLayout;
 
-public class DefaultErrorHandler extends ErrorHandler {
+public class DefaultErrorHandler extends JFrame implements ErrorHandler {
 	public void noErrors() {};
 	public void viewErrors(boolean console, String msg) {
 		

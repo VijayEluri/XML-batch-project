@@ -6,11 +6,17 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Vector;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlParser;
 import com.javalobby.tnt.annotation.attribute;
 
 /**
@@ -26,6 +32,17 @@ public class Connection extends XmlObject {
 	public String password = null;
 	public String url = null;
 	public String theClass = null;
+	public String jndi = null;
+	public String getJndi() {
+		return jndi;
+	}
+
+
+
+	public void setJndi(String jndi) {
+		this.jndi = jndi;
+	}
+
 	Vector<Sql> sqlQueries = new Vector<Sql>();
 	Statement stmt = null;
 
@@ -92,6 +109,9 @@ public class Connection extends XmlObject {
 	public java.sql.Connection getConnection() throws SQLException,
 			ClassNotFoundException {
 		java.sql.Connection con = null;
+		
+		con = getJndiConnection();
+		
 		if (con == null) {
 			Class.forName(theClass);
 			this.execute();
@@ -99,6 +119,51 @@ public class Connection extends XmlObject {
 			con =  DriverManager.getConnection(url, login, password);
 		}
 		return con;
+	}
+	
+	public java.sql.Connection getJndiConnection()  {
+		log.debug("getJndiConnection...");
+		if (jndi == null) {
+			log.debug("getJndiConnection null");
+			return null;
+		}
+		java.sql.Connection  result = null;
+			try {
+				
+		      Context initialContext = new InitialContext();
+		      if ( initialContext == null){
+		        log.debug("JNDI problem. Cannot get InitialContext.");
+		        return null;
+		      }
+//		      Context env = (Context) initialContext.lookup("java:comp/env");
+//		      if (env == null) {
+//		    	  log.debug("JNDI problem. Cannot get env.  Reset env..");
+//		    	  env = initialContext;
+//		      }
+		      try {
+				XmlParser.updateVariables(this);
+			} catch (XMLBuildException e) {
+				log.debug("failed to update variables");
+				e.printStackTrace();
+			}
+		      DataSource datasource = (DataSource)initialContext.lookup(jndi);
+		      if (datasource != null) {
+		        result = datasource.getConnection();
+		      }
+		      else {
+		    	  log.debug("Failed to lookup datasource.");
+		      }
+		    }
+		    catch ( NamingException ex ) {
+		    	log.debug("Cannot get connection: " + ex);
+		    	ex.printStackTrace();
+		    }
+		    catch(SQLException ex){
+		    	log.debug("Cannot get connection: " + ex);
+		    	ex.printStackTrace();
+		    }
+		    return result;
+		
 	}
 
 	public Statement getStatement() throws SQLException, ClassNotFoundException {

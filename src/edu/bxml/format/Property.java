@@ -1,6 +1,7 @@
 package edu.bxml.format;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -53,6 +54,21 @@ public class Property extends XmlObject {
 	 */
 	public void check() throws XMLBuildException {
 		HashMap m = getSymbolTable(); 
+		if (m.get("_#env") != null) {
+			log.debug("env not null");
+			Object value = ((Map)(m.get("_#env"))).get(getName());
+			if (value != null) {
+				if (value instanceof Object[]) {
+					value = ((Object[]) value)[0];
+				}
+				log.debug("value is a " + value.getClass().getName());
+				this.value = value.toString();
+				log.debug("value set from env to " + this.value);
+			}
+		}
+		else {
+			log.debug("env is null");
+		}
 		m.put("_#" + getName(), value);
 		log.debug("put " + getName() + " " + value);
 		log.debug("st = " + m);

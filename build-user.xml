@@ -219,6 +219,7 @@
 		classname="com.browsexml.core.Main">
 		<classpath refid="browsexml.classpath" />
 		<arg value="NSLC.xml" />
+		<arg line="year=2011 yearTerms=2011:FALL title='Fall 2011' standard=Y"/>
 	</java>
 </target>
 	

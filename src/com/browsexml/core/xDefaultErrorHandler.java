@@ -1,7 +1,6 @@
 package com.browsexml.core;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Insets;
@@ -9,7 +8,7 @@ import java.awt.Insets;
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 
-public class xDefaultErrorHandler extends ErrorHandler {
+public class xDefaultErrorHandler extends JFrame implements ErrorHandler {
  	   JFrame frame = null;
  	   JTextArea label = null;
  	   
