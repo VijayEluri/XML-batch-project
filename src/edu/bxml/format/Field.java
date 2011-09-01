@@ -59,7 +59,7 @@ public abstract class Field extends XmlObject {
 
 	public Grouping group = Grouping.NONE;
 
-	public String defaultValue = null;
+	public String defaultValue = "";
 
 	boolean leftPadding = false;
 	boolean rightPadding = false;

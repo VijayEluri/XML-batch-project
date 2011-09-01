@@ -26,7 +26,11 @@ import org.apache.log4j.xml.DOMConfigurator;
  */
 public class Main {
 	Connection con = null;
-
+	static String[] args = null;
+	
+	public static String[] getArgs() {
+		return args;
+	}
 
 	Statement stmt = null;
 
@@ -34,10 +38,11 @@ public class Main {
 
 	public static void main(String[] args) {
 		System.setProperty("sun.awt.noerasebackground","true");
-		Main p = new Main(args[0]);
+		Main p = new Main(args);
 	}
 
-	Main(String file) {
+	Main(String[] args) {
+		String file = args[0];
 		Protocol.registerProtocol( "bxml", Protocol.getProtocol("http") );
 		Protocol.registerProtocol( "bxmls", Protocol.getProtocol("https") );
 
@@ -65,7 +70,7 @@ public class Main {
 		boolean console = SplashScreen.getSplashScreen() == null;
 
 		try {
-			f = new XmlParser(file, factory);
+			f = new XmlParser(file, factory, args);
 			runner.noErrors();
 		}
 		catch (java.net.ConnectException e) {

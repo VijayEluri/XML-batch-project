@@ -41,7 +41,7 @@ public class Select extends FilterAJ {
 	Vector<Field> vctFields = new Vector<Field>();
 	Vector<Replace> replacements = new Vector<Replace>();
 	private String concatSep = " ";
-	PrintStream out = System.out;
+	PrintStream localOut = null;
 
 	Vector allFields = null;
 	private Query query = null;
@@ -375,7 +375,10 @@ public class Select extends FilterAJ {
 	@Override
 	public void execute() throws XMLBuildException {
 		//log.debug("SELECT:");
+		localOut = new PrintStream(this.getOut());
+
 		File arch = null;
+		
 
 		if (!lock) {
 			if (outFile != null) {
@@ -389,10 +392,11 @@ public class Select extends FilterAJ {
 		try {
 			Sql sql = query.getSql(queryName);
 			
+			Connection connection = sql.getConnection();
+			Statement stmt = null;
 			try {
-			final Connection connection = sql.getConnection();
-			final Statement stmt = connection.getStatement();//con.createStatement();
 			log.debug("sql = " + sql.getQuery());
+			stmt = connection.getStatement();
 			final ResultSet rs = stmt.executeQuery(sql.getQuery());
 
 			
@@ -405,9 +409,10 @@ public class Select extends FilterAJ {
 
 			setMD(rs.getMetaData());
 			checkHeader();
+			
 			log.debug("filename = " + filename);
 			if (filenameField == null) {
-				printHeader(out, workingValues);//PROBLEM LINE
+				printHeader(localOut, workingValues);//PROBLEM LINE
 			}
 			while (rs.next()) {
 				recordCount++;
@@ -418,10 +423,16 @@ public class Select extends FilterAJ {
 			catch (SQLException s) {
 				s.printStackTrace();
 			}
+			try {
+				stmt.close();
+				connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 			flushWorkingValues();
 			printFooter();
-			if (archive != null && out != System.out) {
-				out.close();
+			if (archive != null && localOut != System.out) {
+				localOut.close();
 				arch = new File(outFile.getParent() + "/" + archive, 
 						outFile.getName());
 				arch.createNewFile();
@@ -475,13 +486,13 @@ public class Select extends FilterAJ {
 						printFooter();
 					setOutput(outFile);
 					//System.out.println("out output was " + lastFileName);
-					printHeader(out, workingValues);
+					printHeader(localOut, workingValues);
 					//System.out.println("just printed header 2");
 				}
 			}
 			String outLine = format(workingValues);
 			if (outLine != null) {
-				out.println(outLine);
+				localOut.println(outLine);
 				log.debug("printed (" + out + "): " + outLine);
 			}
 			else
@@ -501,7 +512,7 @@ public class Select extends FilterAJ {
 		}
 		footer.execute();
 		try {
-			out.println(footer.output());
+			localOut.println(footer.output());
 		} catch (SQLException e) {
 			throw new XMLBuildException(e.getMessage());
 		}

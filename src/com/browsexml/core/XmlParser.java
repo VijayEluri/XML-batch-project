@@ -15,8 +15,12 @@ import java.net.URLClassLoader;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 import java.util.Stack;
 import java.util.Vector;
+import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -53,7 +57,7 @@ public class XmlParser {
 	boolean namespaceFilter = false;
 	boolean traceNoSuchMethod = true;
 	boolean traceNoSuchClass = true;
-	
+
 	private static final Pattern predefines = Pattern.compile("\\#\\{[^\\{\\}]*\\}");
 	
 	QueryReader handler = new QueryReader();
@@ -89,6 +93,15 @@ public class XmlParser {
 	}
 	
 	XmlObject root = null;
+	
+	public XmlObject getRoot() {
+		return root;
+	}
+
+	public void setRoot(XmlObject root) {
+		this.root = root;
+	}
+
 	URLClassLoader urlClassLoader = null;
 	Vector<URL> urls = new Vector<URL>();
 	
@@ -341,6 +354,29 @@ public class XmlParser {
 						name, locator).printStackTrace();
         }
     }
+    
+    public static void updateVariables(XmlObject x) throws XMLBuildException {
+    	Set c = x.getVariableParameters().entrySet();   
+    	log.debug("size of variable parameters = " + c.size());
+    	Iterator itr = c.iterator();
+    	
+    	while(itr.hasNext()) {
+    		Object[] arguments = new Object[1];
+    		Entry<Method, String> hmItem = (Entry<Method, String>) itr.next();
+    		
+    		arguments[0] = XmlParser.processMacros(x.getSymbolTable(), XmlParser.replacePoundMacros(hmItem.getValue()));
+    		log.debug("aspect before execute " + x.getName() + ": " + x.getClass().getName() + ": " + hmItem.getValue() + " = " + arguments[0]);
+    		try {
+				hmItem.getKey().invoke(x, arguments);
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+    	}
+    }
 	
 	/**
 	 * Replace date strings of the form {SimpleDateFormat pattern} with 
@@ -388,9 +424,27 @@ public class XmlParser {
 		}
 	}
 	
-    public XmlParser(String xmlFile, SAXParserFactory factory) 
+    public XmlParser(String xmlFile, SAXParserFactory factory, Map env) 
+			throws XMLBuildException, IOException, SAXParseException, SAXException, ParserConfigurationException {
+		saxParser = factory.newSAXParser();
+		symbolTable.put("_#env", env);
+		parse(xmlFile);
+	}
+    
+    public XmlParser(String xmlFile, SAXParserFactory factory, String[] args) 
     			throws XMLBuildException, IOException, SAXParseException, SAXException, ParserConfigurationException {
+    		HashMap<String, String> env = new HashMap<String, String>();
+    		
+    		for (int i = 1; i < args.length; i++) {
+    			String arg = args[i];
+    			log.debug("arg = " + arg);
+    			String[] pair = arg.split("=");
+    			if (pair.length == 2) {
+    				env.put(pair[0], pair[1]);
+    			}
+    		}
     		saxParser = factory.newSAXParser();
+    		symbolTable.put("_#env", env);
 			parse(xmlFile);
     }
     
@@ -614,7 +668,7 @@ public class XmlParser {
 						}
 				}
 				catch (InstantiationException e) {
-					log.debug(c.getName() + ": this Class represents an abstract class, an interface, an array class, a primitive type, or void; or the class has no nullary constructor");
+					log.warn(c.getName() + ": this Class represents an abstract class, an interface, an array class, a primitive type, or void; or the class has no nullary constructor");
 					e.printStackTrace();
 					System.exit(1);
 				}
