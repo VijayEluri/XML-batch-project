@@ -90,7 +90,7 @@ public class Properties extends XmlObject {
 	public void execute() {
 		if (queryName != null) {
 			log.debug("execute properties SQL");
-			try {
+
 				String strProperties = "";
 				StringBuffer strbfrProperties = new StringBuffer("");
 				for (Property x: lstProperties) {
@@ -105,33 +105,55 @@ public class Properties extends XmlObject {
 					HashMap m = getSymbolTable(); 
 					Sql sql = (Sql) m.get(queryName);
 					final Connection connection = sql.getConnection();
-					final Statement stmt = connection.getStatement();//con.createStatement();
-					String strSql = sql.getRawQuery().replace("${text}", strProperties.toString());
-					log.debug("sql = " + strSql);
-					strSql = XmlParser.processMacros(m, XmlParser.replacePoundMacros(strSql));
-					log.debug("sql = " + strSql);
-					final ResultSet rs = stmt.executeQuery(strSql);
-					while (rs.next()) {
-						String key = rs.getString("name");
-						if (key == null) 
-							continue;
-						log.debug("key = " + key);
-						key = properties.get(key).toString();
-						String value = null;
-						if (rs.getObject("value") != null) 
-							value = rs.getObject("value").toString();
-						m.put("_#" + key, value);
-						log.debug(key + " = '" + value + "'");
+					java.sql.Connection c = null;
+					Statement stmt = null;
+					ResultSet rs = null;
+					try {
+						c = connection.getConnection();
+						stmt = c.createStatement();
+						String strSql = sql.getRawQuery().replace("${text}", strProperties.toString());
+						log.debug("sql = " + strSql);
+						strSql = XmlParser.processMacros(m, XmlParser.replacePoundMacros(strSql));
+						log.debug("sql = " + strSql);
+						rs = stmt.executeQuery(strSql);
+						while (rs.next()) {
+							String key = rs.getString("name");
+							if (key == null) 
+								continue;
+							log.debug("key = " + key);
+							key = properties.get(key).toString();
+							String value = null;
+							if (rs.getObject("value") != null) 
+								value = rs.getObject("value").toString();
+							m.put("_#" + key, value);
+							log.debug(key + " = '" + value + "'");
+						}
+					} catch (SQLException e1) {
+						e1.printStackTrace();
+					} catch (ClassNotFoundException e1) {
+						e1.printStackTrace();
+					} catch (XMLBuildException e1) {
+						e1.printStackTrace();
 					}
-					connection.close();
+					finally {
+						try {
+							rs.close();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						try {
+							stmt.close();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+						try {
+							c.close();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
 				}
-			} catch (SQLException e) {
-				e.printStackTrace();
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			} catch (XMLBuildException e) {
-				e.printStackTrace();
-			}
+
 		}
 	}
 	

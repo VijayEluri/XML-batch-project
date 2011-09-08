@@ -182,7 +182,7 @@ public class LoadBlob extends XmlObject {
 		}
 		loadBinaryData(c);
 		try {
-			connection.close();
+			c.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new XMLBuildException(e.getMessage());

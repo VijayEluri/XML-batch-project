@@ -448,7 +448,7 @@ public class Load extends FilterAJ {
 			msg = "";
 		}
 		try {
-			connection.close();
+			c.close();
 		}
 		catch (Exception e) {
 			throw new XMLBuildException(e.getMessage());
@@ -835,14 +835,23 @@ public class Load extends FilterAJ {
 			throw new XMLBuildException("Could not find " + onerror);
 		}
 		Connection connection = (Connection)sql.getConnection();
+		java.sql.Connection c;
+		try {
+			c = connection.getConnection();
+		} catch (SQLException e2) {
+			e2.printStackTrace();
+			throw new XMLBuildException(e2.getMessage());
+			
+		} catch (ClassNotFoundException e2) {
+			e2.printStackTrace();
+			throw new XMLBuildException(e2.getMessage());
+		}
 		Statement stmt = null;
 		try {
-			stmt = connection.getStatement();
+			stmt = c.createStatement();
 		} catch (SQLException e1) {
 			throw new XMLBuildException(e1.getMessage());
-		} catch (ClassNotFoundException e1) {
-			throw new XMLBuildException(e1.getMessage());
-		}
+		} 
 		
 		String strQuery = sql.getQuery().replace("{error}", "'" + msg + "'");
 		log.debug("run query = " + strQuery);
@@ -853,7 +862,16 @@ public class Load extends FilterAJ {
 			throw new XMLBuildException(e.getMessage());
 		}
 		finally {
-
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			try {
+				c.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		
 	}

@@ -24,6 +24,7 @@ import edu.bxml.io.FilterAJ;
  */
 @attribute(value = "", required = true)
 public class Excel extends FilterAJ {
+	
 	PrintStream localOut = null;
 	public static String newline = System.getProperty("line.separator");
 	private ArrayList<Column> columns = new ArrayList<Column>();
@@ -61,32 +62,47 @@ public class Excel extends FilterAJ {
 			Connection connection = sql.getConnection();
 			Statement stmt = null;
 			ResultSet rs = null;
+			java.sql.Connection c = null;
 
 			try {
 				log.debug("sql = " + sql.getQuery());
-				stmt = connection.getStatement();
+				c = connection.getConnection();
+				stmt = c.createStatement();
 				rs = stmt.executeQuery(sql.getQuery());
 
 				printHeader();
 				printTable(rs);
 				printFooter();
 				
-				rs.close();
-				stmt.close();
-				connection.close();
+
 			} catch (XMLBuildException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
-			
-		localOut.close();
+			finally {
+				try {
+					log.debug("Close Record Set");
+					rs.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				try {
+					log.debug("Close Statement");
+					stmt.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				try {
+					log.debug("Close Connection");
+					c.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+				localOut.close();
+			}	
 	}
 
 	public void printTable(ResultSet rs) throws SQLException, XMLBuildException {
@@ -141,13 +157,13 @@ log.debug("rs count = " + rs.getFetchSize());
 			}
 		}
 		
-		localOut.println("<Cell ss:StyleID=\"s70\"><Data ss:Type=\"String\">"
-				+ strData + "</Data></Cell>");
+		localOut.println("<Cell ss:StyleID=\"s70\"><Data ss:Type=\"String\"><![CDATA["
+				+ strData + "]]></Data></Cell>");
 	}
 
 	public void printHeader(String headerName) {
-		localOut.println("<Cell ss:StyleID=\"s70\"><Data ss:Type=\"String\">"
-				+ headerName + "</Data></Cell>");
+		localOut.println("<Cell ss:StyleID=\"s70\"><Data ss:Type=\"String\"><![CDATA["
+				+ headerName + "]]></Data></Cell>");
 	}
 	
 	public void printFooter() {

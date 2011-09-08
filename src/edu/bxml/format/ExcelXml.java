@@ -15,7 +15,7 @@ import com.javalobby.tnt.annotation.attribute;
 import edu.misc.Excel.Workbook;
 
 /**
- * Specify the query that needs formatting
+ * 
  * @author ritcheyg
  *
  */
