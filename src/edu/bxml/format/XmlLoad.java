@@ -352,6 +352,7 @@ public class XmlLoad extends XmlObject {
 	 * Called after complete parsing of XML document to evaluate the document.
 	 */
 	public void execute() throws XMLBuildException {
+		ResultSet r = null;
 		Query query = (Query) getParent();
 		connection = query.findConnection(connectionString);
 		//log.debug("connection  = " + this.connection);
@@ -394,8 +395,9 @@ public class XmlLoad extends XmlObject {
 
 			String delFirstQuery = "select " + deleteFirstSelect.substring(2) + 
 				" from " + table + " where 1=0";
+			
 			try {
-				ResultSet r = stmt.executeQuery(delFirstQuery);
+				r = stmt.executeQuery(delFirstQuery);
 				ResultSetMetaData m = r.getMetaData();
 				for (int i = 0; i < deleteFirst.length; i++) {
 					deleteFirstTypes.put(m.getColumnName(i+1).toUpperCase(), 
@@ -415,7 +417,17 @@ public class XmlLoad extends XmlObject {
 			truncateTable(stmt);
 		//parse.execute();
 		try {
-			connection.close();
+			r.close();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		try {
+			stmt.close();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		try {
+			c.close();
 		}
 		catch (Exception e) {
 			throw new XMLBuildException(e.getMessage());
@@ -677,8 +689,10 @@ public class XmlLoad extends XmlObject {
 		}
 		Connection connection = (Connection)sql.getConnection();
 		Statement stmt = null;
+		java.sql.Connection c = null;
 		try {
-			stmt = connection.getStatement();
+			c = connection.getConnection();
+			stmt = c.createStatement();
 		} catch (SQLException e1) {
 			throw new XMLBuildException(e1.getMessage());
 		} catch (ClassNotFoundException e1) {
@@ -694,7 +708,16 @@ public class XmlLoad extends XmlObject {
 			throw new XMLBuildException(e.getMessage());
 		}
 		finally {
-
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			try {
+				c.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 		
 	}

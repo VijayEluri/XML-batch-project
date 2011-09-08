@@ -295,12 +295,14 @@ public class XmlSelect extends XmlObject {
 		if (outFile != null) {
 			setOutput(outFile);
 		}
+		Connection connection = null;
+		ResultSet rs = null;
+		java.sql.Connection c = null;
+		Statement stmt = null;
 		try {
 			Sql sql = query.getSql(queryName);
 			
-			Connection connection = null;
-			ResultSet rs = null;
-			Statement stmt = null;
+
 			try {
 				connection = sql.getConnection();
 			} catch (RuntimeException e) {
@@ -310,7 +312,8 @@ public class XmlSelect extends XmlObject {
 			log.debug("sql = " + sql.getQuery());
 			//java.sql.Connection con = connection.getConnection();
 			/* TODO put dataoutput into sub objects */
-			stmt = connection.getStatement();//con.createStatement();
+			c = connection.getConnection();
+			stmt = c.createStatement();//con.createStatement();
 
 			recordCount = 0;
 
@@ -339,6 +342,21 @@ public class XmlSelect extends XmlObject {
 			throw new XMLBuildException(sqle.getMessage());
 		}
 		finally {
+			try {
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			try {
+				c.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

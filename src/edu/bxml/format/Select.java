@@ -393,10 +393,16 @@ public class Select extends FilterAJ {
 			Sql sql = query.getSql(queryName);
 			
 			Connection connection = sql.getConnection();
+			java.sql.Connection c = null;
+			try {
+				c = connection.getConnection();
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
 			Statement stmt = null;
 			try {
 			log.debug("sql = " + sql.getQuery());
-			stmt = connection.getStatement();
+			stmt = c.createStatement();
 			final ResultSet rs = stmt.executeQuery(sql.getQuery());
 
 			
@@ -425,7 +431,11 @@ public class Select extends FilterAJ {
 			}
 			try {
 				stmt.close();
-				connection.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			try {
+				c.close();
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}

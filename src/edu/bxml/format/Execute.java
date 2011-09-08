@@ -153,10 +153,12 @@ public class Execute extends XmlObject {
 			throws XMLBuildException {
 		log.debug("EXECUTE query=" + query);
 		Statement stmt = null;
+		java.sql.Connection c = null;
 		try {
 			//java.sql.Connection con = connection.getConnection();
 			/* TODO put dataoutput into sub objects */
-			stmt = connection.getStatement();//con.createStatement();
+			c = connection.getConnection();
+			stmt = c.createStatement();//con.createStatement();
 	
 			log.debug("queryX = " + query);
 			int recordCount =  stmt.executeUpdate(query);
@@ -176,7 +178,16 @@ public class Execute extends XmlObject {
 		} catch (ClassNotFoundException cnfe) {
 			throw new XMLBuildException(cnfe.getMessage());
 		} finally {
-
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			try {
+				c.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	

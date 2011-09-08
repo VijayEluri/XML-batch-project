@@ -45,6 +45,7 @@ public class ResultMetadata extends Filter  {
 		Connection connection = null;
 		ResultSet rs = null;
 		Statement stmt = null;
+		java.sql.Connection c = null;
 		try {
 			connection = sql.getConnection();
 		} catch (RuntimeException e) {
@@ -52,7 +53,9 @@ public class ResultMetadata extends Filter  {
 			throw new XMLBuildException("The connection '" + queryName + "' could not be found");
 		}
 		try {
-			stmt = connection.getStatement();
+			
+			c = connection.getConnection();
+			stmt = c.createStatement();
 			rs = stmt.executeQuery(sql.getQuery());
 			PrintStream out = new PrintStream(this.out);
             if (this.out == null && this.toFile==null) {
@@ -103,6 +106,23 @@ public class ResultMetadata extends Filter  {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 			throw new XMLBuildException(e.getMessage());
+		}
+		finally {
+			try {
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			try {
+				stmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			try {
+				c.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 

@@ -165,19 +165,7 @@ public class Connection extends XmlObject {
 		    return result;
 		
 	}
-
-	public Statement getStatement() throws SQLException, ClassNotFoundException {
-		return getConnection().createStatement();
-	}
 	
-	public void close() throws SQLException {
-//		if (stmt != null)
-//			stmt.close();
-//		if (con != null)
-//			con.close();
-//		stmt = null;
-//		con = null;
-	}
 	public void check() throws XMLBuildException {
 		if (this.getName() == null) {
 			throw new XMLBuildException("Name can't be null");
