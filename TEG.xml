@@ -1,0 +1,148 @@
+<?xml version="1.0"?>
+<?classpath
+        file:/Users/geoffreyritchey/Documents/workspace/x86_bookstore/aspectjrt.jar;
+        file:/Users/geoffreyritchey/Documents/workspace/x86_bookstore/cryptix/cryptix-message-api.jar;
+        file:/Users/geoffreyritchey/Documents/workspace/x86_bookstore/jsch.jar;
+        file:/Users/geoffreyritchey/Documents/workspace/x86_bookstore/commons-net-2.0.jar;
+        file:/Users/geoffreyritchey/Documents/workspace/x86_bookstore/jdbc/jtds-1.2.3.jar
+?>
+<core:executer xmlns='edu.bxml.format' xmlns:io='edu.bxml.io'
+                        xmlns:core='com.browsexml.core'
+                        xmlns:ftp='edu.bxml.ftp'
+                        xmlns:format='edu.bxml.format'
+                        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                        xsi:schemaLocation="
+                        edu.bxml.format file:///C:/Users/geoff.ritchey/workspace/browsexml/edu_bxml_format.xsd
+                        edu.bxml.io file:///C:/Users/geoff.ritchey/workspace/browsexml/edu_bxml_io.xsd
+                        edu.bxml.ftp file:///C:/Users/geoff.ritchey/workspace/browsexml/edu_bxml_ftp.xsd
+                        com.browsexml.core file:///C:/Users/geoff.ritchey/workspace/browsexml/com_browsexml_core.xsd"
+        >
+        <io:pipe name="pipe" toDir="." toFile="txgr.txt" iff="true">
+	<query>
+		<!-- load name="loadTXGR" truncateFirst="true" delimit="\t" header="true" dir="." 
+				file="TEGdata.txt"
+				table="lcuTxGrant" connection="Campus6" quoteText="false"
+				printFieldValue="true" stopAfterErrors="1" printCreateTable="false">
+			<charField fieldName = "RECORD_CODE" type="CHAR" size="2" comment="01"/>
+			<charField fieldName = "GOVERNMENT_ID" type="CHAR" size="9" comment="02"/>
+			<charField fieldName = "SSN" type="CHAR" size="9" comment="03"/>
+			<dateField fieldName = "BIRTH_DATE" type="DATE" format="MMddyyyy" padleft="0" comment="04"/>
+			<charField fieldName = "LAST_NAME" type="CHAR" size="30" comment="05"/>
+			<charField fieldName = "FIRST_NAME" type="CHAR" size="30" comment="06"/>
+			<charField fieldName = "MiddleInitial" type="CHAR" size="1" comment="07"/>
+			<charField fieldName = "Primary Street1" type="CHAR" size="30" comment="08"/>
+			<charField fieldName = "Primary Street2" type="CHAR" size="10" comment="09"/>
+			<charField fieldName = "Primary City" type="CHAR" size="20" comment="10"/>
+			<charField fieldName = "Primary State" type="CHAR" size="2" comment="11"/>
+			<charField fieldName = "Primary Zipcode" type="CHAR" size="9" comment="12"/>
+			<charField fieldName = "Filler" type="CHAR" size="1" comment="13"/>
+			<charField fieldName = "Legal Residence" type="CHAR" size="1" comment="14"/>
+			<charField fieldName = "Classification" type="CHAR" size="1" comment="15"/>
+			<numberField fieldName = "Tot Budget" type="NUMBER" size="5" comment="16"/>
+			<charField fieldName = "filler3" type="CHAR" size="1" comment="17"/>
+			<charField fieldName = "Primary Efc" type="CHAR" size="6" comment="18"/>
+			<charField fieldName = "filler1" type="CHAR" size="1" comment="19"/>
+			<numberField fieldName = "Disbursed Amt" type="NUMBER" size="6" comment="20"/>
+			<charField fieldName = "filler2" type="CHAR" size="1" comment="21"/>
+			<numberField fieldName = "Tuition Differential" type="NUMBER" size="6" comment="22"/>
+			<charField fieldName = "Athletic" type="CHAR" size="1" comment="23"/>
+			<numberField fieldName = "Selective Service" type="NUMBER" size="1" comment="24"/>
+			<charField fieldName = "TEXAS Grant" type="CHAR" size="1" comment="25"/>
+			<dateField fieldName = "Award Date 10-11" type="DATE" format="MMddyyyy" padleft="0" comment="26"/>
+			<charField fieldName = "Intial/Renewal" type="CHAR" size="1" comment="27"/>
+			<numberField fieldName = "Hardship" type="NUMBER" size="1" comment="28"/>
+			<numberField fieldName = "PJ" type="NUMBER" size="1" comment="29"/>
+			<numberField fieldName = "CompletionRate" type="NUMBER" size="3" comment="30"/>
+			<numberField fieldName = "F10AttemptHrs" type="NUMBER" size="3"comment="31"/>
+			<numberField fieldName = "Sp11AttemptHrs" type="NUMBER" size="3"comment="32"/>
+			<numberField fieldName = "Winter 2010 Hours Attempted" type="NUMBER" size="3"comment="33"/>
+			<numberField fieldName = "Summer 2011 Hours Attempted" type="NUMBER" size="3"comment="34"/>
+			<numberField fieldName = "CumGPA" type="NUMBER" size="3"comment="35"/>
+			<numberField fieldName = "TotalNumberofCreditsCompleted" type="NUMBER" size="3"comment="36"/>
+			<charField fieldName = "Funds disbursed after enrollment" type="CHAR" size="1" comment="37"/>
+			<dateField fieldName = "GRADUATION_DATE" type="DATE" padleft="0" format="MMddyyyy"comment="38"/>
+			<charField fieldName = "SAP" type="CHAR" size="1" comment="39"/>
+			<numberField fieldName="EXP_FAMILY_CONT" type="NUMBER" size="6" default="0" comment="40"/>
+		</load-->
+		<select name="selectTXgrant" queryName="TXgrant" delimit="" >
+			<header columnsNames="false">
+				<footField type="CONSTANT">@H</footField>
+				<footField type="CONSTANT">TEG </footField>
+				<footField type="CONSTANT">003586</footField>
+				<footField type="DATE" format="yyyy"/>
+				<footField type="CONSTANT">FY11 TEG End-of-Year Report   </footField>
+			</header>
+			<key field="GOVERNMENT_ID"/>
+			<charField fieldName = "RECORD_CODE" type="CHAR" size="2" />
+			<charField fieldName = "GOVERNMENT_ID" type="CHAR" size="9" />
+			<charField fieldName = "SSN" type="CHAR" size="1" />
+			<dateField fieldName = "BIRTH_DATE" type="DATE" format="MMddyyyy" default="00000000"/>
+			<charField fieldName = "LAST_NAME" type="CHAR" size="30" padright=" " /> <!--  left justify -->
+			<charField fieldName = "FIRST_NAME" type="CHAR" size="30" padright=" " />
+			<charField fieldName = "MiddleInitial" type="CHAR" size="1" padright=" "/>
+			<charField fieldName = "Primary Street1" type="CHAR" size="30" padright=" "/>
+			<charField fieldName = "Primary Street2" type="CHAR" size="10" padright=" "/>
+			<charField fieldName = "Primary City" type="CHAR" size="20"  padright=" " />
+			<charField fieldName = "Primary State" type="CHAR" size="2" />
+			<charField fieldName = "Primary Zipcode" type="CHAR" size="9" padright="0"/> <!--  pad right 0 should put zeros on 5 digit zip to make 9 -->
+			<charField fieldName = "Filler" type="CHAR" size="1" default="0"/>
+			<charField fieldName = "Legal Residence" type="CHAR" size="1" />
+			<charField fieldName = "Classification" type="CHAR" size="1" />
+			<numberField fieldName = "Tot Budget" type="NUMBER" size="5" padleft="0"/> <!-- Cost of Attendance (COA) 16 -->
+			<charField fieldName = "Primary Efc" type="CHAR" size="6" padleft="0"/> <!-- Expected Family Contribution (EFC) 17 -->
+			<numberField fieldName = "Disbursed Amt" type="NUMBER" size="6" padleft="0"/> <!-- TEG Award Amount  18 -->
+			<numberField fieldName = "Tuition Differential" type="NUMBER" size="6" padleft="0"/> <!-- 19 -->
+			<charField fieldName = "Athletic" type="CHAR" size="1" default="N"/> <!-- 20 -->
+			<numberField fieldName = "Selective Service" type="NUMBER" size="1" /> <!-- 21 -->
+			<charField fieldName = "TEXAS Grant" type="CHAR" size="1" /> <!-- 22 -->
+			<dateField fieldName = "Award Date 10-11" type="DATE" format="MMddyyyy" default="00000000"/> <!-- 23 -->
+			<charField fieldName = "Intial/Renewal" type="CHAR" size="1" /> <!-- 24 -->
+			<numberField fieldName = "Hardship" type="NUMBER" size="1" /> <!-- 25 -->
+			<numberField fieldName = "PJ" type="NUMBER" size="1" /> <!-- 26 -->
+			<numberField fieldName = "CompletionRate" type="NUMBER" size="3" padleft="0"/> <!-- 27 -->
+			<numberField fieldName = "F10AttemptHrs" type="NUMBER" size="3" padleft="0"/> <!-- 28 -->
+			<numberField fieldName = "Sp11AttemptHrs" type="NUMBER" size="3" padleft="0"/> <!-- 29 -->
+			<numberField fieldName = "Winter 2010 Hours Attempted" type="NUMBER" size="3" padleft="0"/> <!-- 30 -->
+			<numberField fieldName = "Summer 2011 Hours Attempted" type="NUMBER" size="3" padleft="0"/> <!-- 31 -->
+			<numberField fieldName = "CumGPA" type="NUMBER" size="3" padleft="0"/> <!-- 32 -->
+			<numberField fieldName = "TotalNumberofCreditsCompleted" type="NUMBER" size="3" padleft="0"/> <!-- 33 -->
+			<charField fieldName = "Funds disbursed after enrollment" type="CHAR" size="1" /> <!-- 34 -->
+			<dateField fieldName = "GRADUATION_DATE" type="DATE" size="8" format="MMddyyyy" default="00000000"/> <!-- 35 -->
+			<charField fieldName = "SAP" type="CHAR" size="1" /> <!-- 36 --> 
+			<footer>
+				<footField type="CONSTANT">@T</footField>
+				<footField type="CONSTANT">EOF</footField>
+				<footField type="COUNT" size="5" padleft="0"/>
+				<footField type="SQL">              
+					<select name="sum" queryName="TegTotal">
+						<numberField fieldName="total" type="NUMBER" size="10" padleft="0"/>
+					</select>
+				</footField>
+			</footer>
+		</select>
+		<connection name="Campus6" login="sa" password="${password}"
+				class="net.sourceforge.jtds.jdbc.Driver"
+				url="jdbc:jtds:sqlserver://kindness.lcunet.lcu.edu/Area51;instance=powercampus" >
+			<sql name="TXgrant">
+	<![CDATA[
+SELECT [RECORD_CODE] ,[GOVERNMENT_ID] ,[SSN] ,[BIRTH_DATE] ,[LAST_NAME] ,[FIRST_NAME]
+      ,[MiddleInitial] ,[Primary Street1] ,[Primary Street2] ,[Primary City] ,[Primary State]
+      ,[Primary Zipcode] ,[Filler] ,[Legal Residence] ,[Classification] ,[Tot Budget]
+      ,[Primary Efc] ,[Disbursed Amt] ,[Tuition Differential] ,[Athletic] ,[Selective Service]
+      ,[TEXAS Grant] ,[Award Date 10-11] ,[Intial/Renewal] ,[Hardship] ,[PJ]
+      ,[CompletionRate] ,[F10AttemptHrs] ,[Sp11AttemptHrs] ,[Winter 2010 Hours Attempted]
+      ,[Summer 2011 Hours Attempted] ,[CumGPA] ,[TotalNumberofCreditsCompleted]
+      ,[Funds disbursed after enrollment] ,[GRADUATION_DATE] ,[SAP]
+  FROM [Area51].[dbo].[lcuTxGrant]
+	]]>
+			</sql>
+			<sql name="TegTotal">
+	<![CDATA[
+SELECT sum([Disbursed Amt]) as total
+  FROM [Area51].[dbo].[lcuTxGrant]
+	]]>
+			</sql>
+		</connection>
+	</query>
+	</io:pipe>
+</core:executer>
