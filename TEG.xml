@@ -120,7 +120,7 @@
 				</footField>
 			</footer>
 		</select>
-		<connection name="Campus6" login="sa" password="aj9854wbl"
+		<connection name="Campus6" login="sa" password="${password}"
 				class="net.sourceforge.jtds.jdbc.Driver"
 				url="jdbc:jtds:sqlserver://kindness.lcunet.lcu.edu/Area51;instance=powercampus" >
 			<sql name="TXgrant">

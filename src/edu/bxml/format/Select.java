@@ -42,6 +42,7 @@ public class Select extends FilterAJ {
 	Vector<Replace> replacements = new Vector<Replace>();
 	private String concatSep = " ";
 	PrintStream localOut = null;
+
 	public boolean quoteStrings = false;
 
 	public boolean isQuoteStrings() {

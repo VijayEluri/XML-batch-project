@@ -255,8 +255,6 @@ public class XmlParser {
     	Class<?> c = currentObject.getClass();
     	for (int i = 0; i < attrs.getLength(); i++) {
 				String attName = attrs.getQName(i);
-				if (attName.equals("name"))
-					continue;
 				if (attName.contains("schemaLocation"))
 					continue;
 			String functionName = "set" + 
@@ -437,14 +435,14 @@ public class XmlParser {
 		symbolTable.put("_#env", env);
 		parse(xmlFile);
 	}
-    
+
     public XmlParser(URL xmlFile, SAXParserFactory factory, Map env) 
 			throws XMLBuildException, IOException, SAXParseException, SAXException, ParserConfigurationException {
 		saxParser = factory.newSAXParser();
 		symbolTable.put("_#env", env);
 		parse(xmlFile);
 	}
-    
+
     public XmlParser(String xmlFile, SAXParserFactory factory, String[] args) 
     			throws XMLBuildException, IOException, SAXParseException, SAXException, ParserConfigurationException {
     		HashMap<String, String> env = new HashMap<String, String>();

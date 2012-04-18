@@ -14,6 +14,7 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -21,6 +22,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
+
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
@@ -143,7 +145,10 @@ public class Connection extends XmlObject {
 			try {
 				
 		      Context initialContext = new InitialContext();
-
+		      if ( initialContext == null){
+		        log.debug("JNDI problem. Cannot get InitialContext.");
+		        return null;
+		      }
 //		      Context env = (Context) initialContext.lookup("java:comp/env");
 //		      if (env == null) {
 //		    	  log.debug("JNDI problem. Cannot get env.  Reset env..");
@@ -155,6 +160,7 @@ public class Connection extends XmlObject {
 				log.debug("failed to update variables");
 				e.printStackTrace();
 			}
+
 		      DataSource datasource = null;
 			try {
 				datasource = (DataSource)initialContext.lookup(jndi);
