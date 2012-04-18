@@ -31,7 +31,7 @@
     </logger>
     
     <logger name="com.browsexml.core.XmlParser">
-    	<level value="DEBUG"/>
+    	<level value="WARN"/>
     </logger>
 
     <root>

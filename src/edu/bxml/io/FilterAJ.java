@@ -35,6 +35,7 @@ public class FilterAJ extends XmlObject implements Runnable {
 	protected OutputStream out;
 	protected String text = null;
 	protected boolean lock = false;
+
 	protected boolean isHereFile = false;
 
 	public boolean isHereFile() {
@@ -152,6 +153,7 @@ public class FilterAJ extends XmlObject implements Runnable {
 	}
 
 	public OutputStream getOut() {
+
 		FilterAJ ancestor = this.getAncestorOfType(FilterAJ.class);
 		log.debug("get OUT for " + this.getClass().getName());
 		if (out != null) {
