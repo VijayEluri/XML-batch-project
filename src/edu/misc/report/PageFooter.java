@@ -1,6 +1,5 @@
 package edu.misc.report;
 
-import com.browsexml.core.XmlObject;
 
 public class PageFooter extends ReportObject {
 

@@ -2,7 +2,7 @@ package edu.misc.report;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
-import com.lowagie.text.Document;
+import com.itextpdf.text.Document;
 
 public abstract class ReportObject extends XmlObject {	
 	protected Document document = null;

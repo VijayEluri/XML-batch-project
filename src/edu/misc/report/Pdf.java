@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -16,16 +14,14 @@ import org.eclipse.swt.widgets.MessageBox;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.ColumnText;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.javalobby.tnt.annotation.attribute;
-import com.lowagie.text.Document;
-import com.lowagie.text.Element;
-import com.lowagie.text.PageSize;
-import com.lowagie.text.Rectangle;
-import com.lowagie.text.pdf.ColumnText;
-import com.lowagie.text.pdf.PdfContentByte;
-import com.lowagie.text.pdf.PdfWriter;
-
-import edu.bxml.swt.Td;
 
 
 public class Pdf extends ReportObject {
@@ -126,15 +122,15 @@ public class Pdf extends ReportObject {
 	}
 	
 	public void addParagraph(Paragraph paragraph) {
-		paragraph.setDocument(document);
+		//paragraph.setDocument(document);
 	}
 	
 	public void addParagraphEnd(Paragraph paragraph) throws XMLBuildException {
-		paragraph.execute();
+		//paragraph.execute();
 	}
 	
 	public void addTable(edu.misc.report.Table table) {
-		table.setDocument(document);
+		//table.setDocument(document);
 	}
 	
 	public void addTableEnd(edu.misc.report.Table table) throws XMLBuildException {
@@ -142,7 +138,7 @@ public class Pdf extends ReportObject {
 	}
 	
 	public void addNewpage(Newpage newpage) {
-		newpage.setDocument(document);
+		//newpage.setDocument(document);
 	}
 	
 	public void addNewpageEnd(Newpage newpage) {

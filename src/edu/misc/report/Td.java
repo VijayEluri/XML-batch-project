@@ -8,17 +8,17 @@ import org.xml.sax.Attributes;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlParser;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.pdf.PdfPCell;
 import com.javalobby.tnt.annotation.attribute;
-import com.lowagie.text.Element;
-import com.lowagie.text.Image;
-import com.lowagie.text.pdf.PdfPCell;
 
 
 public class Td extends ReportObject {
 	private static Log log = LogFactory.getLog(Td.class);
-	com.lowagie.text.pdf.PdfPTable table = null;
+	com.itextpdf.text.pdf.PdfPTable table = null;
 
-	com.lowagie.text.Phrase phrase = null;
+	com.itextpdf.text.Phrase phrase = null;
 	PdfPCell cell = null;
 
 	@Override
@@ -112,10 +112,10 @@ public class Td extends ReportObject {
 		
 	}
 	
-	public void addPhraseEnd(Phrase phrase) {
-		log.debug("Cell.addElement(" + phrase.getPhrase());
-		this.phrase = phrase.getPhrase();
-		cell.setPhrase(phrase.getPhrase());
+	public void addPhraseEnd(com.itextpdf.text.Phrase phrase) {
+		log.debug("Cell.addElement(" + phrase);
+		this.phrase = phrase;
+		cell.setPhrase(phrase);
 	}
 	
 	

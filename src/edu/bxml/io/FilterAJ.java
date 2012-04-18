@@ -1,7 +1,9 @@
 package edu.bxml.io;
 
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -15,6 +17,7 @@ import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlParser;
 import com.javalobby.tnt.annotation.attribute;
 
 /**
@@ -32,6 +35,15 @@ public class FilterAJ extends XmlObject implements Runnable {
 	protected OutputStream out;
 	protected String text = null;
 	protected boolean lock = false;
+	protected boolean isHereFile = false;
+
+	public boolean isHereFile() {
+		return isHereFile;
+	}
+
+	public void setHereFile(boolean isHereFile) {
+		this.isHereFile = isHereFile;
+	}
 
 	public boolean getLock() {
 		return lock;
@@ -57,30 +69,113 @@ public class FilterAJ extends XmlObject implements Runnable {
 	protected File currentFile = null;  
 	protected File outFile = null;
 
-	protected List<Filter> filters = new ArrayList<Filter>();
+	protected List<FilterAJ> filters = new ArrayList<FilterAJ>();
 	
+	Boolean closeIn = false;
+	Boolean closeOut = false;
+	
+	public Boolean getCloseIn() {
+		return closeIn;
+	}
 
-	public InputStream getIn() {
+	public void setCloseIn(Boolean closeIn) {
+		this.closeIn = closeIn;
+	}
+
+	public Boolean getCloseOut() {
+		return closeOut;
+	}
+
+	public void setCloseOut(Boolean closeOut) {
+		this.closeOut = closeOut;
+	}
+
+	public void closeIn() {
+		if (closeIn)
+			try {
+				in.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+	}
+	
+	public void closeOut() {
+		if (closeOut) {
+			try {
+				out.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public InputStream getIn() throws XMLBuildException {
+		FilterAJ ancestor = this.getAncestorOfType(FilterAJ.class);
+		log.debug("get IN for " + this.getClass().getName());
+		if (in != null) { 
+			return in;
+		}
+		if (ancestor != null) {
+			log.debug("ancestor class is " + ancestor.getClass().getName());
+			this.in = ancestor.getIn();
+		}
+		
+		if (getDir() != null) {
+			if (getFile() != null) {
+				try {
+					closeIn = true;
+					file = XmlParser.processAttributes(this, this.getFile());
+					in = new FileInputStream(new File(this.getDir(), this.getFile()));
+					getLog().debug("Filter file = " + getDir() + "/" + getFile());
+					log.debug("get IN DONE 1");
+					return in;
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+					throw new XMLBuildException(e.getMessage());
+				}
+			}
+		}
+		else if (getDir() == null || getFile() == null){
+			//<<HERE file
+			if (getText() != null && isHereFile()) {
+				log.debug("<<HERE file");
+				in = new ByteArrayInputStream(getText().getBytes());
+			}
+		}
+		
+		if (in == null) {
+			log.debug("System.in");
+			in = System.in;
+		}
+		log.debug("get IN DONE 2");
 		return in;
 	}
 
 	public OutputStream getOut() {
-		if (out == null) {
-			try {
-				if (outFile == null) {
-					if (toDir == null && toFile == null) {
-						out = System.out;
-						return out;
-					}
-					else {
-						outFile = new File(toFile, toDir);
-					}
-				}
+		FilterAJ ancestor = this.getAncestorOfType(FilterAJ.class);
+		log.debug("get OUT for " + this.getClass().getName());
+		if (out != null) {
+			return out;
+		}
+		if (ancestor != null) {
+			log.debug("ancestor class is " + ancestor.getClass().getName());
+			this.out = ancestor.getOut();
+		}
+
+		try {
+			if (getToDir() != null && getToFile() != null){
+				outFile = new File(toDir, toFile);
 				out = new FileOutputStream(outFile);
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				closeOut = true;
+				return out;
 			}
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		if (out == null) {
+			out = System.out;
 		}
 		return out;
 	}
@@ -180,9 +275,13 @@ public class FilterAJ extends XmlObject implements Runnable {
 		try {
 			log.debug("Starting THREAD: " + getName() + "  " + this.getClass().getName());
 			execute();
+		} catch (NullPointerException e) {
+			e.printStackTrace();
 		} catch (XMLBuildException e) {
 			e.printStackTrace();
-		} finally {
+		} 
+		finally {
+		
 			log.debug("Ending THREAD: " + getName() + "  " + this.getClass().getName());
 			try {
 				out.flush();
@@ -191,25 +290,31 @@ public class FilterAJ extends XmlObject implements Runnable {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			log.debug("Ended THREAD: " + getName() + "  " + this.getClass().getName());
 		}
 	}
 
 	public void execute() throws XMLBuildException  {
-
+		log.debug("filterAJ execute");
 		if (in != null) {
 			try {
 				 byte[] buf = new byte[4096];
-				for (int len = in.read(buf); len > 0; len = in.read(buf)) {
+				 log.debug("filterAJ execute for...");
+				 int len = in.read(buf);
+				for (; len > 0; len = in.read(buf)) {
 					out.write(buf, 0, len);
-				}
+				} 
+				log.debug("filterAJ finish");
 				finish(out);
+				log.debug("filterAJ finish DONE");
 
-			} catch (IOException e) {
+			} 
+			catch (IOException e) {
 				e.printStackTrace();
 				throw new XMLBuildException(e.getMessage());
 			}
 		}
-		for (Filter filter : filters) {
+		for (FilterAJ filter : filters) {
 			log.debug("Filter = " + filter);
 			log.debug("Filter in = " + in);
 			log.debug("Filter out = " + out);
@@ -217,6 +322,7 @@ public class FilterAJ extends XmlObject implements Runnable {
 			filter.setOutputStream(out);
 			filter.execute();
 		}
+		log.debug("FilterAJ execute DONE");
 	}
 
 	public String getText() {
@@ -255,57 +361,6 @@ public class FilterAJ extends XmlObject implements Runnable {
 
 	public void setFromTextContent(String text) {
 		this.text = text;
-	}
-
-	/**
-	 * Decrypt/Encrypt a PGP document.
-	 * 
-	 * @param file
-	 */
-	@attribute(value = "", required = false)
-	public void addPgp(Pgp pgp) {
-		filters.add(pgp);
-	}
-
-	/**
-	 * Parse a csv file (any character sequence can 
-	 * be used as the delimiter) into separate fields
-	 * 
-	 * @param file
-	 */
-	@attribute(value = "", required = false)
-	public void addLoad(Load load) {
-		filters.add(load);
-	}
-
-	/**
-	 * Connect classes in a pipeline
-	 * 
-	 * @param file
-	 */
-	@attribute(value = "", required = false)
-	public void addPipe(Pipe pipe) {
-		filters.add(pipe);
-	}
-
-	/**
-	 * Copy a file 
-	 * 
-	 * @param file
-	 */
-	@attribute(value = "", required = false)
-	public void addCopy(Copy copy) {
-		filters.add(copy);
-	}
-	
-	/**
-	 * Print a message
-	 * 
-	 * @param file
-	 */
-	@attribute(value = "", required = false)
-	public void addPrint(Print copy) {
-		filters.add(copy);
 	}
 	
 	public InputStream getInFilter(InputStream in) throws IOException {

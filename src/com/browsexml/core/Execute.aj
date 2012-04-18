@@ -25,6 +25,11 @@ public aspect Execute {
 	pointcut execute():
 	    call(void *.execute());
 	    
+	    
+	    /*
+	    	All variables referenced by foreign objects 
+	    	get macro replacement on a call to execute.
+	    */
 	void around(XmlObject x): execute() && target(x) {
 		Log log = LogFactory.getLog(this.getClass().getName());
 		log.debug("AJ Execute");
@@ -63,77 +68,26 @@ public aspect Execute {
 	}
 	
 	/*
-	 * for future dirction; filters should be handled with aspect
+	 * for future direction; filters should be handled with aspect
 	 * Too big a project for now; future filters should extend FilterAJ
 	 * rather than Filter
 	 */
 	void around(FilterAJ x) throws XMLBuildException: execute() && target(x) {
+		Log log = LogFactory.getLog(this.getClass().getName());
 		if (x.getLock()) {
-			System.err.println("LOCK");
+			log.debug("proceed with LOCK on " + x.getClass().getName());
 			proceed(x);
+			log.debug("proceed DONE with LOCK on " + x.getClass().getName());
 			x.setLock(false);
 			return;
 		}
-		Boolean closeIn = false;
-		Boolean closeOut = false;
 		InputStream in = x.getIn();
 		OutputStream out = x.getOut();
-		String toFile = x.getToFile();
-		if (x.getToDir() != null) {
-			if (x.getToFile() != null) {
-				try {
-					closeOut = true;
-					toFile = XmlParser.processAttributes(x, x.getToFile());
-					out = new FileOutputStream(new File(x.getToDir(), x.getToFile()));
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-					throw new XMLBuildException(e.getMessage());
-				}
-			}
-			x.getLog().debug("Filter toFile = " + x.getToDir() + "/" + x.getToFile());
-			
-		}
-		if (out == null) {
-			x.getLog().debug("To stdout");
-			out = System.out;
-		}
 
-		if (x.getDir() != null && x.getFile() != null) {
-			try {
-				closeIn = true;
-				x.setInputStream(new FileInputStream(new File(x.getDir(), x.getFile())));
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-				throw new XMLBuildException(e.getMessage());
-			}
-		}
-		else {
-			if (x.getText() != null) {
-				in = new ByteArrayInputStream(x.getText().getBytes());
-			}
-		}
-
-		try {
-			in = x.getInFilter(in);
-			out = x.getOutFilter(out);
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		
-		
+		log.debug("proceed with no lock on " + x.getClass().getName());
 		proceed(x);
-		
-		
-		try {
-			/* 
-			 * The filter that opens a file will close the file
-			 */
-			if (closeIn)
-				in.close();
-			if (closeOut)
-				out.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		log.debug("proceed DONE on " + x.getClass().getName());
+		x.closeIn();
+		x.closeOut();
 	}
 }

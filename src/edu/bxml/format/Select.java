@@ -42,6 +42,27 @@ public class Select extends FilterAJ {
 	Vector<Replace> replacements = new Vector<Replace>();
 	private String concatSep = " ";
 	PrintStream localOut = null;
+	public boolean quoteStrings = false;
+
+	public boolean isQuoteStrings() {
+		return quoteStrings;
+	}
+	
+	public boolean getQuoteStrings() {
+		return quoteStrings;
+	}
+
+	public void setQuoteStrings(boolean quoteStrings) {
+		this.quoteStrings = quoteStrings;
+	}
+	
+	public void setQuoteStrings(String quoteStrings) {
+		try {
+			this.quoteStrings = Boolean.parseBoolean(quoteStrings);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
 	Vector allFields = null;
 	private Query query = null;

@@ -9,8 +9,8 @@
     <property name="ECLIPSE_HOME" value="../../../Applications/eclipse"/>
     <property name="javalobby.location" value="../javalobby"/>
     <property name="debuglevel" value="source,lines,vars"/>
-    <property name="target" value="1.5"/>
-    <property name="source" value="1.5"/>
+    <property name="target" value="1.6"/>
+    <property name="source" value="1.6"/>
     <import file="build-user.xml"/>
     <path id="Maven Dependencies.libraryclasspath">
         <pathelement location="../../../.m2/repository/org/bouncycastle/bcpg-jdk16/1.46/bcpg-jdk16-1.46.jar"/>
@@ -33,8 +33,6 @@
         <pathelement location="../../../.m2/repository/org/jdom/jdom/1.1/jdom-1.1.jar"/>
         <pathelement location="../../../.m2/repository/com/jcraft/jsch/0.1.44-1/jsch-0.1.44-1.jar"/>
         <pathelement location="../../../.m2/repository/net/sourceforge/jtds/jtds/1.2.4/jtds-1.2.4.jar"/>
-    	<pathelement location="/Users/geoffreyritchey/Documents/workspace/x86_bookstore/jdbc/sqljdbc.jar"/>
-    	<pathelement location="/Users/geoffreyritchey/Applications/x86/jdbc/postgresql-9.0-801.jdbc4.jar"/>
         <pathelement location="../../../.m2/repository/xerces/xercesImpl/2.9.1/xercesImpl-2.9.1.jar"/>
         <pathelement location="../../../.m2/repository/xml-apis/xml-apis/1.3.04/xml-apis-1.3.04.jar"/>
         <pathelement location="../../../.m2/repository/batik/batik/1.5/batik-1.5.jar"/>
@@ -60,26 +58,40 @@
         <pathelement location="../../../.m2/repository/batik/batik-bridge/1.6-1/batik-bridge-1.6-1.jar"/>
         <pathelement location="../../../.m2/repository/rhino/js/1.5R4.1/js-1.5R4.1.jar"/>
         <pathelement location="../../../.m2/repository/batik/batik-swing/1.6-1/batik-swing-1.6-1.jar"/>
+        <pathelement location="../../../.m2/repository/javalobby/javalobby/1.0.0/javalobby-1.0.0.jar"/>
+        <pathelement location="../../../.m2/repository/org/eclipse/swt/carbon/macosx/3.3.0-v3346/macosx-3.3.0-v3346.jar"/>
+        <pathelement location="../../../.m2/repository/junit/junit/4.8.2/junit-4.8.2.jar"/>
+        <pathelement location="../../../.m2/repository/org/aspectj/aspectjrt/1.6.11.M2/aspectjrt-1.6.11.M2.jar"/>
+        <pathelement location="../../../.m2/repository/org/aspectj/aspectjweaver/1.6.11.M2/aspectjweaver-1.6.11.M2.jar"/>
     </path>
     <path id="JUnit 3.libraryclasspath">
         <pathelement location="${ECLIPSE_HOME}/plugins/org.junit_3.8.2.v3_8_2_v20100427-1100/junit.jar"/>
     </path>
     <path id="AspectJ Runtime Library.libraryclasspath">
-        <pathelement location="${ECLIPSE_HOME}/plugins/org.aspectj.runtime_1.6.11.20110304135300/aspectjrt.jar"/>
+        <pathelement location="${ECLIPSE_HOME}/plugins/org.aspectj.runtime_1.6.12.20110613132200/aspectjrt.jar"/>
     </path>
     <path id="javalobby.classpath">
         <pathelement location="${javalobby.location}/build"/>
         <pathelement location="${javalobby.location}/../../../Library/Java/JavaVirtualMachines/1.7.0.jdk"/>
     </path>
     <path id="browsexml.classpath">
+        <pathelement location="build"/>
         <path refid="Maven Dependencies.libraryclasspath"/>
         <path refid="JUnit 3.libraryclasspath"/>
         <path refid="AspectJ Runtime Library.libraryclasspath"/>
-        <pathelement location="build"/>
         <path refid="javalobby.classpath"/>
     </path>
-    <target name="init"/>
-    <target name="clean"/>
+    <target name="init">
+        <mkdir dir="build"/>
+        <copy includeemptydirs="false" todir="build">
+            <fileset dir="src">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="build"/>
+    </target>
     <target depends="clean" name="cleanall">
         <ant antfile="build.xml" dir="${javalobby.location}" inheritAll="false" target="clean"/>
     </target>
@@ -93,6 +105,10 @@
     </target>
     <target depends="init" name="build-project">
         <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="build" source="${source}" target="${target}">
+            <src path="src"/>
+            <classpath refid="browsexml.classpath"/>
+        </javac>
     </target>
     <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
     <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">

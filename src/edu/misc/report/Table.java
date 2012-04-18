@@ -3,11 +3,9 @@ package edu.misc.report;
 import org.xml.sax.Attributes;
 
 import com.browsexml.core.XMLBuildException;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
 import com.javalobby.tnt.annotation.attribute;
-import com.lowagie.text.Document;
-import com.lowagie.text.DocumentException;
-import com.lowagie.text.Element;
-import com.lowagie.text.pdf.PdfPCell;
 
 
 public class Table extends ReportObject {
@@ -15,7 +13,7 @@ public class Table extends ReportObject {
 	int[] widths = null;
 	int rowCount = 0;
 	
-	com.lowagie.text.pdf.PdfPTable table = null;
+	com.itextpdf.text.pdf.PdfPTable table = null;
 	
 	@Override
 	public boolean processRawAttributes(Attributes attrs)
@@ -25,7 +23,7 @@ public class Table extends ReportObject {
 			throw new XMLBuildException("you must set the widths of the table.");
 		}
 		implSetWidths(strWidths);
-		table = new com.lowagie.text.pdf.PdfPTable(widths.length);
+		table = new com.itextpdf.text.pdf.PdfPTable(widths.length);
 		
 		pageWidth = document.right() - document.left();
 		table.setTotalWidth(pageWidth);
@@ -47,7 +45,7 @@ public class Table extends ReportObject {
 		super.setDocument(document);
 	}
 	
-	public com.lowagie.text.pdf.PdfPTable getTable() {
+	public com.itextpdf.text.pdf.PdfPTable getTable() {
 		return table;
 	}
 	

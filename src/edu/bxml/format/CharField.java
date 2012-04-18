@@ -27,8 +27,14 @@ public class CharField extends Field {
 	@Override
 	public String format(Object v) throws XMLBuildException {
 		String returnValue = null;
-		if (v == null)
+		boolean quoteStrings = false;
+		Select s = (Select)this.getAncestorOfType(edu.bxml.format.Select.class);
+		if (s!= null) {
+			quoteStrings = s.getQuoteStrings();
+		}
+		if (v == null) {
 			returnValue = defaultValue;
+		}
 		else {
 			returnValue = v.toString();
 
@@ -64,6 +70,9 @@ public class CharField extends Field {
 		}
 		if (postText != null) {
 			returnValue = returnValue  + postText;
+		}
+		if (quoteStrings) {
+			return "\"" + returnValue + "\"";
 		}
 		return returnValue;
 	}

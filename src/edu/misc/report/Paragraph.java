@@ -1,12 +1,11 @@
 package edu.misc.report;
 
 import com.browsexml.core.XMLBuildException;
-import com.browsexml.core.XmlObject;
-import com.lowagie.text.DocumentException;
+import com.itextpdf.text.DocumentException;
 
 public class Paragraph extends ReportObject {
 
-	com.lowagie.text.Paragraph paragraph = new com.lowagie.text.Paragraph();
+	com.itextpdf.text.Paragraph paragraph = new com.itextpdf.text.Paragraph();
 	
 	public void setText(String text) {
 		paragraph.add(text);

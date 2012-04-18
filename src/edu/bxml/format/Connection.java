@@ -1,23 +1,33 @@
 package edu.bxml.format;
 
 
+import java.io.IOException;
+import java.net.URL;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
 import com.browsexml.core.XmlParser;
 import com.javalobby.tnt.annotation.attribute;
+
+import edu.bxml.jetty.Configure;
 
 /**
  * Define a connection to a database
@@ -116,6 +126,8 @@ public class Connection extends XmlObject {
 			Class.forName(theClass);
 			this.execute();
 			log.debug("url = " + url);
+			// Replace any single backslash with a double backslash
+			url = url.replaceAll("\\\\([^\\\\])", "\\\\$1");
 			con =  DriverManager.getConnection(url, login, password);
 		}
 		return con;
@@ -131,10 +143,7 @@ public class Connection extends XmlObject {
 			try {
 				
 		      Context initialContext = new InitialContext();
-		      if ( initialContext == null){
-		        log.debug("JNDI problem. Cannot get InitialContext.");
-		        return null;
-		      }
+
 //		      Context env = (Context) initialContext.lookup("java:comp/env");
 //		      if (env == null) {
 //		    	  log.debug("JNDI problem. Cannot get env.  Reset env..");
@@ -146,7 +155,49 @@ public class Connection extends XmlObject {
 				log.debug("failed to update variables");
 				e.printStackTrace();
 			}
-		      DataSource datasource = (DataSource)initialContext.lookup(jndi);
+		      DataSource datasource = null;
+			try {
+				datasource = (DataSource)initialContext.lookup(jndi);
+			} catch (javax.naming.NoInitialContextException e) {
+                	URL x = this.getClass().getClassLoader().getResource("jetty-env.xml");
+                	log.debug("jetty-env.xml = " + x);
+                	if (x != null) {
+                		//initialContext.createSubcontext("java:comp/env").createSubcontext("jdbc").bind("nslcCampus", ds);
+                		SAXParserFactory factory = SAXParserFactory.newInstance();
+                		factory.setNamespaceAware(true);
+                		
+                		XmlParser f = null;
+                		Map myMap = new HashMap();
+                		myMap.put("#ct_package", "edu.bxml.jetty");
+                		try {
+							f = new XmlParser(x, factory, myMap);
+							f.execute();
+						} catch (SAXParseException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (XMLBuildException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (SAXException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (ParserConfigurationException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						Configure root = (Configure) f.getRoot();
+				        System.err.println("root = " + root);
+				        root.getContext(initialContext);
+				        try {
+							datasource = (DataSource)initialContext.lookup(jndi);
+						} catch (Exception e1) {
+							e1.printStackTrace();
+						}
+                	}           
+			}
 		      if (datasource != null) {
 		        result = datasource.getConnection();
 		      }

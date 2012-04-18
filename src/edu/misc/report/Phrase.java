@@ -5,12 +5,12 @@ import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
 import com.javalobby.tnt.annotation.attribute;
-import com.lowagie.text.Chunk;
+import com.itextpdf.text.Chunk;
 
 
 public class Phrase extends ReportObject {
 	private static Log log = LogFactory.getLog(Phrase.class);
-		private com.lowagie.text.Phrase phrase = new com.lowagie.text.Phrase();
+		private com.itextpdf.text.Phrase phrase = new com.itextpdf.text.Phrase();
 		float fltLeading = 0;
 
 	String text = null;
@@ -54,7 +54,7 @@ public class Phrase extends ReportObject {
 		
 	}
 	
-	public com.lowagie.text.Phrase getPhrase() {
+	public com.itextpdf.text.Phrase getPhrase() {
 		return phrase;
 	}
 

@@ -29,7 +29,7 @@ public abstract class Field extends XmlObject {
 	};
 
 	public enum Types {
-		IMAGE, CHAR, NUMBER, TEXT, DATE, HIDDEN, MONEY
+		IMAGE, CHAR, NUMBER, TEXT, DATE, HIDDEN, MONEY, BIT
 	};
 
 	public String fieldName = null;
@@ -333,6 +333,10 @@ public abstract class Field extends XmlObject {
 	
 	public void setFromTextContent(String text) {
 		this.text = text;
+	}
+	
+	public String getText() {
+		return this.text;
 	}
 	
 	/**

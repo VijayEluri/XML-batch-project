@@ -121,12 +121,14 @@ public class Properties extends XmlObject {
 							if (key == null) 
 								continue;
 							log.debug("key = " + key);
-							key = properties.get(key).toString();
-							String value = null;
-							if (rs.getObject("value") != null) 
-								value = rs.getObject("value").toString();
-							m.put("_#" + key, value);
-							log.debug(key + " = '" + value + "'");
+							if (properties.get(key) != null) {
+								key = properties.get(key).toString();
+								String value = null;
+								if (rs.getObject("value") != null) 
+									value = rs.getObject("value").toString();
+								m.put("_#" + key, value);
+								log.debug(key + " = '" + value + "'");
+							}
 						}
 					} catch (SQLException e1) {
 						e1.printStackTrace();

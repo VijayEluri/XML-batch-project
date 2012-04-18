@@ -12,7 +12,7 @@ import com.javalobby.tnt.annotation.attribute;
 
 public abstract class XmlObject {
 	private static Log log = LogFactory.getLog(XmlObject.class);
-	private String name = null;
+	protected String _uniqName = null;
 	protected XmlObject parent = null;
 	HashMap symbolTable = null;
 	private XmlParser parser = null;
@@ -66,7 +66,7 @@ public abstract class XmlObject {
 	 * @throws XMLBuildException
 	 */
 	public void init(XmlObject parent) throws XMLBuildException {
-		setName(name);
+		setName(_uniqName);
 	}
 	
 	/**
@@ -115,8 +115,8 @@ public abstract class XmlObject {
 	public void setSource(String source) {
 		this.source = source;
 	}
-	public final String getName() {
-		return name;
+	public String getName() {
+		return _uniqName;
 	}
 	public void setSymbolTable(HashMap st) {
 		this.symbolTable = st;
@@ -137,11 +137,11 @@ public abstract class XmlObject {
 	 * @param file
 	 */
 	@attribute(value = "", required = false, defaultValue="name of class as an instance name (initial character not capitalized) plus a unique number")
-	public final void setName(String name) {
+	public void setName(String name) {
 		if (name == null)
-			this.name = (proper(getClass().getSimpleName()) + Main.getID());
+			this._uniqName = (proper(getClass().getSimpleName()) + Main.getID());
 		else
-			this.name=(name);
+			this._uniqName=(name);
 	}
 	public XmlObject getParent() {
 		return parent;

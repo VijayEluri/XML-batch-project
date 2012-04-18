@@ -5,14 +5,14 @@ import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
-import com.lowagie.text.Element;
+import com.itextpdf.text.Element;
 
 
 public class Tr extends ReportObject {
 	private static Log log = LogFactory.getLog(Tr.class);
 	int count = 0;
 	int numColumns = 0;
-	com.lowagie.text.pdf.PdfPTable table = null;
+	com.itextpdf.text.pdf.PdfPTable table = null;
 	
 	@Override
 	public void init(XmlObject parent) throws XMLBuildException {

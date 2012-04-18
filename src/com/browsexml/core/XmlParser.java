@@ -134,7 +134,7 @@ public class XmlParser {
 		String[] var = null;
 		while (myMatcher.find()) {
 			origVar = myMatcher.group(1);
-			var = origVar.split("\\.");
+			var = origVar.split("->"); // Use arrow instead of dot (.) to denote structure elements
 			Object x = st.get("_#" + var[0]);
 			if (x == null) {
 				 x = st.get(var[0]);
@@ -255,6 +255,8 @@ public class XmlParser {
     	Class<?> c = currentObject.getClass();
     	for (int i = 0; i < attrs.getLength(); i++) {
 				String attName = attrs.getQName(i);
+				if (attName.equals("name"))
+					continue;
 				if (attName.contains("schemaLocation"))
 					continue;
 			String functionName = "set" + 
@@ -332,6 +334,7 @@ public class XmlParser {
 			try {
 				parameterTypes[0] = t;
 				name = "add" + properName(t.getSimpleName()) + endString;
+				log.debug("calling " + name + " on " + c.getName() + " with parameter " + t.getName());
 				Method m = c.getMethod(name, parameterTypes);
 				m.invoke(parent, arguments);
 				success = true;
@@ -339,7 +342,11 @@ public class XmlParser {
 			catch (IllegalAccessException e) {
 				e.printStackTrace();
 			}
-			catch (NoSuchMethodException e) {}
+			catch (NoSuchMethodException e) {
+//				for (Method m:c.getMethods()) {
+//					log.debug("method: " + m.getName());
+//				}
+			}
 			catch (InvocationTargetException e) {
 				if (e.getMessage() == null) { 
 					e.printStackTrace();
@@ -431,6 +438,13 @@ public class XmlParser {
 		parse(xmlFile);
 	}
     
+    public XmlParser(URL xmlFile, SAXParserFactory factory, Map env) 
+			throws XMLBuildException, IOException, SAXParseException, SAXException, ParserConfigurationException {
+		saxParser = factory.newSAXParser();
+		symbolTable.put("_#env", env);
+		parse(xmlFile);
+	}
+    
     public XmlParser(String xmlFile, SAXParserFactory factory, String[] args) 
     			throws XMLBuildException, IOException, SAXParseException, SAXException, ParserConfigurationException {
     		HashMap<String, String> env = new HashMap<String, String>();
@@ -492,6 +506,10 @@ public class XmlParser {
     
     public String getContext() {
     	return context;
+    }
+    
+    public void parse (URL xmlFile) throws ConnectException, XMLBuildException, IOException, SAXParseException, SAXException {
+    	parse(xmlFile.openStream());
     }
     
     public void parse (String xmlFile) throws ConnectException, XMLBuildException, IOException, SAXParseException, SAXException {
@@ -575,7 +593,7 @@ public class XmlParser {
     public void setPackage(String packageName) {
     	this.namespaceFilter = true;
     	this.packageName = packageName;
-    	//log.debug("package name just set to " + packageName);
+    	log.debug("package name just set to " + packageName);
     }
     
 	class QueryReader extends DefaultHandler {
@@ -630,8 +648,14 @@ public class XmlParser {
 				String name = properName(sName);
 
 				try {
-					//log.debug("namespace URI = " + namespaceURI);
-					//log.debug("package = " + packageName);
+					log.debug("namespace URI = " + namespaceURI);
+					log.debug("package = " + packageName);
+					if (packageName == null) {
+						Map env = (Map)symbolTable.get("_#env");
+						if (env != null)
+							packageName = (String) env.get("#ct_package");
+					}
+					log.debug("package = " + packageName);
 					String fullName = "";
 					if (packageName != null)
 						fullName = packageName + "." + name;
@@ -641,11 +665,13 @@ public class XmlParser {
 					else
 						fullName = namespaceURI + "." + name;
 					
+					log.debug("fullName = " + fullName);
+					
 					String newFullName = (String) symbolTable.get("#ct_" + fullName);
 					if (newFullName != null) {
 						fullName = newFullName;
 					}
-					//log.debug("fullName = " + fullName);
+					log.debug("fullName = " + fullName);
 					c = Class.forName(fullName);
 					
 						try {
@@ -693,9 +719,8 @@ public class XmlParser {
 		        		 if (currentObject.processRawAttributes(attrs))
 		        			 setAttributes(attrs, currentObject, symbolTable, handler.locator);
 		        		 
-		        		 currentObject.init(parentObject);
-		        		 
 	        			 String cname = currentObject.getName();
+	        			 log.debug("cname = " + cname);
 	        			 if (cname != null) {
 		        			 if (null != symbolTable.put(cname, currentObject)) {
 	        					currentObject.setLocator(locator);
@@ -703,6 +728,7 @@ public class XmlParser {
 		        				 throw new XMLBuildException(cname + ": multiply defined.");
 		        			 }
 	        			 }
+	        			 currentObject.init(parentObject);
 
 	        		 }
 	        		 catch (XMLBuildException e) {

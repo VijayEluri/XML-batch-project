@@ -6,16 +6,16 @@ import org.apache.commons.logging.LogFactory;
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlParser;
 import com.javalobby.tnt.annotation.attribute;
-import com.lowagie.text.FontFactory;
+import com.itextpdf.text.FontFactory;
 
 public class Font extends ReportObject {
 	private static Log log = LogFactory.getLog(Font.class);
-	private com.lowagie.text.Font font = null;
+	private com.itextpdf.text.Font font = null;
 
 	String text = null;
 	String face = "HELVETICA";
 	float size = 12;
-	int fontStyle = com.lowagie.text.Font.NORMAL;
+	int fontStyle = com.itextpdf.text.Font.NORMAL;
 
 	public Font() {
 		setName(null);
@@ -61,7 +61,7 @@ public class Font extends ReportObject {
 	public void setStyle(java.lang.String style) {
 		
 		this.fontStyle = XmlParser.getFieldValues(
-				com.lowagie.text.Font.class, style);
+				com.itextpdf.text.Font.class, style);
 		log.debug("set style to " + style + " = " + fontStyle);
 	}
 	
@@ -73,7 +73,7 @@ public class Font extends ReportObject {
 	}
 	
 	
-	public com.lowagie.text.Font getFont() {
+	public com.itextpdf.text.Font getFont() {
 		log.debug("get font " + size + "  " + size + "  " + fontStyle);
 		return FontFactory.getFont(face, size, fontStyle);
 	}

@@ -108,7 +108,7 @@ public class Header extends XmlObject {
 		//s = (Query) getAncestorOfType(Query.class);
 		log.debug(" s = " + s);
 		outBuffer = new StringBuffer();
-		String delimit = null;
+		String delimit = separator;
 		if (footerFields.size() > 0) {
 			for (FootField field:footerFields){
 				field.execute();  // All fields macro-replacement done by aspectj
@@ -136,16 +136,24 @@ public class Header extends XmlObject {
 			}
 		}
 		if (setToColumnNames) {
+			Select select = (Select)this.getAncestorOfType(Select.class);
+			String quote = "";
+			if (select != null) {
+				if (select.getQuoteStrings()) {
+					quote = "\"";
+				}
+			}
 			for (Field column:columns){
 				log.debug("colunn = " + column);
 				if (!(column instanceof HiddenField)) {
 					outBuffer.append(separator);
-					outBuffer.append(column.getFieldName());
+					outBuffer.append(quote + column.getFieldName() + quote);
 				}
 			}
 			if (outBuffer.length() > delimit.length()) {
 				outBuffer.delete(0, delimit.length());
 			}
+			outBuffer.append(System.getProperty("line.separator"));
 		}
 	}
 	/**
