@@ -48,23 +48,7 @@ public class Pdfform extends FilterAJ {
 	private static Log log = LogFactory.getLog(Pdfform.class);
 	private String queryName;
 	private String reportName = "";
-	private Integer personId;
 
-	public Integer getPersonId() {
-		return personId;
-	}
-
-	public void setPersonId(Integer personId) {
-		this.personId = personId;
-	}
-	
-	public void setPersonId(String personId) {
-		try {
-			this.personId = Integer.parseInt(personId);
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-		}
-	}
 
 	public String getReportName() {
 		return reportName;
@@ -203,6 +187,7 @@ public class Pdfform extends FilterAJ {
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
+	
 			Statement stmt = null;
 			try {
 				log.debug("sql = " + sql.getQuery());

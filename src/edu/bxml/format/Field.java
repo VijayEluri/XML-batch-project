@@ -215,6 +215,9 @@ public abstract class Field extends XmlObject {
 	@attribute(value = "", required = false)
 	public void setDefault(String defaultValue) {
 		this.defaultValue = defaultValue;
+		if (defaultValue.equals("{null}")) {
+			this.defaultValue = null;
+		}
 	}
 	
 	/**

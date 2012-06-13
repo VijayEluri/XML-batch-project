@@ -11,7 +11,7 @@
     </appender>
     
     <logger name="edu.bxml.format.Load">
-    	<level value="WARN"/>
+    	<level value="DEBUG"/>
     </logger>
     
     <logger name="com.browsexml">
