@@ -1,8 +1,8 @@
 package edu.bxml.aj.db;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,16 @@ public class BlobLoad extends FilterAJ  {
 	private static Log log = LogFactory.getLog(BlobLoad.class);
 	private Connection connection = null;
 	private String connectionString = null;
+	private Key primaryKey = null;
 	
+	public Key getPrimaryKey() {
+		return primaryKey;
+	}
+
+	public void setPrimaryKey(Key primaryKey) {
+		this.primaryKey = primaryKey;
+	}
+
 	public Connection getConnection() {
 		return connection;
 	}
@@ -125,7 +134,7 @@ public class BlobLoad extends FilterAJ  {
 		log.debug(" query = " + query);
 		try {
 			// create prepared statement
-			sqlStatement = c.prepareStatement(query.toString());
+			sqlStatement = c.prepareStatement(query.toString(), sqlStatement.RETURN_GENERATED_KEYS);
 		} catch (SQLException s) {
 			s.printStackTrace();
 			throw new XMLBuildException(s.getMessage());
@@ -136,6 +145,7 @@ public class BlobLoad extends FilterAJ  {
 			sqlStatement.setBinaryStream(1, inputFileInputStream);
 			int i = 2;
 			for (Field field: fields) {
+				field.execute();
 				if (field.getType().equals("java.lang.String"))
 					sqlStatement.setString(i, field.getValue());
 				else if (field.getType().equals("java.lang.Integer"))
@@ -143,14 +153,27 @@ public class BlobLoad extends FilterAJ  {
 				i++;
 			}
 			sqlStatement.executeUpdate();
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} 
-//		try {
-//			sqlStatement.executeUpdate();
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
+		ResultSet rs;
+		try {
+			rs = sqlStatement.getGeneratedKeys();
+		log.debug("GeneratedKeys next...");
+			if (rs.next()) {
+				log.debug("primary key = " + primaryKey);
+				
+				if (primaryKey != null && primaryKey.getFieldName() != null) {
+					log.debug("primary key = " + primaryKey.getFieldName());
+					primaryKey.setValue(rs.getInt(1) + "");
+				}
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		log.debug("GeneratedKeys done");
 		
 	}
 	
@@ -158,5 +181,10 @@ public class BlobLoad extends FilterAJ  {
 	
 	public void addField(Field f) {
 		fields.add(f);
+	}
+	
+	public void addKey(Key f) {
+		log.debug("add key " + f);
+		primaryKey = f;
 	}
 }

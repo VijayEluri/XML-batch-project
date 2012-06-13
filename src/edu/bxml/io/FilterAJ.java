@@ -71,6 +71,7 @@ public class FilterAJ extends XmlObject implements Runnable {
 	protected File outFile = null;
 
 	protected List<FilterAJ> filters = new ArrayList<FilterAJ>();
+	protected List<FilterAJ> filtersMaster = new ArrayList<FilterAJ>();
 	
 	Boolean closeIn = false;
 	Boolean closeOut = false;
@@ -157,8 +158,10 @@ public class FilterAJ extends XmlObject implements Runnable {
 		FilterAJ ancestor = this.getAncestorOfType(FilterAJ.class);
 		log.debug("get OUT for " + this.getClass().getName());
 		if (out != null) {
+			log.debug("out already set ");
 			return out;
 		}
+		log.debug("out is null");
 		if (ancestor != null) {
 			log.debug("ancestor class is " + ancestor.getClass().getName());
 			this.out = ancestor.getOut();
@@ -166,7 +169,9 @@ public class FilterAJ extends XmlObject implements Runnable {
 
 		try {
 			if (getToDir() != null && getToFile() != null){
+				
 				outFile = new File(toDir, toFile);
+				log.debug("set output file to " + outFile.getPath());
 				out = new FileOutputStream(outFile);
 				closeOut = true;
 				return out;
@@ -315,6 +320,11 @@ public class FilterAJ extends XmlObject implements Runnable {
 				e.printStackTrace();
 				throw new XMLBuildException(e.getMessage());
 			}
+		}
+		filters.clear();
+		for (FilterAJ filter : filtersMaster) {
+			if (filter.isIff())
+				filters.add(filter);
 		}
 		for (FilterAJ filter : filters) {
 			log.debug("Filter = " + filter);

@@ -82,44 +82,43 @@ public class Pipe extends FilterAJ implements UncaughtExceptionHandler {
 			this.file = "_output_";
 			files = new File[] {new File(".", this.file)};
 		}
-		for (File file : files) {
-			if (!file.getName().matches(this.file))
-				continue;
-			currentFile = file;
-			String toFile = this.toFile;
-			OutputStream out = this.out;
-			if (this.toDir != null) {
-				if (toFile == null) {
-					toFile = file.getName();
-				}
-				try {
-					out = new FileOutputStream(new File(toDir, toFile));
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-					throw new XMLBuildException(e.getMessage());
-				}
-			}
-			if (out == null) 
-				out = System.out;
-			found = true;
-			log.debug("pipe file is " + file.getAbsolutePath());
-			if (file.exists())
-				try {
-					pipeInput = (InputStream) new FileInputStream(file);
-				} catch (FileNotFoundException e2) {
-					e2.printStackTrace();
-				}
-			else {
-				try {
-					pipeInput = new ByteArrayInputStream("".getBytes("UTF-8"));
-				} catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
-				}
+		if (true) {
 
-			}
-			Thread.setDefaultUncaughtExceptionHandler(this);
+//			currentFile = file;
+//			String toFile = this.toFile;
+//			OutputStream out = this.out;
+//			if (this.toDir != null) {
+//				if (toFile == null) {
+//					toFile = file.getName();
+//				}
+//				try {
+//					out = new FileOutputStream(new File(toDir, toFile));
+//				} catch (FileNotFoundException e) {
+//					e.printStackTrace();
+//					throw new XMLBuildException(e.getMessage());
+//				}
+//			}
+//			if (out == null) 
+//				out = System.out;
+//			found = true;
+//			log.debug("pipe file is " + file.getAbsolutePath());
+//			if (file.exists())
+//				try {
+//					pipeInput = (InputStream) new FileInputStream(file);
+//				} catch (FileNotFoundException e2) {
+//					e2.printStackTrace();
+//				}
+//			else {
+//				try {
+//					pipeInput = new ByteArrayInputStream("".getBytes("UTF-8"));
+//				} catch (UnsupportedEncodingException e) {
+//					e.printStackTrace();
+//				}
+//
+//			}
+//			Thread.setDefaultUncaughtExceptionHandler(this);
 			
-			pin = pipeInput;
+			pipeInput = getIn();
 			log.debug("HERE");
 			for (XmlObject att: attributes) {
 				att.execute();
@@ -129,31 +128,38 @@ public class Pipe extends FilterAJ implements UncaughtExceptionHandler {
 				command.execute();
 			}
 			
+			filters.clear();
+			for (FilterAJ filter : filtersMaster) {
+				if (filter.isIff())
+					filters.add(filter);
+			}
 			for (FilterAJ filter : filters) {
-				try {
-					log.debug("command = " + filter);
-					pout = new PipedOutputStream();
-					log.debug("pout = " + pout);
-					filter.setInputStream(pin);
-					filter.setOutputStream(pout);
-					pin = new PipedInputStream(pout);
-					pins.add(pin);
-					pouts.add(pout);
-
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+						try {
+							log.debug("command = " + filter);
+							pout = new PipedOutputStream();
+							log.debug("pout = " + pout);
+							filter.setInputStream(pin);
+							filter.setOutputStream(pout);
+							pin = new PipedInputStream(pout);
+							pins.add(pin);
+							pouts.add(pout);
+		
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
 			}
 
 			threads = new ArrayList<Thread>();
 			log.debug("start threads");
 			FilterAJ filt2 = new FilterAJ(pin, out);
 			for (FilterAJ filter : filters) {
-				filter.setLock(true);
-				Thread t = new Thread(filter);
-				threads.add(t);
-				log.debug("start thread " + (threads.size() -1) + " for " + filter.getClass().getName());
-				t.start();
+
+					filter.setLock(true);
+					Thread t = new Thread(filter);
+					threads.add(t);
+					log.debug("start thread " + (threads.size() -1) + " for " + filter.getClass().getName());
+					t.start();
+				
 			}
 			filt2.setLock(true);
 			Thread t = new Thread(filt2);
@@ -172,7 +178,7 @@ public class Pipe extends FilterAJ implements UncaughtExceptionHandler {
 					}
 					int i = 0;
 					for (Thread t1: threads) {
-						log.debug("  sub thread state = " + t1.getState().toString());
+						log.debug("  sub thread state = " + t1.getState().toString() );
 						if (!t1.getState().equals(Thread.State.TERMINATED)) {
 							log.debug("sub thread still running... not terminated    " + t1.getState() + "   " + Thread.State.TERMINATED);
 							t1.join(1000);
@@ -207,31 +213,31 @@ public class Pipe extends FilterAJ implements UncaughtExceptionHandler {
 				command.execute();
 			}
 			closeIO();
-			if (archive != null) {
-				if (!archiveDir.exists()) {
-					archiveDir.mkdirs();
-				}
-				if (archiveDir.exists()) {
-					log.debug("archive exists");
-					//file.renameTo(new File(archiveDir, file.getName()));
-					try {
-						FileInputStream inArch = new FileInputStream(file);
-						FileOutputStream outArch = new FileOutputStream(
-								new File(archiveDir, file.getName()));
-						Copy.copyBinaryFile(inArch, outArch);
-						inArch.close();
-						outArch.close();
-						
-						log.debug("delete " + file.getAbsolutePath());
-						log.debug("delete result = " + file.delete());
-						
-					} catch (FileNotFoundException e) {
-						e.printStackTrace();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
+//			if (archive != null) {
+//				if (!archiveDir.exists()) {
+//					archiveDir.mkdirs();
+//				}
+//				if (archiveDir.exists()) {
+//					log.debug("archive exists");
+//					//file.renameTo(new File(archiveDir, file.getName()));
+//					try {
+//						FileInputStream inArch = new FileInputStream(file);
+//						FileOutputStream outArch = new FileOutputStream(
+//								new File(archiveDir, file.getName()));
+//						Copy.copyBinaryFile(inArch, outArch);
+//						inArch.close();
+//						outArch.close();
+//						
+//						log.debug("delete " + file.getAbsolutePath());
+//						log.debug("delete result = " + file.delete());
+//						
+//					} catch (FileNotFoundException e) {
+//						e.printStackTrace();
+//					} catch (IOException e) {
+//						e.printStackTrace();
+//					}
+//				}
+//			}
 		}
 		if (!found) {
 			log.debug("no file in " + new File(dir).getAbsolutePath() + 
@@ -258,12 +264,14 @@ public class Pipe extends FilterAJ implements UncaughtExceptionHandler {
 	 * to concatenate the output of multiple classes into the pipe.
 	 * 
 	 * @param file
+	 * @throws XMLBuildException 
 	 */
 	@attribute(value = "", required = false)
-	public void addFilterAJ(FilterAJ filter) {
+	public void addFilterAJ(FilterAJ filter) throws XMLBuildException {
 		log.debug("Fiter adding is " + filter.getClass());
-		filters.add(filter);
+		filtersMaster.add(filter);
 	}
+
 
 	public void uncaughtException(Thread t, Throwable exception) {
 		log.debug("UNCAUGHT EXCEPTION from thread " + t + " for exception " + exception.getMessage());
