@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.apache.commons.codec.binary.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -26,7 +27,7 @@ import edu.bxml.io.FilterAJ;
 public class Excel extends FilterAJ {
 	
 	PrintStream localOut = null;
-	public static String newline = System.getProperty("line.separator");
+	public static String newline = "\n";//System.getProperty("line.separator");
 	private ArrayList<Column> columns = new ArrayList<Column>();
 	private String dateFormat = null;
 	private SimpleDateFormat format = null;
@@ -157,13 +158,26 @@ log.debug("rs count = " + rs.getFetchSize());
 			}
 		}
 		
-		localOut.println("<Cell ss:StyleID=\"s70\"><Data ss:Type=\"String\"><![CDATA["
-				+ strData + "]]></Data></Cell>");
+		strData = escHtml(strData);
+		
+		localOut.println("<Cell ss:StyleID=\"s70\"><Data ss:Type=\"String\">"
+				+ strData + "</Data></Cell>");
+	}
+	
+	public String escHtml(String strData) {
+		String[] orig = new String[]{"&", "\"", "<", ">"};
+		String[] repl = new String[]{"&amp;", "&quot;", "&lt;", "&gt;"};
+		
+		for (int count = 0; count < orig.length; count++) {
+			strData = strData.replaceAll(orig[count], repl[count]);
+		}
+		return strData;
 	}
 
 	public void printHeader(String headerName) {
-		localOut.println("<Cell ss:StyleID=\"s70\"><Data ss:Type=\"String\"><![CDATA["
-				+ headerName + "]]></Data></Cell>");
+		headerName = escHtml(headerName);
+		localOut.println("<Cell ss:StyleID=\"s70\"><Data ss:Type=\"String\">"
+				+ headerName + "</Data></Cell>");
 	}
 	
 	public void printFooter() {
