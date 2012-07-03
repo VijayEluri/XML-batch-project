@@ -132,7 +132,7 @@
 SELECT [Record Code] ,[Student Ssn] ,[Is Student ID SSN?] ,[Date Of Birth] ,[Last Name] ,[First Name]
       ,[Middle Init] ,[Primary Street1] ,[Primary Street2] ,[Primary City] ,[Primary State]
       ,[Primary Zipcode] ,[Filler] ,[Legal Residence] ,[Year In School] ,[Tot Budget]
-      ,[Tfc] ,[Disbursed Amt]*100 ,[Tuition Differential] ,[Athletic] ,[Selective Service Reg]
+      ,[Tfc] ,[Disbursed Amt]*100 as [Disbursed Amt] ,[Tuition Differential] ,[Athletic] ,[Selective Service Reg]
       ,[TEXAS Grant & TEG] ,[Date TEG Awarded] ,[Initial/Renewal] ,[Hardship] ,[Prof Judge]
       ,[Overall Completion Rate] ,[Fall 2011 Hours Attempted] ,[Spring 2012 Hours Attempted] ,[Winter 2011 Hours Attempted]
       ,[Summer 2012 Hours Attempted] ,[Student's Overall Cumulative GPA] ,[Total Number of Hours Complted in Award Period]
