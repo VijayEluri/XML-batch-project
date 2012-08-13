@@ -16,6 +16,8 @@ import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.batik.svggen.font.table.Program;
 import org.apache.commons.httpclient.protocol.Protocol;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.apache.log4j.xml.DOMConfigurator;
 
 /**
@@ -25,6 +27,7 @@ import org.apache.log4j.xml.DOMConfigurator;
  * Preferences - Java - Code Generation - Code and Comments
  */
 public class Main {
+	private static Log log = LogFactory.getLog(Main.class);
 	Connection con = null;
 	static String[] args = null;
 	
@@ -42,6 +45,7 @@ public class Main {
 	}
 
 	Main(String[] args) {
+		
 		String file = args[0];
 		Protocol.registerProtocol( "bxml", Protocol.getProtocol("http") );
 		Protocol.registerProtocol( "bxmls", Protocol.getProtocol("https") );
@@ -49,14 +53,16 @@ public class Main {
 		URL x = getClass().getClassLoader().getResource("log4j.xml");
 		if (x == null) 
 			x = getClass().getClassLoader().getResource("log4j.xml");
+		log.debug("log file url = " + x);
 
 		try {
 			System.err.println(new java.io.File(".").getCanonicalPath());
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
-		if (x != null) 
+		if (x != null) {
 			DOMConfigurator.configure(x);
+		}
 		else
 			System.err.println("log4j.xml not found in path");
 		
@@ -70,7 +76,9 @@ public class Main {
 		boolean console = SplashScreen.getSplashScreen() == null;
 
 		try {
+			log.debug("PARSE");
 			f = new XmlParser(file, factory, args);
+			log.debug("PARSE DONE");
 			runner.noErrors();
 		}
 		catch (java.net.ConnectException e) {
@@ -82,8 +90,15 @@ public class Main {
 		}
 
 		try {
-			if (f != null)
+			
+			
+			if (f != null) {
+				log.debug("MAIN execute f is a " + f.getClass().getName());
 				f.execute();
+			}
+			else {
+				log.debug("MAIN execute f is null");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			runner.viewErrors(console, e.getMessage());

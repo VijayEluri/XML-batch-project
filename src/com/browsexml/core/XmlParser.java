@@ -406,7 +406,7 @@ public class XmlParser {
 	}
 	
 	public void execute() throws XMLBuildException {
-		//log.debug("ROOT EXECUTE");
+		log.debug("ROOT EXECUTE  is a " + root.getClass().getName());
 		if (root != null)
 			root.execute();
 		else {

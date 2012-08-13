@@ -2,20 +2,18 @@ package edu.misc.report;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.program.Program;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.MessageBox;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.Element;
+import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.ColumnText;
@@ -34,6 +32,8 @@ public class Pdf extends ReportObject {
 	ColumnText ct = null;
 	File workFile = null;
 	Rectangle size = PageSize.LETTER;
+	Float[] marginArray = new Float[4];
+	String file;
 	
 	public void setText(String text) {
 		this.text = text;
@@ -45,38 +45,11 @@ public class Pdf extends ReportObject {
 	
 	public void init(XmlObject parent) throws XMLBuildException {
 		super.init(parent);
-		try {
-			workFile = File.createTempFile("pdf", ".pdf");
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new XMLBuildException(
-					"Could not create report file " + workFile + 
-					" on your computer");
-		};
-		log.debug("Work file PDF = " + workFile);
 
-			//String size = attrs.getValue("size");
-			try {
-				if (landscape) {
-					size = size.rotate();
-				}
-				document = new Document(size, 20, 20, 20,20);
-				writer = PdfWriter.getInstance(document, new FileOutputStream(
-						workFile));
-			} catch (Exception e) {
-				e.printStackTrace();
-			};
-
-			document.open();
-			float pageWidth = document.right() - document.left();
-			cb = writer.getDirectContent();
-			ct = new ColumnText(cb);
-			ct.setSimpleColumn(document.left(), document.bottom(),
-					document.right(), document.top(), 24,
-					Element.ALIGN_JUSTIFIED);
-			System.err.println("document.open();");
 			
 	}
+	
+	List<ReportObject> objects = new ArrayList<ReportObject>();
 	
 	@attribute(value = "", required = false)
 	public void setLandscape(Boolean landscape) {
@@ -84,6 +57,32 @@ public class Pdf extends ReportObject {
 	}
 	public void setLandscape(String landscape) {
 		setLandscape(Boolean.parseBoolean(landscape));
+	}
+	
+	public void setFile(String file) {
+		this.file = file;
+	}
+	
+	public void setMargins(String margins) {
+		 String[] marginArray = margins.split(" *, *");
+		 Float defaultValue = 0f;
+		 try {
+			defaultValue = Float.parseFloat(marginArray[0]);
+			
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		}
+		 this.marginArray[0] = defaultValue;
+		 for (int i = 1; i < 4; i++) {
+			 this.marginArray[i] = defaultValue;
+			 if (i < marginArray.length) {
+				 try {
+					this.marginArray[i] = Float.parseFloat(marginArray[i]);
+				} catch (NumberFormatException e) {
+					e.printStackTrace();
+				}
+			 }
+		 }
 	}
 	
 	/**
@@ -122,27 +121,16 @@ public class Pdf extends ReportObject {
 	}
 	
 	public void addParagraph(Paragraph paragraph) {
-		//paragraph.setDocument(document);
+		objects.add(paragraph);
 	}
-	
-	public void addParagraphEnd(Paragraph paragraph) throws XMLBuildException {
-		//paragraph.execute();
-	}
+
 	
 	public void addTable(edu.misc.report.Table table) {
-		//table.setDocument(document);
-	}
-	
-	public void addTableEnd(edu.misc.report.Table table) throws XMLBuildException {
-		table.execute();
+		objects.add(table);
 	}
 	
 	public void addNewpage(Newpage newpage) {
-		//newpage.setDocument(document);
-	}
-	
-	public void addNewpageEnd(Newpage newpage) {
-		newpage.execute();
+		objects.add(newpage);
 	}
 	
 	/**
@@ -150,21 +138,57 @@ public class Pdf extends ReportObject {
 	 */
 	public void execute() throws XMLBuildException {
 		log.debug("Execute PDF");
+//		try {
+			//workFile = File.createTempFile("pdf", ".pdf");
+			workFile = new File(".", "x.pdf");
+//		}
+//		catch (IOException e) {
+//			e.printStackTrace();
+//			throw new XMLBuildException(
+//					"Could not create report file " + workFile + 
+//					" on your computer");
+//		};
+		log.debug("Work file PDF = " + workFile);
+
+			//String size = attrs.getValue("size");
+			try {
+				if (landscape) {
+					size = size.rotate();
+				}
+				document = new Document(size, marginArray[0], marginArray[1], marginArray[2], marginArray[3]);
+				writer = PdfWriter.getInstance(document, new FileOutputStream(
+						workFile));
+			} catch (Exception e) {
+				e.printStackTrace();
+			};
+
+			document.open();
+			FontFactory.registerDirectory("/Library/Fonts/Microsoft/");
+			float pageWidth = document.right() - document.left();
+			cb = writer.getDirectContent();
+			ct = new ColumnText(cb);
+			ct.setSimpleColumn(document.left(), document.bottom(),
+					document.right(), document.top(), 24,
+					Element.ALIGN_JUSTIFIED);
+			System.err.println("document.open();");
+			
+			for (ReportObject object:objects) {
+				object.setDocument(document);
+				object.execute();
+			}
+
+			log.debug("margin set = " + marginArray[0]);
 
 		try {
 			document.close();
 		} catch (RuntimeException e) {
-			 MessageBox messageBox =
-				   new MessageBox(Display.getDefault().getShells()[0],
-				    SWT.OK|SWT.ICON_ERROR);
-			 messageBox.setMessage("The report is empty");
-			 messageBox.open();
 			e.printStackTrace();
 		}
 		log.debug("document.close();");
 
-		Program prog = Program.findProgram("PDF");
-		log.debug("prog = " + prog);
-		prog.execute(workFile.getPath());
+		//Program prog = Program.findProgram("PDF");
+		//log.debug("prog = " + prog);
+		//prog.execute(workFile.getPath());
+		log.debug("file = " + workFile.getPath());
 	}
 }

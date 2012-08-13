@@ -74,7 +74,7 @@ public class Font extends ReportObject {
 	
 	
 	public com.itextpdf.text.Font getFont() {
-		log.debug("get font " + size + "  " + size + "  " + fontStyle);
+		log.debug("get font " + face + "  " + size + "  " + fontStyle);
 		return FontFactory.getFont(face, size, fontStyle);
 	}
 }

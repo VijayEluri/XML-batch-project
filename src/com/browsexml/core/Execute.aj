@@ -73,22 +73,28 @@ public aspect Execute {
 	 * rather than Filter
 	 */
 	void around(FilterAJ x) throws XMLBuildException: execute() && target(x) {
-		Log log = LogFactory.getLog(this.getClass().getName());
-		if (x.getLock()) {
-			System.err.println("LOCK");
-			proceed(x);
-			x.setLock(false);
-			return;
-		}
-		Boolean closeIn = false;
-		Boolean closeOut = false;
-		InputStream in = x.getIn();
-		OutputStream out = x.getOut();
+		try {
+			Log log = LogFactory.getLog(this.getClass().getName());
+			if (x.getLock()) {
+				System.err.println("LOCK");
+				proceed(x);
+				x.setLock(false);
+				return;
+			}
+			Boolean closeIn = false;
+			Boolean closeOut = false;
+			InputStream in = x.getIn();
+			OutputStream out = x.getOut();
 
-		log.debug("proceed with no lock on " + x.getClass().getName());
-		proceed(x);
-		log.debug("proceed DONE on " + x.getClass().getName());
-		x.closeIn();
-		x.closeOut();
+			log.debug("proceed with no lock on " + x.getClass().getName());
+
+			proceed(x);
+
+			log.debug("proceed DONE on " + x.getClass().getName());
+			x.closeIn();
+			x.closeOut();
+		} catch (XMLBuildException e) {
+			e.printStackTrace();
+		}
 	}
 }

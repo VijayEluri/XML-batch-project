@@ -25,7 +25,12 @@ public class Newpage extends ReportObject {
 	 * Called after complete parsing of XML document to evaluate the document.
 	 */
 	public void execute() {
-		document.newPage();
+		try {
+			document.newPage();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 }

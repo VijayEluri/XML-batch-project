@@ -18,6 +18,7 @@ import edu.bxml.format.Property;
 import edu.bxml.format.ResultMetadata;
 import edu.bxml.format.Sql;
 import edu.bxml.format.SyncOnArchive;
+import edu.bxml.generator.Generator;
 import edu.bxml.io.FilterAJ;
 import edu.misc.report.Pdf;
 
@@ -32,7 +33,11 @@ public class Query extends FilterAJ {
 	private static Log log = LogFactory.getLog(Query.class);
 	Vector<Connection> connections = new Vector<Connection>();
 	Vector<XmlObject> sqlCommands = new Vector<XmlObject>();
-	Vector<Pdf> pdfDocs = new Vector<Pdf>();
+	//Vector<Pdf> pdfDocs = new Vector<Pdf>();
+	
+	public Query() {
+		log.debug("Query LOADED");
+	}
 	
 	static public String processDelimit(String delimit) {
 		delimit = delimit.replaceAll("\\\\t", "\t");
@@ -77,6 +82,7 @@ public class Query extends FilterAJ {
 		sqlCommands.add(exists);
 	}
 	
+	
 	/**
 	 * Fill in a pdf form
 	 */
@@ -90,7 +96,7 @@ public class Query extends FilterAJ {
 	 */
 	//@attribute(value = "", required = false)
 	public void addPdf(Pdf document) {
-		pdfDocs.add(document);
+		sqlCommands.add(document);
 	}
 	
 	public void addSyncOnArchive(SyncOnArchive sync) {
@@ -117,7 +123,7 @@ public class Query extends FilterAJ {
 	 */
 	public void execute() throws XMLBuildException {
 		// log.debug("EXECUTE QUERY");
-		log.debug("SQL COMMANDS = " + sqlCommands);
+		log.debug("P SQL COMMANDS = " + sqlCommands);
 		for (XmlObject sqlCommand : sqlCommands) {
 			log.debug("QUERY EXEC: " + sqlCommand);
 			sqlCommand.execute();
@@ -138,6 +144,13 @@ public class Query extends FilterAJ {
 	public void addBlobFetch(BlobFetch p) {
 		sqlCommands.add(p);
 	}	
+	
+	/**  */
+	@attribute(value = "", required = false)
+	public void addGenerator(Generator generator) {
+		log.debug("ADD generator");
+		sqlCommands.add(generator);
+	}
 	
 	/**  */
 	@attribute(value = "", required = false)

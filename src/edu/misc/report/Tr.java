@@ -1,5 +1,8 @@
 package edu.misc.report;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -10,7 +13,7 @@ import com.itextpdf.text.Element;
 
 public class Tr extends ReportObject {
 	private static Log log = LogFactory.getLog(Tr.class);
-	int count = 0;
+	
 	int numColumns = 0;
 	com.itextpdf.text.pdf.PdfPTable table = null;
 	
@@ -24,8 +27,10 @@ public class Tr extends ReportObject {
 		this.table = table.getTable();
 		numColumns = table.getWidthCount();
 		super.init(parent);
+		
+		
 	}
-	
+		
 	public Tr() {
 		setName(null);
 	}
@@ -40,18 +45,28 @@ public class Tr extends ReportObject {
 	
 	@Override
 	public void check() throws XMLBuildException {
+
+	}
+	
+	List<Td> cells = new ArrayList<Td>();
+	
+	public void addTdEnd(Td td) {
+		cells.add(td);
+	}
+	
+	public void execute() {
+		int count = 0;
+		for (Td td: cells) {
+			td.execute();
+			if (count < numColumns) {
+				table.addCell(td.getCell());
+			}
+			log.debug("td.HORIZSON = " + td.getCell().getHorizontalAlignment());
+			log.debug("El = " + Element.ALIGN_RIGHT);
+			count+=td.getSpan();
+		}
 		while (count++ < numColumns) {
 			table.addCell("");
 		}
-	}
-	
-	public void addTdEnd(Td td) {
-
-		if (count < numColumns) {
-			table.addCell(td.getCell());
-		}
-		log.debug("td.HORIZSON = " + td.getCell().getHorizontalAlignment());
-		log.debug("El = " + Element.ALIGN_RIGHT);
-		count+=td.getSpan();
 	}
 }
