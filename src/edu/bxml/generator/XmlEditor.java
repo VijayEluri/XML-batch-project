@@ -118,16 +118,16 @@ public class XmlEditor  extends FilterAJ {
 			}
 		}
 		
-		NodeList nodeList = doc.getElementsByTagName("sql");
-		for (int x = nodeList.getLength()-1; x >= 0 ; x--) {
-			Node id = nodeList.item(x).getAttributes().getNamedItem("id");
+		NodeList sqlNodeList = doc.getElementsByTagName("sql");
+		for (int x = sqlNodeList.getLength()-1; x >= 0 ; x--) {
+			Node id = sqlNodeList.item(x).getAttributes().getNamedItem("id");
 			String idName = id.getNodeValue();
 			System.out.println("id = " + id.getNodeValue());
 			Node replacement = nodes.get(id.getNodeValue());
 			if (replacement != null) {
 				Node repl = doc.importNode(replacement, true);
 				log.debug("REPLACE replacement = " + replacement);
-				selectNodeList.item(x).getParentNode().removeChild(selectNodeList.item(x));
+				sqlNodeList.item(x).getParentNode().removeChild(sqlNodeList.item(x));
 				
 			}
 		}
