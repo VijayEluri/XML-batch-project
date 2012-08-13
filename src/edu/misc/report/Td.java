@@ -8,6 +8,7 @@ import org.xml.sax.Attributes;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlParser;
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.pdf.PdfPCell;
@@ -18,7 +19,7 @@ public class Td extends ReportObject {
 	private static Log log = LogFactory.getLog(Td.class);
 	com.itextpdf.text.pdf.PdfPTable table = null;
 
-	com.itextpdf.text.Phrase phrase = null;
+	Phrase phrase = null;
 	PdfPCell cell = null;
 
 	@Override
@@ -32,6 +33,7 @@ public class Td extends ReportObject {
 	}
 	
 	public PdfPCell getCell() {
+		//return new PdfPCell(new com.itextpdf.text.Phrase("PPP"));
 		return cell;
 	}
 	
@@ -60,8 +62,9 @@ public class Td extends ReportObject {
 	
 	public void setAlignment(String alignment) {
 		log.debug("ALIGN = " + alignment);
+
 		try {
-			int align = XmlParser.getFieldValues(Element.class, alignment);
+			int align = XmlParser.getFieldValues(PdfPCell.class, alignment);
 			cell.setHorizontalAlignment(align);
 			log.debug("currentCell.setHorizontalAlignment("
 					+ align + ");");
@@ -78,7 +81,8 @@ public class Td extends ReportObject {
 		try {
 			setBorder(Integer.parseInt(strBorder));
 		}catch (NumberFormatException nfe) {
-			nfe.printStackTrace();
+			int border = XmlParser.getFieldValues(PdfPCell.class, strBorder);
+			cell.setBorder(border);
 		}
 	}
 	/**
@@ -88,6 +92,8 @@ public class Td extends ReportObject {
 	 */
 	@attribute(value = "", required = false, defaultValue="1")
 	public void setColSpan(Integer span) {
+		log.debug("set col span to " + span);
+		this.colSpan = span;
 		cell.setColspan(colSpan);
 	}
 	public void setColSpan(String span) throws XMLBuildException {
@@ -95,6 +101,7 @@ public class Td extends ReportObject {
 			setColSpan(Integer.parseInt(span));
 			
 		} catch (NumberFormatException nfe) {
+			nfe.printStackTrace();
 		};
 	}
 	
@@ -112,10 +119,17 @@ public class Td extends ReportObject {
 		
 	}
 	
-	public void addPhraseEnd(com.itextpdf.text.Phrase phrase) {
+	public void addPhraseEnd(Phrase phrase) throws XMLBuildException {
 		log.debug("Cell.addElement(" + phrase);
 		this.phrase = phrase;
-		cell.setPhrase(phrase);
+
+	}
+	
+	@Override
+	public void execute() {
+		log.debug("Cell.addElement(" + phrase);
+		phrase.execute();// do macro substitutions
+		cell.setPhrase(phrase.getPhrase());
 	}
 	
 	
@@ -134,6 +148,105 @@ public class Td extends ReportObject {
 	public void setPadding(String padding) {
 		try {
 			setPadding(Float.parseFloat(padding));
+		}catch (NumberFormatException nfe) {
+			nfe.printStackTrace();
+		}
+	}
+	
+	public void setBorderWidth(Integer borderWidth) {
+		cell.setBorderWidth(borderWidth);
+	}
+	
+	public void setBorderWidth(String width) {
+		try {
+			setBorderWidth(Integer.parseInt(width));
+		}catch (NumberFormatException nfe) {
+			nfe.printStackTrace();
+		}
+	}
+	
+	public void setBorderWidthRight(Integer borderWidth) {
+		cell.setBorderWidthRight(borderWidth);
+	}
+	
+	public void setBorderWidthRight(String width) {
+		try {
+			setBorderWidthRight(Integer.parseInt(width));
+		}catch (NumberFormatException nfe) {
+			nfe.printStackTrace();
+		}
+	}
+	
+	public void setBorderWidthLeft(Integer borderWidth) {
+		cell.setBorderWidthLeft(borderWidth);
+	}
+	
+	public void setBorderWidthLeft(String width) {
+		try {
+			setBorderWidthLeft(Integer.parseInt(width));
+		}catch (NumberFormatException nfe) {
+			nfe.printStackTrace();
+		}
+	}
+	
+	public void setBorderWidthTop(Integer borderWidth) {
+		cell.setBorderWidthTop(borderWidth);
+
+
+	}
+	
+	public BaseColor getColor(String color) {
+		java.lang.reflect.Field f = null;
+		try {
+			f = BaseColor.class.getField(color);
+		} catch (SecurityException e) {
+			e.printStackTrace();
+			return BaseColor.BLACK;
+		} catch (NoSuchFieldException e) {
+			e.printStackTrace();
+			return BaseColor.BLACK;
+		}
+		BaseColor value = null;
+		try {
+			value = (BaseColor) f.get(BaseColor.class);
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+			return BaseColor.BLACK;
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+			return BaseColor.BLACK;
+		}
+		return value;
+	}
+	
+	public void setBorderColorTop(String color) {
+		cell.setBorderColorTop(getColor(color));
+	}
+	public void setBorderColorLeft(String color) {
+		cell.setBorderColorLeft(getColor(color));
+	}
+	public void setBorderColorBottom(String color) {
+		cell.setBorderColorBottom(getColor(color));
+	}
+	public void setBorderColorRight(String color) {
+		cell.setBorderColorRight(getColor(color));
+	}
+	
+	public void setBorderWidthTop(String width) {
+		try {
+			setBorderWidthTop(Integer.parseInt(width));
+		}catch (NumberFormatException nfe) {
+			nfe.printStackTrace();
+		}
+	}
+	
+	public void setBorderWidthBottom(Integer borderWidth) {
+		cell.setBorderWidthBottom(borderWidth);
+	}
+	
+	public void setBorderWidthBottom(String width) {
+		try {
+			setBorderWidthBottom(Integer.parseInt(width));
 		}catch (NumberFormatException nfe) {
 			nfe.printStackTrace();
 		}

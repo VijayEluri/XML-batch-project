@@ -1,6 +1,6 @@
 package com.browsexml.core;
 
-public class XMLBuildException extends Exception {
+public class XMLBuildException extends RuntimeException {
 	 private static final long serialVersionUID = 71446761993856547L;
 	/**
 	 * @param args

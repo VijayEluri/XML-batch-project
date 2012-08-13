@@ -4,7 +4,9 @@ import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
 import com.itextpdf.text.Document;
 
-public abstract class ReportObject extends XmlObject {	
+import edu.bxml.io.FilterAJ;
+
+public abstract class ReportObject extends FilterAJ {	
 	protected Document document = null;
 	
 	public Document getDocument() {

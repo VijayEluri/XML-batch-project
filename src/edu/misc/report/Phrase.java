@@ -1,19 +1,23 @@
 package edu.misc.report;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
 import com.javalobby.tnt.annotation.attribute;
-import com.itextpdf.text.Chunk;
 
 
 public class Phrase extends ReportObject {
 	private static Log log = LogFactory.getLog(Phrase.class);
-		private com.itextpdf.text.Phrase phrase = new com.itextpdf.text.Phrase();
+		private com.itextpdf.text.Phrase phrase;
 		float fltLeading = 0;
 
 	String text = null;
+	private String font;
+	private List<Chunk> chunks = new ArrayList<Chunk>();
 	
 	@Override
 	public void check() throws XMLBuildException {
@@ -22,7 +26,6 @@ public class Phrase extends ReportObject {
 	@attribute(value = "", required = false)
 	public void setLeading(Float leading) {
 		fltLeading = leading;
-		phrase.setLeading(fltLeading);
 	}
 	public void setLeading(String leading) {
 		try {
@@ -45,10 +48,9 @@ public class Phrase extends ReportObject {
 	}
 
 	public void setFont(String strFont) {
-		Font font = (Font) this.getSymbolTable().get(strFont);
-		log.debug("set font(" + strFont + "  size: " + font.getFont().getSize());
-		phrase.setFont(font.getFont());
+		this.font = strFont;
 	}
+	
 	
 	public void addField(Field field) {
 		
@@ -62,7 +64,27 @@ public class Phrase extends ReportObject {
 	 * Called after complete parsing of XML document to evaluate the document.
 	 */
 	public void execute() {
-		
+		phrase = new com.itextpdf.text.Phrase();
+		phrase.setLeading(fltLeading);
+		String text = getValue();
+		log.debug("phrase text = " + text);
+		if (text == null) {
+			text = "";
+		}
+		Font font = (Font) this.getSymbolTable().get(this.font);
+		if (font == null) {
+			log.debug("Font '" + this.font + "' not found in environment");
+		}
+		else 
+			phrase.setFont(font.getFont());
+		log.debug("st = " + getSymbolTable());
+		log.debug("phrase execute text = " +text);
+		new Exception().printStackTrace();
+		phrase.add(new com.itextpdf.text.Chunk(text));
+		for (Chunk chunk: chunks) {
+			chunk.execute();
+			phrase.add(chunk.getChunk());
+		}
 	}
 	
 	/**
@@ -72,7 +94,10 @@ public class Phrase extends ReportObject {
 
 		if (text == null) 
 			return;
-		this.text = text.trim();
-		phrase.add(new Chunk(text));
+		setValue(text.trim());
+	}
+	
+	public void addChunk(Chunk chunk) {
+		chunks.add(chunk);
 	}
 }
