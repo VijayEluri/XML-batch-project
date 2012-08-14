@@ -45,7 +45,9 @@ public class TemplateParser {
 		StringBuffer ret = new StringBuffer();
 		String line = null;
 		Boolean newlines = true;
+		log.debug("template file is " + templatePath);
 		for (line = reader.readLine(); line != null;line = reader.readLine()) {
+			log.debug("raw line = " + line);
 			if (line.startsWith("#nonewline")) {
 				newlines = false;
 				continue;
@@ -55,6 +57,7 @@ public class TemplateParser {
 				continue;
 			}
 			if (line.startsWith("#for")) {
+				int substring = 0;
 				Matcher matcher = variableReplacePattern.getPattern().matcher(line);
 				if (matcher.find()) {
 					Map<String, Map<String, String>> variable = (Map<String, Map<String, String>>) env.get(matcher.group(1));
@@ -63,8 +66,20 @@ public class TemplateParser {
 					}
 					List<String> lines = new ArrayList<String>();
 					for (line = reader.readLine(); line != null && !line.startsWith("#end for");line = reader.readLine()) {
+						log.debug("raw line 2 = " + line);
 						lines.add(line);
 					}
+					if (line.startsWith("#end for")) {
+						String[] values = line.substring(8).trim().split(" +");
+						if (values.length == 2 && values[0].equals("substring")) {
+							try {
+								substring = Integer.parseInt(values[1]);
+							} catch (NumberFormatException e) {
+								e.printStackTrace();
+							}
+						}
+					}
+					StringBuffer totalLine = new StringBuffer();
 					for (Map.Entry<String, Map<String, String>>entry: variable.entrySet()) {
 						Map<String, Object> env1 = env;
 						log.debug("EntryHashMapValue =  " + entry.getValue());
@@ -75,23 +90,30 @@ public class TemplateParser {
 						env1.put("Key", Character.toUpperCase(key.charAt(0)) + key.substring(1));
 						env1.putAll(entry.getValue());
 		
+						StringBuffer forLine = new StringBuffer("");
 						for (String line1: lines) {
 							log.debug("replace '" + line1 + "'   env = " + env1);
 							String newLine = replaceVariables(line1, env1);
 							System.err.println("newLine = " + newLine);
-							ret.append(newLine);
+							forLine.append(newLine);
 							if (newlines)
-								ret.append("\n");
+								forLine.append("\n");
 						}
+						log.debug("FOR LINE = '" + forLine + "'");
+						totalLine.append(forLine);
 					}
+					ret.append(totalLine.substring(substring));
 				}
 			}
-			line = replaceVariables(line, env);
-			System.err.println("LINE: " + line);
-			if (line != null && !line.startsWith("#"))
-				ret.append(line);
-				if (newlines)
-					ret.append("\n");
+			else {
+				log.debug("LINE: " + line);
+				if (line != null && !line.startsWith("#")) {
+					line = replaceVariables(line, env);
+					ret.append(line);
+					if (newlines)
+						ret.append("\n");
+				}
+			}
 		}
 		return ret.toString();
 	}

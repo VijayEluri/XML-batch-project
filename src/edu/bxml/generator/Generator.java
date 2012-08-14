@@ -10,6 +10,9 @@ import java.util.Stack;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.ToolFactory;
+import org.eclipse.jdt.core.compiler.IProblem;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTParser;
@@ -19,6 +22,9 @@ import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
+import org.eclipse.jdt.core.formatter.CodeFormatter;
+import org.eclipse.jdt.core.formatter.DefaultCodeFormatterConstants;
+import org.eclipse.jdt.internal.formatter.DefaultCodeFormatter;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.text.edits.MalformedTreeException;
@@ -44,7 +50,16 @@ public class Generator extends FilterAJ {
 	String match = ".*.java";
 	String basename;
 	XmlEditor xmlEditor;
+	String compilerVersion = "1.5";
 	
+	public String getCompilerVersion() {
+		return compilerVersion;
+	}
+
+	public void setCompilerVersion(String compilerVersion) {
+		this.compilerVersion = compilerVersion;
+	}
+
 	public String getGeneratedDir() {
 		return generatedDir;
 	}
@@ -167,19 +182,27 @@ public class Generator extends FilterAJ {
 	
 	public void editExistingFile(File existingFile, File templateFile, Map<String, Object> env) {
 		log.debug("Edit Existing file = " + existingFile);
-		Map<String, Object> x = getDocument(existingFile, null);
-		Document existingDocument = (Document) x.get("document");
-		CompilationUnit existingCU = (CompilationUnit) x.get("cu");
+		Map<String, Object> exiting = getDocument(existingFile, null);
+		Document existingDocument = (Document) exiting.get("document");
+		CompilationUnit existingCU = (CompilationUnit) exiting.get("cu");
 		AST existingAst = existingCU.getAST();
 		ASTRewrite rewriter = ASTRewrite.create(existingAst);
 		TypeDeclaration existingTypes = (TypeDeclaration) existingCU.types().get(0);
 		
 		findGenerated(existingCU, existingAst, rewriter, /*remove*/true, /*copy*/false);
 		
-		x = getDocument(templateFile, env);
-		Document templateDocument = (Document) x.get("document");
-		CompilationUnit templateCU = (CompilationUnit) x.get("cu");
+		log.debug("Check Template file = " + templateFile);
+		Map<String, Object> temp = getDocument(templateFile, env);
+		Document templateDocument = (Document) temp.get("document");
+		CompilationUnit templateCU = (CompilationUnit) temp.get("cu");
 		AST templateAst = templateCU.getAST();
+		if (templateCU.getProblems().length > 0) {
+			log.debug(temp.get("source"));
+
+			for (IProblem x : templateCU.getProblems()) {
+				log.info("PARSE*** " + x.getOriginatingFileName() + ":" + x.getSourceLineNumber() + "  " + x.getMessage());
+			}
+		}
 		ASTRewrite templateRewriter = ASTRewrite.create(templateAst);
 		
 		Stack stack = findGenerated(templateCU, templateAst, templateRewriter, /*remove*/false, /*copy*/true);
@@ -189,9 +212,10 @@ public class Generator extends FilterAJ {
 		 while (stack.size() > 0) {
 			 lrw.insertLast((ASTNode) stack.pop(), null);
 		 }
-		
+			
+		 
 		 TextEdit edits = rewriter.rewriteAST(existingDocument, null);
-		 System.err.println("edits = " + edits);
+		 log.debug("edits = " + edits);
 			UndoEdit undo = null;
 			 try {
 			     undo = edits.apply(existingDocument);
@@ -201,6 +225,45 @@ public class Generator extends FilterAJ {
 			     e.printStackTrace();
 			 }
 			 
+			 
+			 Map options = DefaultCodeFormatterConstants.getEclipseDefaultSettings();
+				// initialize the compiler settings to be able to format 1.5 code
+				options.put(JavaCore.COMPILER_COMPLIANCE, JavaCore.VERSION_1_5);
+				options.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, JavaCore.VERSION_1_5);
+				options.put(JavaCore.COMPILER_SOURCE, JavaCore.VERSION_1_5);
+				
+				// change the option to wrap each enum constant on a new line
+				options.put(
+					DefaultCodeFormatterConstants.FORMATTER_ALIGNMENT_FOR_ENUM_CONSTANTS,
+					DefaultCodeFormatterConstants.createAlignmentValue(
+						true,
+						DefaultCodeFormatterConstants.WRAP_ONE_PER_LINE,
+						DefaultCodeFormatterConstants.INDENT_ON_COLUMN));
+				
+				// instanciate the default code formatter with the given options
+				final CodeFormatter formatter = ToolFactory.createCodeFormatter(options);
+			 //
+				//CodeFormatter formatter = new DefaultCodeFormatter();
+			 
+			 //edits = cf.format(CodeFormatter.K_COMPILATION_UNIT, existingDocument.get(), 0,existingDocument.getLength(),0,null);
+				final TextEdit edit = formatter.format(
+						CodeFormatter.K_COMPILATION_UNIT, // format a compilation unit
+						existingDocument.get(), // source to format
+						0, // starting position
+						existingDocument.get().length(), // length
+						0, // initial indentation
+						System.getProperty("line.separator") // line separator
+					);
+			
+				try {
+					edit.apply(existingDocument);
+				} catch (MalformedTreeException e) {
+					e.printStackTrace();
+				} catch (BadLocationException e) {
+					e.printStackTrace();
+				}
+
+
 		printFile(existingFile, existingDocument);
 	}
 	
@@ -244,10 +307,12 @@ public class Generator extends FilterAJ {
 							 if (marker.getTypeName().getFullyQualifiedName().equals("Generated")) {
 								 if (copy) {
 									 MethodDeclaration dup = (MethodDeclaration) ASTNode.copySubtree(ast, meth);
-									 log.debug("remove " + meth);
+									 log.debug("copy " + meth.toString());
+									 log.debug("dup " + dup.toString());
 									 stack.push(dup);
 								 }
 								 if (remove) {
+									 log.debug("remove " + meth);
 									 lrw.remove(meth, null);
 								 }
 							 }
@@ -266,6 +331,7 @@ public class Generator extends FilterAJ {
 	public Map<String, Object> getDocument(File file, Map<String, Object> env) {
 		ASTParser parser = ASTParser.newParser(AST.JLS3);
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
+
 		String sourceString = null;
 		try {
 			log.debug("source = " + file.getAbsolutePath());
@@ -274,12 +340,23 @@ public class Generator extends FilterAJ {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+				 
 		Document document = new Document(sourceString);
+
 		parser.setSource(document.get().toCharArray());
+
+		
+		Map<String, String> options = JavaCore.getOptions();
+		JavaCore.setComplianceOptions(compilerVersion /*JavaCore.VERSION_1_5*/, options);
+		parser.setCompilerOptions(options);
+		
 		CompilationUnit compilationUnit = (CompilationUnit) parser.createAST(null);
+		
+		
 		Map<String, Object> ret = new HashMap<String, Object>();
 		ret.put("document", document);
 		ret.put("cu", compilationUnit);
+		ret.put("source", sourceString);
 		return ret;
 	}
 }
