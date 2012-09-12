@@ -14,14 +14,15 @@ import org.apache.commons.logging.LogFactory;
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
 import com.browsexml.core.XmlParser;
-//import com.bxml.IoFilter;
 import com.novell.ldap.LDAPAttribute;
 import com.novell.ldap.LDAPConnection;
 import com.novell.ldap.LDAPEntry;
 import com.novell.ldap.LDAPException;
 import com.novell.ldap.LDAPSearchResults;
 
-public class Ldap extends IoFilter {
+import edu.bxml.io.Filter;
+
+public class Ldap extends Filter {
 	private static Log log = LogFactory.getLog(Ldap.class);
 	File dir = null;
 	File toDir = null;
