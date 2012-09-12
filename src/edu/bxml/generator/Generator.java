@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -24,7 +25,6 @@ import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
 import org.eclipse.jdt.core.dom.rewrite.ListRewrite;
 import org.eclipse.jdt.core.formatter.CodeFormatter;
 import org.eclipse.jdt.core.formatter.DefaultCodeFormatterConstants;
-import org.eclipse.jdt.internal.formatter.DefaultCodeFormatter;
 import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.Document;
 import org.eclipse.text.edits.MalformedTreeException;
@@ -51,7 +51,16 @@ public class Generator extends FilterAJ {
 	String basename;
 	XmlEditor xmlEditor;
 	String compilerVersion = "1.5";
+	String workingPerson;
 	
+	public String getWorkingPerson() {
+		return workingPerson;
+	}
+
+	public void setWorkingPerson(String workingPerson) {
+		this.workingPerson = workingPerson;
+	}
+
 	public String getCompilerVersion() {
 		return compilerVersion;
 	}
@@ -104,20 +113,103 @@ public class Generator extends FilterAJ {
 		
 		env.put("basename", basename);
 		env.put("propername", propername);
+		env.put("workingPerson", workingPerson);
+		Filter firstFilter = this.analyzer.filters.get(0);
+		env.put("searchText", firstFilter.getSearchText());
+		
+		SqlAnalyzer.translateJavaToGui(firstFilter.getSearchTextType(), firstFilter.getSearchText(), env, "guiSearchText");
+		
+		log.debug("search text = " + env.get("searchText"));	
 		
 		log.debug("generator where variables = " + analyzer.getWhereVariables());
 		
+		Map<String, Map<String, String>> where = analyzer.getWhereVariables();
 		env.put("whereVariables", analyzer.getWhereVariables());
 		env.put("fromClause", analyzer.getFromclause().get());
 		env.put("orderByClause", analyzer.getOrderbyclause().get());
 		env.put("selectClause", analyzer.getSelectclause().get());
+		for (Filter filter: analyzer.getFilters()) {
+			LinkedHashMap<String, Map<String, String>> selectList = SqlAnalyzer.getSelectvariables().get();
+			LinkedHashMap<String, Map<String, String>> filterList = new LinkedHashMap<String, Map<String, String>>();
+			for (Interface i:filter.getInterfaces()) {
+				Map<String, String> fieldMap = selectList.get(i.getName());
+				if (fieldMap == null) {
+					fieldMap = new HashMap<String, String>();
+				}
+				Field f = i.getFields().get(0);
+				Map<String, String> subMap = selectList.get(f.getFieldName());
+				String jdbcType = SqlAnalyzer.getJdbcType(subMap.get("jdbcKey"));
+				log.debug("Filter name = " + i.getName() + "  jdbcType = " + jdbcType);
+				
+		    	fieldMap.put("jdbcType", jdbcType);
+		    	
+		    	
+		    	String javaType = SqlAnalyzer.translateJdbcToJava(jdbcType);	
+		    	fieldMap.put("javaType", javaType);
+		    	
+		    	fieldMap.put("width", i.getWidth());
+		    	fieldMap.put("label", i.getLabel());
+		    	
+		    	String javaName = i.getName();
+				
+		    	SqlAnalyzer.translateJavaToGui(javaType, javaName, fieldMap);
+	
+				filterList.put(i.getName(), fieldMap);
+				log.debug("filter put " + i.getName() + "   fieldMap = " + fieldMap);
+				
+				log.debug("filter write to whereVariables");
+				for (Field ff: i.getFields()) {
+					Map<String, String> fieldVars = where.get(ff.getFieldName());
+					Map<String, String> filterVars = filter.getFilterName(ff.getFieldName());
+					log.debug("fieldVars = " + fieldVars);
+					log.debug("filterVars = " + filterVars);
+					fieldVars.putAll(filterVars);
+					fieldVars.put("filterGuiName", fieldMap.get("guiName"));
+				}
+			}
+			
+			env.put(filter.getName(), filterList);
+			log.debug("filter size = " + ((LinkedHashMap<String, Map<String, String>>)env.get("filter")).size());
+		}
+		log.debug("filter size = " + ((LinkedHashMap<String, Map<String, String>>)env.get("filter")).size());
+		for (Select select: analyzer.getSelects()) {
+			//env.put(select.getName(), select);
+			LinkedHashMap<String, Map<String, String>> selectList = SqlAnalyzer.getSelectvariables().get();
+			if (selectList == null) {
+				selectList = new LinkedHashMap<String, Map<String, String>>();
+				SqlAnalyzer.getSelectvariables().set(selectList);
+			}
+			
+			log.debug("SELECT FOR");
+			for (Field field: select.getFields()) {
+				log.debug("filed info for '" + field.getFieldName() + "'");
+				Map<String, String> fieldMap = selectList.get(field.getFieldName());
+				if (fieldMap == null) {
+					fieldMap = new HashMap<String, String>();
+					log.error(field.getFieldName() + " not found in query");
+				}
+		    	
+				String jdbcType = SqlAnalyzer.getJdbcType(fieldMap.get("jdbcKey"));
+		    	fieldMap.put("jdbcType", jdbcType);
+		    	log.debug("jdbcType for "  + field.getFieldName() + " is " + jdbcType);
+		    	String javaType = SqlAnalyzer.translateJdbcToJava(jdbcType);	
+		    	fieldMap.put("javaType", javaType);
+		    	log.debug("javaType for "  + field.getFieldName() + " is " + javaType);
+		    
+				
+				fieldMap.putAll(field.getFields());
+				
+				selectList.put(field.getFieldName(), fieldMap);
+			}
+			env.put(select.getName(), selectList);
+		}
 		
 		Find find = new Find() {
 			@Override
 			void process(File file, Map env) {
 				log.debug("found " + file);
 				try {
-					if (file.getCanonicalPath().endsWith("xml")) {
+					if (xmlEditor != null && file.getCanonicalPath().endsWith("xml")) {
 						log.debug("set xmlEditor basename = " + basename);
 						xmlEditor.setXmlFile(file);
 						xmlEditor.setEnv(env);
@@ -156,15 +248,14 @@ public class Generator extends FilterAJ {
 		File fileName = new File(generatedDir + "/" + packagePath, env.get("propername") + packageFilePath.substring(packageFilePath.lastIndexOf('/') + 1));
 		log.debug("PACKAGE PATH = " + packagePath);
 		Boolean exists = fileName.exists();
+		try {
+			log.debug("destination PATH = " + fileName.getCanonicalPath() + "   exists = " + exists);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		if (exists) {
-			try {
-				log.debug("destination PATH = " + fileName.getCanonicalPath() + "   exists = " + exists);
-				editExistingFile(fileName, file, env);
-				return;
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			editExistingFile(fileName, file, env);
+			return;
 		}
 		
 		
@@ -187,6 +278,10 @@ public class Generator extends FilterAJ {
 		CompilationUnit existingCU = (CompilationUnit) exiting.get("cu");
 		AST existingAst = existingCU.getAST();
 		ASTRewrite rewriter = ASTRewrite.create(existingAst);
+		log.debug("template File = " + templateFile);
+		log.debug("existing File = " + existingFile);
+		//if (existingCU.types().size() == 0)
+			//return;
 		TypeDeclaration existingTypes = (TypeDeclaration) existingCU.types().get(0);
 		
 		findGenerated(existingCU, existingAst, rewriter, /*remove*/true, /*copy*/false);
@@ -200,7 +295,7 @@ public class Generator extends FilterAJ {
 			log.debug(temp.get("source"));
 
 			for (IProblem x : templateCU.getProblems()) {
-				log.info("PARSE*** " + x.getOriginatingFileName() + ":" + x.getSourceLineNumber() + "  " + x.getMessage());
+				log.error("PARSE*** " + templateFile + ":" + x.getSourceLineNumber() + "  " + x.getMessage());
 			}
 		}
 		ASTRewrite templateRewriter = ASTRewrite.create(templateAst);

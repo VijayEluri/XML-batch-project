@@ -51,7 +51,7 @@ public class Parameter extends XmlObject {
 	 *  Get the value
 	 */
 	@attribute(value = "", required = true)
-	public String getValue() {
+	public Object getValue() {
 		if (type == null || type != String.class) {
 			if (object == null)
 				object = (XmlObject)getSymbolTable().get(value);

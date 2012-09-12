@@ -22,7 +22,11 @@
 
 package net.sf.jsqlparser.expression;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import edu.bxml.generator.SqlAnalyzer;
+import edu.bxml.generator.TemplateParser;
 
 
 
@@ -31,6 +35,7 @@ import edu.bxml.generator.SqlAnalyzer;
  * which are in turn expressions. 
  */
 public abstract class BinaryExpression implements Expression {
+	private static Log log = LogFactory.getLog(BinaryExpression.class);
 	private Expression leftExpression;
 	private Expression rightExpression;
 	private boolean not = false;
@@ -68,17 +73,18 @@ public abstract class BinaryExpression implements Expression {
 		Expression right = getRightExpression();
 		String strLeft = left.toString();
 		String strRight = right.toString();
-		boolean leftConst = false;
-		boolean rightConst = false;
 		SqlAnalyzer x;
+		boolean leftConst = left instanceof StringValue || left instanceof LongValue;
+		boolean rightConst = right instanceof StringValue  || right instanceof LongValue;
 		if (SqlAnalyzer.isVariable()) {
-			if (left instanceof StringValue || left instanceof LongValue) {
-				leftConst = true;
-				strLeft = "#{" + SqlAnalyzer.camelCase(strRight) + ",jdbcType=" + SqlAnalyzer.getJdbcType(strLeft) + "}";
+			if (leftConst && !rightConst) {
+				log.debug("LEFT is a const right variable");
+				strLeft = "#{" + SqlAnalyzer.camelCase(strRight, strLeft) + ",jdbcType=" + SqlAnalyzer.getJdbcType(strRight) + "}";
 			}
-			if (right instanceof StringValue  || right instanceof LongValue) {
-				rightConst = true;
-				strRight = "#{" + SqlAnalyzer.camelCase(strLeft) + ",jdbcType=" + SqlAnalyzer.getJdbcType(strLeft) + "}";
+			if (rightConst && !leftConst) {
+				
+				log.debug("RIGHT is a const right variable");
+				strRight = "#{" + SqlAnalyzer.camelCase(strLeft, strRight) + ",jdbcType=" + SqlAnalyzer.getJdbcType(strLeft) + "}";
 			}
 		}
 		if (leftConst && rightConst && SqlAnalyzer.isVariable()) 

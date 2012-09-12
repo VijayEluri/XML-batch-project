@@ -150,6 +150,16 @@ public class XmlEditor  extends FilterAJ {
 		}
 		transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+		
+		if (doc.getDoctype() != null) {
+		    String value = doc.getDoctype().getPublicId();
+		    String system = doc.getDoctype().getSystemId();
+		    log.debug("public id = " + value);
+		    log.debug("system id = " + system);
+		    transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, value);
+		    transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, system);
+		}
+		
 		DOMSource domSource = new DOMSource(doc);
 		StreamResult result = new StreamResult(destFile);
 		try {
