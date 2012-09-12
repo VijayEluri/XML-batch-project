@@ -86,6 +86,7 @@ public abstract class XmlObject {
 	 */
 	public abstract void execute() throws XMLBuildException;
 	public void setFromTextContent(String text) throws XMLBuildException {
+		log.debug("set from text Context " + this.getName() + " to " + text);
 		this.value = text;
 	}
 	
@@ -183,6 +184,11 @@ public abstract class XmlObject {
 	 */
 	public static String proper(String name) {
 		return name.substring(0,1).toLowerCase() + 
+			name.substring(1);
+	}
+	
+	public static String uname(String name) {
+		return name.substring(0,1).toUpperCase() + 
 			name.substring(1);
 	}
 	

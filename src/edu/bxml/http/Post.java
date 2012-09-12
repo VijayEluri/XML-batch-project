@@ -116,7 +116,7 @@ public class Post extends XmlObject {
 			response = post.getResponseBody();
 			post.releaseConnection();
 		} catch (HttpException e) {
-			e.printStackTrace();
+			log.error(e.getStackTrace());
 			throw new XMLBuildException(e.getMessage());
 		} catch (IOException e) {
 			throw new XMLBuildException(e.getMessage());
@@ -135,9 +135,9 @@ public class Post extends XmlObject {
 				if (print) 
 					log.debug("RESPNSE: " + new String(response));
 				parser.setSource(url);
-				parser.parse(response);
+				parser.parse(response, null);
 			} catch (Exception e) {
-				e.printStackTrace();
+				log.error(e.getStackTrace());
 				if (e.getMessage().endsWith(".Html")) {
 					//FIXME: this interface stuff should not be part of GET
 					//new Browser("text/html", new String(response));

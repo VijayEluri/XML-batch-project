@@ -8,8 +8,10 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,6 +19,7 @@ import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.operators.conditional.AndExpression;
 import net.sf.jsqlparser.parser.CCJSqlParserManager;
+import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.select.Join;
 import net.sf.jsqlparser.statement.select.PlainSelect;
@@ -34,16 +37,27 @@ import com.javalobby.tnt.annotation.attribute;
 import edu.bxml.aj.format.Query;
 import edu.bxml.format.Sql;
 import edu.bxml.io.FilterAJ;
+
 /**
  * Specify the query that needs formatting
+ * 
  * @author ritcheyg
- *
+ * 
  */
 @attribute(value = "", required = true)
 public class SqlAnalyzer extends FilterAJ {
 	private static Log log = LogFactory.getLog(SqlAnalyzer.class);
-	
+
 	String queryName;
+	static String workingPerson;
+
+	public String getWorkingPerson() {
+		return workingPerson;
+	}
+
+	public void setWorkingPerson(String workingPerson) {
+		this.workingPerson = workingPerson;
+	}
 
 	public String getQueryName() {
 		return queryName;
@@ -52,12 +66,13 @@ public class SqlAnalyzer extends FilterAJ {
 	public void setQueryName(String queryName) {
 		this.queryName = queryName;
 	}
-	
+
 	static public final ThreadLocal<Map<String, String>> aliases = new ThreadLocal();
 	static public final ThreadLocal<List<Table>> tables = new ThreadLocal();
 	static public final ThreadLocal<Map<String, Map>> mapTables = new ThreadLocal();
 	static public final ThreadLocal<Boolean> variable = new ThreadLocal();
-	static public final ThreadLocal<Map<String, Map<String, String>>> whereVariables = new ThreadLocal();
+	static public final ThreadLocal<LinkedHashMap<String, Map<String, String>>> whereVariables = new ThreadLocal();
+	static public final ThreadLocal<LinkedHashMap<String, Map<String, String>>> selectVariables = new ThreadLocal();
 	static public final ThreadLocal<String> fromClause = new ThreadLocal();
 	static public final ThreadLocal<String> selectClause = new ThreadLocal();
 	static public final ThreadLocal<String> orderByClause = new ThreadLocal();
@@ -102,30 +117,31 @@ public class SqlAnalyzer extends FilterAJ {
 		return whereVariables.get();
 	}
 
-	public void setWhereVariables(Map<String, Map<String, String>> whereVariables) {
+	public void setWhereVariables(
+			LinkedHashMap<String, Map<String, String>> whereVariables) {
 		this.whereVariables.set(whereVariables);
 	}
 
 	@Override
-	public void execute() throws XMLBuildException  {
+	public void execute() throws XMLBuildException {
 		log.debug("analyizer...");
 		variable.set(false);
 		mapTables.set(new HashMap<String, Map>());
 		tables.set(new ArrayList<Table>());
-		aliases.set( new HashMap<String, String>());
-		whereVariables.set(new HashMap<String, Map<String, String>>());
+		aliases.set(new HashMap<String, String>());
+		whereVariables.set(new LinkedHashMap<String, Map<String, String>>());
 		CCJSqlParserManager parserManager = new CCJSqlParserManager();
 		Generator generator = getAncestorOfType(Generator.class);
 		Query query = getAncestorOfType(Query.class);
 		Sql sql = query.getSql(queryName);
 		PlainSelect select = parse(parserManager, sql);
 		log.debug("analyzer where variables = " + whereVariables.get());
-		
+
 		selectClause.set(getSelectItems(select.getSelectItems()));
 
 		orderByClause.set(getOrderBy(select.getOrderByElements()));
 	}
-	
+
 	public static ThreadLocal<String> getSelectclause() {
 		return selectClause;
 	}
@@ -138,19 +154,23 @@ public class SqlAnalyzer extends FilterAJ {
 		Select select = null;
 
 		try {
-			select = (Select) parserManager.parse(new StringReader(sql.getQuery()));
+			select = (Select) parserManager.parse(new StringReader(sql
+					.getQuery()));
 		} catch (JSQLParserException e) {
 			e.printStackTrace();
 			return null;
 		}
-		
-		//sql.getRawQuery() to see without variable substitution
+
+		// sql.getRawQuery() to see without variable substitution
 		ResultSetMetaData types = getTypes(sql, null);
 		log.debug("sql = " + select.toString());
 		try {
-			for (int i = 1; i < types.getColumnCount()+1; i++) {
-				log.debug("column " + types.getTableName(i) + "." + types.getColumnName(i) + " as " + types.getColumnLabel(i) + "   " + types.getColumnTypeName(i));
-				
+			for (int i = 1; i < types.getColumnCount() + 1; i++) {
+				log.debug("column " + types.getTableName(i) + "."
+						+ types.getColumnName(i) + " as "
+						+ types.getColumnLabel(i) + "   "
+						+ types.getColumnTypeName(i));
+
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -164,54 +184,74 @@ public class SqlAnalyzer extends FilterAJ {
 		printMapper(sql, plain);
 		return plain;
 	}
-	
 
 	public void printMapper(Sql sql, PlainSelect plain) {
+		for (Object s : plain.getSelectItems()) {
+			log.debug("select item " + s.getClass().getCanonicalName());
+			SelectExpressionItem item = (SelectExpressionItem) s;
+			log.debug("expression = "
+					+ item.getExpression().getClass().getName());
+			Column c = (Column) item.getExpression();
+			log.debug("column = " + c.getWholeColumnName() + ":"
+					+ c.getColumnName() + "   table = " + c.getTable());
+			camelCase(c);
+
+		}
 		StringBuffer fromClause = new StringBuffer();
-		log.debug("plain from class = " + plain.getFromItem().getClass().getName());
+		log.debug("plain from class = "
+				+ plain.getFromItem().getClass().getName());
 		System.out.println("<sql id=\"PagedListBody\">");
 
 		Table table = (Table) plain.getFromItem();
-		
+
 		List<Table> tables = this.tables.get();
 		Map<String, String> aliases = this.aliases.get();
-		
+
 		tables.add(table);
 		fromClause.append("from " + table);
-	     System.out.println("from " + table);
- 
+		System.out.println("from " + table);
+
 		if (table.getAlias() != null) {
 			aliases.put(table.getAlias(), table.getName());
 		}
-		log.debug("table is " + table.getName() + "   is also " + table.getAlias() + "  whole = " + table.getWholeTableName());
+		log.debug("table is " + table.getName() + "   is also "
+				+ table.getAlias() + "  whole = " + table.getWholeTableName());
 		List<Join> joins = plain.getJoins();
-		for (Join join: joins) {
-			Table right = (Table) join.getRightItem();
-			tables.add(right);
-			if (right.getAlias() != null) {
-				aliases.put(right.getAlias(), right.getName());
+		if (joins != null) {
+			for (Join join : joins) {
+				Table right = (Table) join.getRightItem();
+				tables.add(right);
+				if (right.getAlias() != null) {
+					aliases.put(right.getAlias(), right.getName());
+				}
+
+				log.debug("join table is " + right.getName() + "  is also "
+						+ right.getAlias() + "  whole = "
+						+ right.getWholeTableName());
 			}
-			
-			log.debug("join table is " + right.getName() + "  is also " + right.getAlias() + "  whole = " + right.getWholeTableName());
-		}
 			List<Join> joinList = plain.getJoins();
-			for (Join join: joinList) {
+			for (Join join : joinList) {
 				fromClause.append(" ").append(join);
 				System.out.println(join);
 			}
-		 System.out.println(" where (1=1) ");
-		 System.out.println("</sql>");
-		 
-		for (Table t:tables) {
+		}
+		System.out.println(" where (1=1) ");
+		System.out.println("</sql>");
+
+		for (Table t : tables) {
 			String query = "select * from " + t.getName() + " where (1=0)";
 			log.debug("TABLE TYPES :");
 			ResultSetMetaData types = getTypes(sql, query);
 			// columns is name, type
 			Map<String, String> columns = new HashMap<String, String>();
 			try {
-				for (int i = 1; i < types.getColumnCount()+1; i++) {
-					log.debug("column " + types.getTableName(i) + "." + types.getColumnName(i) + " as " + types.getColumnLabel(i) + "   " + types.getColumnTypeName(i));
-					columns.put(types.getColumnName(i), types.getColumnTypeName(i));
+				for (int i = 1; i < types.getColumnCount() + 1; i++) {
+					log.debug("column " + types.getTableName(i) + "."
+							+ types.getColumnName(i) + " as "
+							+ types.getColumnLabel(i) + "   "
+							+ types.getColumnTypeName(i));
+					columns.put(types.getColumnName(i),
+							types.getColumnTypeName(i));
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -221,7 +261,7 @@ public class SqlAnalyzer extends FilterAJ {
 		printWhere(plain.getWhere(), null, null);
 		this.fromClause.set(fromClause.toString());
 	}
-	
+
 	public static String translateJdbcToJava(String jdbc) {
 		if (jdbc.equals("INTEGER")) {
 			return "Integer";
@@ -237,37 +277,103 @@ public class SqlAnalyzer extends FilterAJ {
 		}
 		return null;
 	}
-	
-	static Pattern evalPattern = Pattern.compile("(\\S+)\\s*(\\S+)\\s*#\\{([^,]*),jdbcType=([^}]*)}");
+
+	public static void translateJavaToGui(String javaType, String javaName,
+			Map env) {
+		translateJavaToGui(javaType, javaName, env, null);
+	}
+	public static void translateJavaToGui(String javaType, String javaName,
+			Map env, String varName) {
+		String name = "guiName";
+		if (varName != null) {
+			name = varName;
+		}
+		env.put("baseGuiName", uname(javaName));
+		if (javaType.equals("String")) {
+			env.put("guiType", "TextBox");
+			env.put(name, "txt" + uname(javaName));
+		}
+		if (javaType.equals("Date")) {
+			env.put("guiType", "DateBox");
+			env.put(name, "dt" + uname(javaName));
+
+		}
+		if (javaType.equals("Boolean")) {
+			env.put("guiType", "CheckBox");
+			env.put(name, "ck" + uname(javaName));
+		}
+	}
+
+	static Pattern evalPattern = Pattern
+			.compile("(\\S+)\\s*(\\S+)\\s*#\\{([^,]*),jdbcType=([^}]*)}");
+
 	public static List<String> eval(String expression) {
 		log.debug("Expression = '" + expression + "'");
 		if (!expression.contains("#{"))
 			return null;
 		List<String> list = new ArrayList<String>();
-        
+
 		// 1 = dbName
 		// 2 = compare
 		// 3 = key
 		// 4 = jdbcType
-        Matcher matcher = evalPattern.matcher(expression);
-        
-        while (matcher.find()) {
-        	list.add(matcher.group(3));
-        	Map<String, String> env = new HashMap<String, String>();
-        	env.put("jdbcType", matcher.group(4));
-        	env.put("compare", matcher.group(2));
-        	env.put("jdbcKey", matcher.group(1));
-        	env.put("value", translateJdbcToJava(matcher.group(4)));
-        	env.put("key", matcher.group(3));
-        	whereVariables.get().put(matcher.group(3), env);
-        }
-        System.err.println("list = " + list);
+		Matcher matcher = evalPattern.matcher(expression);
+
+		while (matcher.find()) {
+			list.add(matcher.group(3));
+			Map<String, String> env = whereVariables.get()
+					.get(matcher.group(3));
+			if (env == null) {
+				env = new HashMap<String, String>();
+			}
+			env.put("jdbcType", matcher.group(4));
+			env.put("compare", matcher.group(2));
+			env.put("jdbcKey", matcher.group(1));
+			String javaType = translateJdbcToJava(matcher.group(4));
+			env.put("javaType", javaType);
+			String key = matcher.group(3);
+			env.put("key", key);
+			String interfaceType = "variable";
+			if (workingPerson != null && key != null
+					&& workingPerson.equals(key)) {
+				interfaceType = "person";
+			}
+			translateJavaToGui(javaType, key, env);
+
+			Set<String> s = constants.getItems();
+			log.debug("constants =  " + s);
+			log.debug("key = '" + key + "'");
+			if (key != null && s.contains(key)) {
+				interfaceType = "const";
+			}
+			env.put("interfaceType", interfaceType);
+			whereVariables.get().put(matcher.group(3), env);
+			String value = env.get("value");
+			if (javaType.equals("Boolean")) {
+				try {
+					Integer v = Integer.parseInt(value);
+					if (v == 0) {
+						env.put("value", "false");
+					} else {
+						env.put("value", "true");
+					}
+				} catch (NumberFormatException e) {
+					e.printStackTrace();
+				}
+			}
+			log.debug("WHERE Value for " + matcher.group(3) + " is "
+					+ env.get("value"));
+			log.debug("WHERE Value for " + matcher.group(3) + " is "
+					+ whereVariables.get().get(matcher.group(3)).get("value"));
+		}
+		System.err.println("list = " + list);
 		return list;
 	}
-	
+
 	public void printWhere(Expression where, Document doc, Element sql) {
 		variable.set(true);
-		System.err.println("MMM TOP where is a " + where.getClass().getName());
+		log.debug("where = " + where);
+		log.debug("MMM TOP where is a " + where.getClass().getName());
 		if (where instanceof AndExpression) {
 			AndExpression and = (AndExpression) where;
 			if (and.getLeftExpression() instanceof AndExpression) {
@@ -279,19 +385,20 @@ public class SqlAnalyzer extends FilterAJ {
 					if (vars != null) {
 						if (sql != null) {
 							Element ifElement = doc.createElement("if");
-							for (String var: vars) {
+							for (String var : vars) {
 								ifElement.setAttribute("test", var + "!=null");
 							}
-							ifElement.appendChild(doc.createTextNode(" AND " + left));
+							ifElement.appendChild(doc.createTextNode(" AND "
+									+ left));
 							sql.appendChild(ifElement);
 						}
 						System.out.print("<if ");
-						for (String var: vars) {
+						for (String var : vars) {
 							System.out.print("test=\"" + var + " != null\" ");
 						}
 						System.out.println(">");
 					}
-					System.out.println(" AND " + left );
+					System.out.println(" AND " + left);
 					if (vars != null) {
 						System.out.println("</if>");
 					}
@@ -306,19 +413,20 @@ public class SqlAnalyzer extends FilterAJ {
 					if (vars != null) {
 						if (sql != null) {
 							Element ifElement = doc.createElement("if");
-							for (String var: vars) {
+							for (String var : vars) {
 								ifElement.setAttribute("test", var + "!=null");
 							}
-							ifElement.appendChild(doc.createTextNode(" AND " + right));
+							ifElement.appendChild(doc.createTextNode(" AND "
+									+ right));
 							sql.appendChild(ifElement);
 						}
 						System.out.print("<if ");
-						for (String var: vars) {
+						for (String var : vars) {
 							System.out.print("test=\"" + var + " != null\" ");
 						}
 						System.out.println(">");
 					}
-					System.out.println(" AND " + right );
+					System.out.println(" AND " + right);
 					if (vars != null) {
 						System.out.println("</if>");
 					}
@@ -328,13 +436,12 @@ public class SqlAnalyzer extends FilterAJ {
 		}
 
 	}
-	
-	
+
 	public ResultSetMetaData getTypes(Sql sql, String query) {
 
-		if (query == null) 
+		if (query == null)
 			query = sql.getQuery();
-		
+
 		edu.bxml.format.Connection connection = sql.getConnection();
 		java.sql.Connection c = null;
 		try {
@@ -368,20 +475,27 @@ public class SqlAnalyzer extends FilterAJ {
 		}
 		return md;
 	}
-	
+
+	/**
+	 * Given a variable name from a query, look up the name in the query
+	 * metadata and return its database type
+	 * 
+	 * @param ex
+	 * @return
+	 */
 	static public String getJdbcType(String ex) {
+		log.debug("jdbcType for " + ex);
 		String ret = null;
 		String[] parts = ex.split("\\.");
 		if (parts.length == 1) {
 			String field = parts[0];
-			for (Map<String, String> mapTable: mapTables.get().values()) {
+			for (Map<String, String> mapTable : mapTables.get().values()) {
 				String type = filterType(mapTable.get(field));
 				if (type != null) {
 					return type.toUpperCase();
 				}
 			}
-		}
-		else {
+		} else {
 			log.debug("talbe name is  " + parts[0]);
 			log.debug("mapTables is  " + mapTables);
 			Map<String, String> mapTable = mapTables.get().get(parts[0]);
@@ -401,10 +515,10 @@ public class SqlAnalyzer extends FilterAJ {
 		}
 		return ret;
 	}
-	
+
 	/**
-	 * Find a literal dot (.) or underscore (_) character followed by any character and replace both with 
-	 * the second character's upper case value
+	 * Find a literal dot (.) or underscore (_) character followed by any
+	 * character and replace both with the second character's upper case value
 	 */
 	static BxmlPattern camelPattern = new BxmlPattern("[._](.)") {
 		@Override
@@ -412,15 +526,70 @@ public class SqlAnalyzer extends FilterAJ {
 			return match.get(1).toUpperCase();
 		}
 	};
-	
-	public static String camelCase(String name) {
-		return camelPattern.execute(name, null);
+
+	/**
+	 * Comes when analysing the where clause: called with a name and value from
+	 * the sql query
+	 * 
+	 * @param name
+	 * @param value
+	 * @return
+	 */
+	public static String camelCase(String toCamel, String value) {
+
+		String name = camelPattern.execute(toCamel, null);
+		log.debug("CAMEL name = " + name + "  value = " + value);
+		Map<String, String> env = null;
+		env = whereVariables.get().get(name);
+
+		if (env == null) {
+			env = new HashMap<String, String>();
+			whereVariables.get().put(name, env);
+		}
+		log.debug("name  =" + name + "    env = " + env);
+		// Database quotes converted to java quotes for strings
+		value = value.replaceAll("'", "\\\\\"");
+		env.put("value", value);
+		log.debug("camelCase value = " + value);
+		String interfaceType = "const";
+		log.debug("interfaceType = " + interfaceType);
+		env.put("interfaceType", interfaceType);
+		log.debug("WHERE Value for " + name + " is "
+				+ whereVariables.get().get(name).get("value"));
+		return name;
 	}
-	
+
+	public static String camelCase(Column column) {
+
+		String name = camelPattern.execute(column.getWholeColumnName(), null);
+		log.debug("CAMEL name = " + name);
+
+		LinkedHashMap<String, Map<String, String>> selectList = SqlAnalyzer
+				.getSelectvariables().get();
+		if (selectList == null) {
+			selectList = new LinkedHashMap<String, Map<String, String>>();
+			SqlAnalyzer.getSelectvariables().set(selectList);
+		}
+
+		Map<String, String> env = selectList.get(name);
+		if (env == null) {
+			env = new HashMap<String, String>();
+			selectList.put(name, env);
+		}
+		log.debug("name  =" + name + "    env = " + env);
+		// Database quotes converted to java quotes for strings
+		env.put("jdbcKey", column.getWholeColumnName());
+		return name;
+	}
+
+	public static ThreadLocal<LinkedHashMap<String, Map<String, String>>> getSelectvariables() {
+		return selectVariables;
+	}
+
 	public static String filterType(String type) {
 		log.debug("filter " + type);
-		
-		if (type == null) 
+
+		if (type == null)
 			return null;
 		type = type.toUpperCase();
 		if (type.equals("INT")) {
@@ -429,7 +598,7 @@ public class SqlAnalyzer extends FilterAJ {
 		}
 		return type;
 	}
-	
+
 	public String getSelectItems(List<SelectExpressionItem> list) {
 		StringBuffer linebuffer = new StringBuffer();
 		Iterator iterator = list.iterator();
@@ -448,5 +617,37 @@ public class SqlAnalyzer extends FilterAJ {
 			linebuffer.append(",").append(iterator.next().toString());
 		}
 		return "	order by " + linebuffer.toString().substring(1);
+	}
+
+	static Constants constants;
+
+	public void addConstants(Constants c) {
+		constants = c;
+	}
+
+	Concat concat;
+
+	public void addConcat(Concat c) {
+		concat = c;
+	}
+
+	List<edu.bxml.generator.Select> selects = new ArrayList<edu.bxml.generator.Select>();
+
+	public List<edu.bxml.generator.Select> getSelects() {
+		return selects;
+	}
+
+	List<edu.bxml.generator.Filter> filters = new ArrayList<edu.bxml.generator.Filter>();
+
+	public List<edu.bxml.generator.Filter> getFilters() {
+		return filters;
+	}
+
+	public void addFilter(edu.bxml.generator.Filter filter) {
+		filters.add(filter);
+	}
+
+	public void addSelect(edu.bxml.generator.Select s) {
+		selects.add(s);
 	}
 }

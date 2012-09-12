@@ -125,28 +125,28 @@ public class InstallCert extends XmlObject {
 		socket.setSoTimeout(10000);
 	} catch (KeyManagementException e1) {
 		// TODO Auto-generated catch block
-		e1.printStackTrace();
+		log.error(e1.getStackTrace());
 	} catch (FileNotFoundException e1) {
 		// TODO Auto-generated catch block
-		e1.printStackTrace();
+		log.error(e1.getStackTrace());
 	} catch (KeyStoreException e1) {
 		// TODO Auto-generated catch block
-		e1.printStackTrace();
+		log.error(e1.getStackTrace());
 	} catch (NoSuchAlgorithmException e1) {
 		// TODO Auto-generated catch block
-		e1.printStackTrace();
+		log.error(e1.getStackTrace());
 	} catch (CertificateException e1) {
 		// TODO Auto-generated catch block
-		e1.printStackTrace();
+		log.error(e1.getStackTrace());
 	} catch (UnknownHostException e1) {
 		// TODO Auto-generated catch block
-		e1.printStackTrace();
+		log.error(e1.getStackTrace());
 	} catch (SocketException e1) {
 		// TODO Auto-generated catch block
-		e1.printStackTrace();
+		log.error(e1.getStackTrace());
 	} catch (IOException e1) {
 		// TODO Auto-generated catch block
-		e1.printStackTrace();
+		log.error(e1.getStackTrace());
 	}
 	try {
 	    System.out.println("Starting SSL handshake...");
@@ -156,10 +156,10 @@ public class InstallCert extends XmlObject {
 	    System.out.println("No errors, certificate is already trusted");
 	} catch (SSLException e) {
 	    System.out.println();
-	    e.printStackTrace(System.out);
+	    log.error(e.getStackTrace());
 	} catch (IOException e) {
 	    System.out.println();
-	    e.printStackTrace(System.out);
+	    log.error(e.getStackTrace());
 	}
 	X509Certificate[] chain = tm.chain;
 	if (chain == null) {
@@ -180,7 +180,7 @@ public class InstallCert extends XmlObject {
 		md5 = MessageDigest.getInstance("MD5");
 	} catch (NoSuchAlgorithmException e1) {
 		// TODO Auto-generated catch block
-		e1.printStackTrace();
+		log.error(e1.getStackTrace());
 	}
 	for (int i = 0; i < chain.length; i++) {
 	    X509Certificate cert = chain[i];
@@ -194,7 +194,7 @@ public class InstallCert extends XmlObject {
 			System.out.println("   md5     " + toHexString(md5.digest()));
 		} catch (CertificateEncodingException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			log.error(e.getStackTrace());
 		}
 	    System.out.println();
 	}
@@ -205,7 +205,7 @@ public class InstallCert extends XmlObject {
 		line = reader.readLine().trim();
 	} catch (IOException e2) {
 		// TODO Auto-generated catch block
-		e2.printStackTrace();
+		log.error(e2.getStackTrace());
 	}*/
 	int k;
 	try {
@@ -221,7 +221,7 @@ public class InstallCert extends XmlObject {
 		ks.setCertificateEntry(alias, cert);
 	} catch (KeyStoreException e1) {
 		// TODO Auto-generated catch block
-		e1.printStackTrace();
+		log.error(e1.getStackTrace());
 	}
 
 	try {
@@ -230,19 +230,19 @@ public class InstallCert extends XmlObject {
 		out.close();
 	} catch (FileNotFoundException e) {
 		// TODO Auto-generated catch block
-		e.printStackTrace();
+		log.error(e.getStackTrace());
 	} catch (KeyStoreException e) {
 		// TODO Auto-generated catch block
-		e.printStackTrace();
+		log.error(e.getStackTrace());
 	} catch (NoSuchAlgorithmException e) {
 		// TODO Auto-generated catch block
-		e.printStackTrace();
+		log.error(e.getStackTrace());
 	} catch (CertificateException e) {
 		// TODO Auto-generated catch block
-		e.printStackTrace();
+		log.error(e.getStackTrace());
 	} catch (IOException e) {
 		// TODO Auto-generated catch block
-		e.printStackTrace();
+		log.error(e.getStackTrace());
 	}
 
 	System.out.println();

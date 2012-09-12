@@ -11,11 +11,11 @@ import org.apache.commons.httpclient.HttpException;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-//import org.eclipse.swt.SWT;
-//import org.eclipse.swt.SWTError;
-//import org.eclipse.swt.layout.FillLayout;
-//import org.eclipse.swt.widgets.Display;
-//import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTError;
+import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlParser;
@@ -23,9 +23,9 @@ import com.browsexml.core.XmlObject;
 import com.javalobby.tnt.annotation.attribute;
 import com.sun.org.apache.xerces.internal.xni.parser.XMLParseException;
 
-//import edu.bxml.swt.ControlObject;
-//import edu.bxml.swt.Data;
-//import edu.bxml.swt.Interface;
+import edu.bxml.swt.ControlObject;
+import edu.bxml.swt.Data;
+import edu.bxml.swt.Interface;
 
 /**
  * Get an http web page
@@ -53,8 +53,8 @@ public class Get extends XmlObject {
 	private String toTempFileSuffix = null;
 
 	private Vector<WebItem> webItems = new Vector<WebItem>();
-//	private Vector<Data> datum = new Vector<Data>();
-//	private Vector<Interface> interfaces = new Vector<Interface>();
+	private Vector<Data> datum = new Vector<Data>();
+	private Vector<Interface> interfaces = new Vector<Interface>();
 	private XmlParser f = null;
 
 	private byte[] response = null;
@@ -92,7 +92,7 @@ public class Get extends XmlObject {
 			log.debug("getting: " + url);
 			// keytool - genkey -keystore key.store -alias browse
 		} catch (RuntimeException e) {
-			e.printStackTrace();
+			log.error(e.getStackTrace());
 			throw new XMLBuildException(e.getMessage());
 		}
 		get.setFollowRedirects(followRedirects);
@@ -108,7 +108,7 @@ public class Get extends XmlObject {
 		} catch (HttpException e) {
 			throw new XMLBuildException(e.getMessage());
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error(e.getStackTrace());
 			throw new XMLBuildException("Connection refused: There appears to be a problem accessing " + url + ".  Make sure the web service is running!");
 		} catch (IllegalArgumentException e) {
 			return;//throw new XMLBuildException(e.getMessage());
@@ -121,7 +121,7 @@ public class Get extends XmlObject {
 				workFile = java.io.File.createTempFile(toTempFilePrefix, toTempFileSuffix);
 				file = workFile.getAbsolutePath();
 			} catch (IOException e) {
-				e.printStackTrace();
+				log.error(e.getStackTrace());
 			}
 		}
 		else if (file != null)
@@ -164,31 +164,31 @@ public class Get extends XmlObject {
 				if (true) 
 					log.debug("RESPNSE: " + new String(response));
 				f.setSource(url);
-				f.parse(response);
+				f.parse(response, null);
 				f.execute();
 			} catch (Exception e) {
 				log.debug("HERE  msg = " + e.getMessage());
-				e.printStackTrace();
+				log.error(e.getStackTrace());
 				String strResponse = new String(response);
 				if (strResponse.matches(".*html>\\s*\\z")) {
 					//FIXME: this interface stuff should not be part of GET
 					//new Browser("text/html", new String(response));
-//					Display display = Display.getDefault();
-//					Shell shell = new Shell(display);
-//					shell.setLayout(new FillLayout());
-//					org.eclipse.swt.browser.Browser browser;
-//					try {
-//						browser = new org.eclipse.swt.browser.Browser(shell, SWT.NONE);
-//					} catch (SWTError e1) {
-//						System.out.println("Could not instantiate Browser: " + e1.getMessage());
-//						return;
-//					}
-//					browser.setText(strResponse);
-//					shell.open();
-//					while (!shell.isDisposed()) {
-//						if (!display.readAndDispatch())
-//							display.sleep();
-//					}
+					Display display = Display.getDefault();
+					Shell shell = new Shell(display);
+					shell.setLayout(new FillLayout());
+					org.eclipse.swt.browser.Browser browser;
+					try {
+						browser = new org.eclipse.swt.browser.Browser(shell, SWT.NONE);
+					} catch (SWTError e1) {
+						System.out.println("Could not instantiate Browser: " + e1.getMessage());
+						return;
+					}
+					browser.setText(strResponse);
+					shell.open();
+					while (!shell.isDisposed()) {
+						if (!display.readAndDispatch())
+							display.sleep();
+					}
 					log.debug("display.dispose");
 					//display.dispose();
 					//System.exit(1);
@@ -200,10 +200,10 @@ public class Get extends XmlObject {
 
 	@Override
 	public void check() throws XMLBuildException {
-//		ControlObject o = getAncestorOfType(ControlObject.class);
-//		if (o != null && o.isShowUrl() == true) {
-//			o.setToolTipText(url);
-//		}
+		ControlObject o = getAncestorOfType(ControlObject.class);
+		if (o != null && o.isShowUrl() == true) {
+			o.setToolTipText(url);
+		}
 		if ((toTempFilePrefix == null && toTempFileSuffix != null) ||
 		(toTempFilePrefix != null && toTempFileSuffix == null))
 			log.debug("temp file prefix and suffix should either both be set or neither set.");
@@ -326,19 +326,19 @@ public class Get extends XmlObject {
 		this.parse = Boolean.parseBoolean(parse);
 	}
 	
-//	public void addData(Data data) throws XMLBuildException {
-//		datum.add(data);
-//	}
-//	
-//	public void addInterface(Interface in) throws XMLBuildException {
-//		if (f != null) {
-//			f.setSymbolTable(new HashMap<String, Object>());
-//		}
-//	}
-//	
-//	public void addInterfaceEnd(Interface in) throws XMLBuildException {
-//		in.execute();
-//	}
+	public void addData(Data data) throws XMLBuildException {
+		datum.add(data);
+	}
+	
+	public void addInterface(Interface in) throws XMLBuildException {
+		if (f != null) {
+			f.setSymbolTable(new HashMap<String, Object>());
+		}
+	}
+	
+	public void addInterfaceEnd(Interface in) throws XMLBuildException {
+		in.execute();
+	}
 	
 	/**
 	 * the name of the 'Http' object.  
