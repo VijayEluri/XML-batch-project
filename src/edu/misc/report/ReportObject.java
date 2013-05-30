@@ -1,12 +1,12 @@
 package edu.misc.report;
 
 import com.browsexml.core.XMLBuildException;
-import com.browsexml.core.XmlObject;
 import com.itextpdf.text.Document;
 
 import edu.bxml.io.FilterAJ;
+import edu.bxml.io.FilterAJImpl;
 
-public abstract class ReportObject extends FilterAJ {	
+public abstract class ReportObject extends FilterAJImpl implements FilterAJ {	
 	protected Document document = null;
 	
 	public Document getDocument() {

@@ -6,8 +6,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
-import com.browsexml.core.XmlParser;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
+import com.browsexml.core.XmlParser;
 
 /**
  * Delete the file named by file and dir.  If dependsDir and dependsFile is set,
@@ -16,7 +17,7 @@ import com.browsexml.core.XmlObject;
  * @author geoff.ritchey
  *
  */
-public class Delete  extends XmlObject {
+public class Delete  extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(Delete.class);
 	String file = null;
 	String dir = null;

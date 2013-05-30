@@ -17,8 +17,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
-import com.browsexml.core.XmlParser;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.javalobby.tnt.annotation.attribute;
 
 
@@ -29,7 +29,7 @@ import com.javalobby.tnt.annotation.attribute;
  * 
  */
 @attribute(value = "", required = true)
-public class XmlLoad extends XmlObject {
+public class XmlLoad extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(XmlLoad.class);
 	public String delimit = "\t";
 	boolean header = false;

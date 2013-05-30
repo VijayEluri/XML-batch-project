@@ -13,6 +13,7 @@ import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.javalobby.tnt.annotation.attribute;
 /**
  * Load binary data and the name of the file it came from into the database. The
@@ -23,7 +24,7 @@ import com.javalobby.tnt.annotation.attribute;
  * 
  */
 @attribute(value = "", required = true)
-public class LoadBlob extends XmlObject {
+public class LoadBlob extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(LoadBlob.class);
 	File currentFile = null;
 

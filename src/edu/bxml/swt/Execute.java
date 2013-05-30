@@ -9,13 +9,14 @@ import org.eclipse.swt.program.Program;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.javalobby.tnt.annotation.attribute;
 
 /**
  * Spawn a separate program. 
  */
 @attribute(value = "", required = false)
-public class Execute extends XmlObject {
+public class Execute extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(Execute.class);
 	private Program p = null;
 	private List<edu.bxml.swt.Argument> arguments = new ArrayList<edu.bxml.swt.Argument>();

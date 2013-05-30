@@ -8,6 +8,7 @@ import org.eclipse.swt.widgets.Display;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.javalobby.tnt.annotation.attribute;
 
 import edu.bxml.http.Get;
@@ -16,7 +17,7 @@ import edu.bxml.http.Get;
  * 
  */
 @attribute(value = "", required = false)
-public class Timer extends XmlObject {
+public class Timer extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(Timer.class);
 	int time = -1;
 	Vector<XmlObject>actions = new Vector<XmlObject>();

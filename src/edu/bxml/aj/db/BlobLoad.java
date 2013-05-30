@@ -16,6 +16,7 @@ import com.javalobby.tnt.annotation.attribute;
 import edu.bxml.aj.format.Query;
 import edu.bxml.format.Connection;
 import edu.bxml.io.FilterAJ;
+import edu.bxml.io.FilterAJImpl;
 
 /**
  * Copy a file
@@ -24,7 +25,7 @@ import edu.bxml.io.FilterAJ;
  * 
  */
 @attribute(value = "", required = true)
-public class BlobLoad extends FilterAJ  {
+public class BlobLoad extends FilterAJImpl implements FilterAJ  {
 	private static Log log = LogFactory.getLog(BlobLoad.class);
 	private Connection connection = null;
 	private String connectionString = null;

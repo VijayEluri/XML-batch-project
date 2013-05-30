@@ -4,13 +4,14 @@ import java.util.Vector;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.javalobby.tnt.annotation.attribute;
 /**
  * Get an http web page
  * 
  */
 @attribute(value = "", required = false)
-public class Attribute extends XmlObject {
+public class Attribute extends XmlObjectImpl implements XmlObject {
 	String value = "";
 	
 	Vector<Parameter> params = new Vector<Parameter>();

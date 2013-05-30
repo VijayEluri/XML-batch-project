@@ -3,8 +3,9 @@ package edu.bxml.swt;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
 
-import com.browsexml.core.XmlParser;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
+import com.browsexml.core.XmlParser;
 import com.javalobby.tnt.annotation.attribute;
 import com.sun.org.apache.xerces.internal.xni.parser.XMLParseException;
 
@@ -13,7 +14,7 @@ import com.sun.org.apache.xerces.internal.xni.parser.XMLParseException;
  * All gui objects are subclassed from this.
  */
 @attribute(value = "", required = false)
-public abstract class GUIObject extends XmlObject {
+public abstract class GUIObject extends XmlObjectImpl implements XmlObject {
 	int style = 0;
 	String text = null;
 	GridLayout gridLayout = null;

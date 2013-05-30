@@ -2,13 +2,14 @@ package edu.bxml.swt;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.javalobby.tnt.annotation.attribute;
 
 /**
  * Hold a key/value pair; the value is in the body of the tag
  */
 @attribute(value = "", required = false)
-public class Item extends XmlObject {
+public class Item extends XmlObjectImpl implements XmlObject {
 	private String key = null;
 	private String value = null;
 	

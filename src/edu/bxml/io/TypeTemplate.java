@@ -2,8 +2,9 @@ package edu.bxml.io;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 
-public class TypeTemplate extends XmlObject {
+public class TypeTemplate extends XmlObjectImpl implements XmlObject {
 	String text = "";
 	String type = "";
 

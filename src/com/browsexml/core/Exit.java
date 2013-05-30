@@ -17,7 +17,7 @@ import edu.bxml.ftp.Ftp;
  * 
  */
 @attribute(value = "", required = true)
-public class Exit extends XmlObject {
+public class Exit extends XmlObjectImpl implements XmlObject {
 	
 	
 	/**

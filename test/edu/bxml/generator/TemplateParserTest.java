@@ -192,6 +192,30 @@ public class TemplateParserTest extends TestCase {
 		assertTrue(ret.equals("start line 1;\nstart line 2;\nline1;\nline2;\nend line 1;\nend line 2;\n"));
 	}
 	
+	public void testContinueUndefined() throws Exception {
+		List<String> lines = new ArrayList<String>();
+		Map env = new HashMap<String, String>();
+		Map<String, Map<String, String>> variable = new LinkedHashMap<String, Map<String, String>>();
+		
+		Map<String, String> forVar1 = new HashMap<String, String>();
+		forVar1.put("count", "1");
+		variable.put("env1", forVar1);
+		
+		Map<String, String> forVar2 = new HashMap<String, String>();
+		forVar2.put("count", "2");
+		variable.put("env2", forVar2);
+		env.put("filter", variable);
+
+		
+		lines.add("#for ${filter}");
+		lines.add("#if (typeof(guiName) === 'undefined' || (guiName == null) || guiName.equals(\"\")) continue;");
+		lines.add("	private ${guiType} ${guiName};");
+		lines.add("#end for");
+		String ret = TemplateParser.processLines(lines, env, "template");
+		log.debug("ret = '" + ret + "'");
+		assertTrue(ret.equals(""));
+	}
+	
 	public void testProcessContinue() throws Exception {
 		List<String> lines = new ArrayList<String>();
 		Map env = new HashMap<String, String>();
@@ -256,5 +280,43 @@ public class TemplateParserTest extends TestCase {
 		String ret = TemplateParser.processLines(lines, env, "template");
 		log.debug("ret = '" + ret + "'");
 		assertTrue(ret.equals("    final Integer person=clientFactory.getWorkingPersonId();\n"));
+	}
+	
+	public void testIfSet() throws Exception {
+		List<String> lines = new ArrayList<String>();
+		Map env = new HashMap<String, String>();
+		Map<String, Map<String, String>> variable = new LinkedHashMap<String, Map<String, String>>();
+		
+		Map<String, String> forVar1 = new HashMap<String, String>();
+		forVar1.put("interfaceType", "person");
+		forVar1.put("value", "1");
+		forVar1.put("Key", "Person");
+		forVar1.put("key", "person");
+		forVar1.put("javaType", "Integer");
+		variable.put("env1", forVar1);
+		
+		env.put("whereVariables", variable);
+		
+		lines.add("#for ${whereVariables}");
+		lines.add("#if (false) continue");
+		lines.add("#set rhs }");
+		lines.add("	var ret = \"XXX\";");
+		lines.add("	switch(interfaceType) {");
+		lines.add("	case \"person\":	");
+		lines.add("		ret = \"clientFactory.getWorkingPersonId()\";");
+		lines.add("		break;");
+		lines.add("	case \"const\": 	");
+		lines.add("		ret = \"${value}\";");
+		lines.add("		break; ");
+		lines.add("	default: ");
+		lines.add("		ret = \"this.display.get${Key}()\";");
+		lines.add("	};");
+		lines.add("	ret;");
+		lines.add("}");
+		lines.add("    final ${javaType} ${key}=${rhs};");
+		lines.add("#end for");
+		String ret = TemplateParser.processLines(lines, env, "template");
+		log.debug("ret = '" + ret + "'");
+		assert(ret.equals("    final Integer person=clientFactory.getWorkingPersonId();\n"));
 	}
 }

@@ -11,8 +11,9 @@ import org.apache.commons.logging.LogFactory;
 import org.xml.sax.SAXParseException;
 
 import com.browsexml.core.XMLBuildException;
-import com.browsexml.core.XmlParser;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
+import com.browsexml.core.XmlParser;
 import com.javalobby.tnt.annotation.attribute;
 
 import edu.bxml.http.Get;
@@ -23,7 +24,7 @@ import edu.bxml.http.Post;
  * Any attributes and children of the target object can be used by Apply.
  */
 @attribute(value = "", required = false)
-public class Apply extends XmlObject {
+public class Apply extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(Apply.class);
 	XmlObject object = null;
 	String objectName = null;

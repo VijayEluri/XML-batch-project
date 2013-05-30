@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.javalobby.tnt.annotation.attribute;
 
 import edu.bxml.format.ExcelData;
@@ -14,7 +15,7 @@ import edu.bxml.format.ExcelData;
  *
  */
 @attribute(value = "", required = true)
-public class Workbook extends XmlObject {
+public class Workbook extends XmlObjectImpl implements XmlObject {
 	Vector<Worksheet> worksheets = new Vector<Worksheet>();
 	String separator = "|";
 	

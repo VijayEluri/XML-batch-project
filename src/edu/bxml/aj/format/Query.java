@@ -20,6 +20,7 @@ import edu.bxml.format.Sql;
 import edu.bxml.format.SyncOnArchive;
 import edu.bxml.generator.Generator;
 import edu.bxml.io.FilterAJ;
+import edu.bxml.io.FilterAJImpl;
 import edu.misc.report.Pdf;
 
 /**
@@ -29,7 +30,7 @@ import edu.misc.report.Pdf;
  * 
  */
 @attribute(value = "", required = true)
-public class Query extends FilterAJ {
+public class Query extends FilterAJImpl implements FilterAJ {
 	private static Log log = LogFactory.getLog(Query.class);
 	Vector<Connection> connections = new Vector<Connection>();
 	Vector<XmlObject> sqlCommands = new Vector<XmlObject>();

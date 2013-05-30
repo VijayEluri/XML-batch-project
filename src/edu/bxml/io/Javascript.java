@@ -1,8 +1,5 @@
 package edu.bxml.io;
 
-import java.util.Map;
-
-import javax.script.Bindings;
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineFactory;
@@ -12,8 +9,9 @@ import javax.script.SimpleBindings;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 
-public class Javascript extends XmlObject {
+public class Javascript extends XmlObjectImpl implements XmlObject {
 	private String script = "ECMAScript";
 	private String text = "";
 	private Object value = null;

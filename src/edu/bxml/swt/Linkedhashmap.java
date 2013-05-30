@@ -7,6 +7,7 @@ import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.javalobby.tnt.annotation.attribute;
 
 import edu.bxml.http.Get;
@@ -16,7 +17,7 @@ import edu.bxml.http.Post;
  * 
  */
 @attribute(value = "", required = false)
-public class Linkedhashmap extends XmlObject {
+public class Linkedhashmap extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(Linkedhashmap.class);
 	Get get = null;
 	Post post = null;

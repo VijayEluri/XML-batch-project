@@ -1,16 +1,11 @@
 package edu.bxml.aj.io;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
-import java.io.UnsupportedEncodingException;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +17,8 @@ import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
 import com.javalobby.tnt.annotation.attribute;
 
-import edu.bxml.io.Copy;
 import edu.bxml.io.FilterAJ;
+import edu.bxml.io.FilterAJImpl;
 
 
 /**
@@ -34,7 +29,7 @@ import edu.bxml.io.FilterAJ;
  * 
  */
 @attribute(value = "", required = true)
-public class Pipe extends FilterAJ implements UncaughtExceptionHandler {
+public class Pipe extends FilterAJImpl implements FilterAJ, UncaughtExceptionHandler {
 	private static Log log = LogFactory.getLog(Pipe.class);
 	List<XmlObject> preCommands = new ArrayList<XmlObject>();
 	List<XmlObject> postCommands = new ArrayList<XmlObject>();
@@ -151,7 +146,7 @@ public class Pipe extends FilterAJ implements UncaughtExceptionHandler {
 
 			threads = new ArrayList<Thread>();
 			log.debug("start threads");
-			FilterAJ filt2 = new FilterAJ(pin, out);
+			FilterAJ filt2 = new FilterAJImpl(pin, out);
 			for (FilterAJ filter : filters) {
 
 					filter.setLock(true);

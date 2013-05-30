@@ -1,13 +1,13 @@
 package edu.bxml.io;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.javalobby.tnt.annotation.attribute;
 
 import edu.bxml.format.Util;
@@ -17,7 +17,7 @@ import edu.bxml.format.Util;
  * 
  */
 @attribute(value = "", required = true)
-public class Move extends XmlObject {
+public class Move extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(Move.class);
 	String file;
 	String dir;

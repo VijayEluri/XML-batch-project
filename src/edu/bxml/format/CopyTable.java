@@ -4,17 +4,15 @@ import java.io.PrintStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import com.browsexml.core.XMLBuildException;
 import com.javalobby.tnt.annotation.attribute;
 
 import edu.bxml.io.FilterAJ;
+import edu.bxml.io.FilterAJImpl;
 
 /**
  * Copy an sql tables data from one database to another
@@ -23,7 +21,7 @@ import edu.bxml.io.FilterAJ;
  * 
  */
 @attribute(value = "", required = true)
-public class CopyTable extends FilterAJ {
+public class CopyTable extends FilterAJImpl implements FilterAJ {
 	private static Log log = LogFactory.getLog(CopyTable.class);
 	PrintStream localOut = null;
 	public static String newline = System.getProperty("line.separator");

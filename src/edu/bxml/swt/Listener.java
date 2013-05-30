@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.Event;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.browsexml.core.XmlParser;
 import com.javalobby.tnt.annotation.attribute;
 import com.sun.org.apache.xerces.internal.xni.parser.XMLParseException;
@@ -22,7 +23,7 @@ import edu.bxml.http.Parameter;
  * Execute children when an event of the given type occurs
  */
 @attribute(value = "", required = false)
-public class Listener extends XmlObject {
+public class Listener extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(Listener.class);
 	int mask = 0;
 	org.eclipse.swt.widgets.Widget parent = null;

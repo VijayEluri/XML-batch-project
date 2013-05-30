@@ -2,12 +2,31 @@ package edu.bxml.format;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 
-public class Column extends XmlObject {
+public class Column extends XmlObjectImpl implements XmlObject {
 	private String fieldName;
 	private String header;
 	private Integer index;
 	private String width = null;
+	private String dateTimeFormat = null;
+	private int formatNumber = 0;
+
+	public int getFormatNumber() {
+		return formatNumber;
+	}
+
+	public void setFormatNumber(int formatNumber) {
+		this.formatNumber = formatNumber;
+	}
+
+	public String getDateTimeFormat() {
+		return dateTimeFormat;
+	}
+
+	public void setDateTimeFormat(String dateTimeFormat) {
+		this.dateTimeFormat = dateTimeFormat;
+	}
 
 	public String getWidth() {
 		return width;

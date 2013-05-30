@@ -4,13 +4,14 @@ package edu.bxml.http;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.javalobby.tnt.annotation.attribute;
 /**
  * Get an http web page
  * 
  */
 @attribute(value = "", required = false)
-public class Parameter extends XmlObject {
+public class Parameter extends XmlObjectImpl implements XmlObject {
 
 	String key = null;
 	Object fieldValue;
@@ -51,7 +52,7 @@ public class Parameter extends XmlObject {
 	 *  Get the value
 	 */
 	@attribute(value = "", required = true)
-	public Object getValue() {
+	public String getValue() {
 		if (type == null || type != String.class) {
 			if (object == null)
 				object = (XmlObject)getSymbolTable().get(value);
@@ -128,4 +129,5 @@ public class Parameter extends XmlObject {
 	public void setValue(String value) {
 		this.value = value;
 	}
+
 }

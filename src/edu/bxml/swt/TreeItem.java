@@ -6,8 +6,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Widget;
 
 import com.browsexml.core.XMLBuildException;
-import com.browsexml.core.XmlParser;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
+import com.browsexml.core.XmlParser;
 import com.javalobby.tnt.annotation.attribute;
 import com.sun.org.apache.xerces.internal.xni.parser.XMLParseException;
 
@@ -15,7 +16,7 @@ import com.sun.org.apache.xerces.internal.xni.parser.XMLParseException;
  * Add a row of data to a Tree.
  */
 @attribute(value = "", required = false)
-public class TreeItem extends XmlObject {
+public class TreeItem extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(TreeItem.class);
 	org.eclipse.swt.widgets.Widget GUIParent = null;
 	int style = 0;

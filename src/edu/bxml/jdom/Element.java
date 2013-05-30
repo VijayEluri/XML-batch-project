@@ -5,8 +5,9 @@ import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 
-public class Element extends XmlObject {
+public class Element extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(Element.class);
 	private String text = null;
 	private String nodeName = null;

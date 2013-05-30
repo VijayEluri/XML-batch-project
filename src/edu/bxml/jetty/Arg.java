@@ -1,6 +1,5 @@
 package edu.bxml.jetty;
 
-import java.sql.SQLException;
 import java.util.HashMap;
 
 import javax.sql.DataSource;
@@ -12,8 +11,9 @@ import org.apache.commons.logging.LogFactory;
 import com.browsexml.core.XMLBuildException;
 
 import edu.bxml.io.FilterAJ;
+import edu.bxml.io.FilterAJImpl;
 
-public class Arg extends FilterAJ {
+public class Arg extends FilterAJImpl implements FilterAJ {
 	private static Log log = LogFactory.getLog(Arg.class);
 
 	HashMap parameters = new HashMap();

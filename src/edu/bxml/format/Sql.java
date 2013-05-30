@@ -1,10 +1,20 @@
 package edu.bxml.format;
 
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.browsexml.core.XmlParser;
 import com.javalobby.tnt.annotation.attribute;
 /**
@@ -13,7 +23,7 @@ import com.javalobby.tnt.annotation.attribute;
  *
  */
 @attribute(value = "", required = true)
-public class Sql extends XmlObject {
+public class Sql extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(Sql.class);
 
 	private String query = "";
@@ -47,6 +57,51 @@ public class Sql extends XmlObject {
 	 */
 	public void execute() {
 		
+	}
+	
+	public List<Map<String, String>> getHashMap() {
+		java.sql.Connection c = null;
+		List<Map<String, String>> ret = new ArrayList<Map<String, String>>();
+		try {
+			c = this.getConnection().getConnection();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+			return null;
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
+		String strQuery = this.getQuery();
+		Statement stmt = null;
+		try {
+			log.debug("sql = " + strQuery);
+			stmt = c.createStatement();
+			final ResultSet rs = stmt.executeQuery(strQuery);
+			ResultSetMetaData md = rs.getMetaData();
+
+			while (rs.next()) {
+				Map<String, String> m = new HashMap<String, String>();
+				for (int i = 1; i <= md.getColumnCount(); i++) {
+					Object value = rs.getObject(i);
+					m.put(md.getColumnName(i), value + "");
+				}
+				ret.add(m);
+			}
+		}
+		catch (SQLException s) {
+			s.printStackTrace();
+		}
+		try {
+			stmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		try {
+			c.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return ret;
 	}
 	/**
 	 * Retrieve the text that was contained inside the tag

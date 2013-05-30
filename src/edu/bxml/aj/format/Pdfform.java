@@ -4,9 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.PrintStream;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
@@ -14,7 +11,6 @@ import java.security.PrivateKey;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.Certificate;
 import java.security.cert.CertificateException;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -28,7 +24,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
-import com.browsexml.core.XmlObject;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.AcroFields;
 import com.itextpdf.text.pdf.AcroFields.Item;
@@ -41,10 +36,10 @@ import edu.bxml.format.BitArrayField;
 import edu.bxml.format.Connection;
 import edu.bxml.format.Field;
 import edu.bxml.format.Sql;
-import edu.bxml.format.Util;
 import edu.bxml.io.FilterAJ;
+import edu.bxml.io.FilterAJImpl;
 
-public class Pdfform extends FilterAJ {
+public class Pdfform extends FilterAJImpl implements FilterAJ {
 	private static Log log = LogFactory.getLog(Pdfform.class);
 	private String queryName;
 	private String reportName = "";

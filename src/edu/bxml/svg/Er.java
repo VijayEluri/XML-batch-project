@@ -1,14 +1,9 @@
 package edu.bxml.svg ;
 
-import static edu.bxml.svg.LineEndPoint.LEFT;
-import static edu.bxml.svg.LineEndPoint.RIGHT;
-
 import java.awt.event.ComponentEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 import org.apache.batik.swing.JSVGCanvas;
 import org.apache.batik.swing.gvt.GVTTreeRendererAdapter;
@@ -18,7 +13,6 @@ import org.apache.batik.swing.svg.GVTTreeBuilderAdapter;
 import org.apache.batik.swing.svg.GVTTreeBuilderEvent;
 import org.apache.batik.swing.svg.SVGDocumentLoaderAdapter;
 import org.apache.batik.swing.svg.SVGDocumentLoaderEvent;
-import org.apache.batik.util.SVGConstants;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.w3c.dom.Element;
@@ -26,11 +20,10 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.events.Event;
 import org.w3c.dom.events.EventListener;
-import org.w3c.dom.events.EventTarget;
-import org.w3c.dom.svg.SVGDocument;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.javalobby.tnt.annotation.attribute;
 
 import edu.bxml.swt.Svg;
@@ -40,7 +33,7 @@ import edu.bxml.swt.Svg;
  */
 /*import ;*/
 @attribute(value = "", required = false)
-public class Er extends XmlObject {
+public class Er extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(Er.class);
 	JSVGCanvas canvas = null; 
 	String id = null;
@@ -115,10 +108,11 @@ public class Er extends XmlObject {
             }
             public void gvtBuildCompleted(GVTTreeBuilderEvent e) {
             	log.debug("Build Done.");
-            	
+            	/*
 
         		
             	log.debug("putting balls...");
+            	
             	SVGDocument doc = canvas.getSVGDocument();
             	eHandle = doc.getElementById("eHandle");
             	sHandle = doc.getElementById("sHandle");
@@ -133,9 +127,9 @@ public class Er extends XmlObject {
 
 				Element stroke = doc.getElementById("eStroke");
 				ball1 = new MovableObject(doc.getElementById("gHandle"));
-				ball1.addLink(stroke, LEFT);
+				//ball1.addLink(stroke, LEFT);
 				ball2 = new MovableObject(doc.getElementById("gBall"));
-				ball2.addLink(stroke, RIGHT);
+				//ball2.addLink(stroke, RIGHT);
 				
         		for (Iterator s = items.entrySet().iterator();s.hasNext();) {
         			Map.Entry entry = (Map.Entry)s.next();
@@ -164,7 +158,9 @@ public class Er extends XmlObject {
                         movingListener, true);
                 
                 canvas.setDoubleBufferedRendering(false);
+                */
             }
+            
         });
 
 		canvas.addGVTTreeRendererListener(new GVTTreeRendererAdapter() {

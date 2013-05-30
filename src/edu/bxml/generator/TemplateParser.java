@@ -20,6 +20,8 @@ import javax.script.SimpleBindings;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import com.browsexml.core.XMLBuildException;
+
 public class TemplateParser {
 	private static Log log = LogFactory.getLog(TemplateParser.class);
 	
@@ -40,8 +42,9 @@ public class TemplateParser {
 	
 	static String replaceVariables(String line, Map<String, Object> env) {
 		log.debug("replace value [replaceVariables] = " + line);
-		log.debug("replace value [replaceVariables] = " + env.get("value"));
-        return variableReplacePattern.execute(line, env);
+		String ret = variableReplacePattern.execute(line, env);
+		log.debug("replace value [replaceVariables] = " + ret);
+        return ret;
 	}
 	
 	static public String javascript(String text, Map env) {
@@ -70,11 +73,8 @@ public class TemplateParser {
 			if (matcher.find()) {
 				Map<String, Map<String, String>> variable = (LinkedHashMap<String, Map<String, String>>) env.get(matcher.group(1));
 				if (variable == null) {
-					try {
-						throw new java.io.IOException(templatePath + ": " + matcher.group(1) + " is not in environment");
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+						log.debug("env = " + env);
+						log.warn(templatePath + ": " + matcher.group(1) + " is not in environment");
 				}
 				log.debug("#for " + variable);
 
@@ -101,56 +101,54 @@ public class TemplateParser {
 				
 				// Loop through all whereVariables
 				StringBuffer ret1 = new StringBuffer();
-				for (Map.Entry<String, Map<String, String>>entry: variable.entrySet()) {
-					Map<String, Object> env1 = env;
-					log.debug("for variable = " + entry.getKey());
-					log.debug("EntryHashMapValue =  " + entry.getValue());
-					env1.putAll(entry.getValue());
-					
-					String key = entry.getKey();
-					env1.put("key", key);
-					env1.put("Key", Character.toUpperCase(key.charAt(0)) + key.substring(1));
-					env1.putAll(entry.getValue());
-	
-					StringBuffer forLine = new StringBuffer("");
-					int index = forStart;
-					String line1 = null;
-					
-					for ( ; index < forEnd; index++) {
-						line1 = lines.get(index);
+				if (variable != null) {
+					for (Map.Entry<String, Map<String, String>>entry: variable.entrySet()) {
+						Map<String, Object> env1 = new HashMap<String, Object>();
+						env1.putAll(env);
+						log.debug("for variable = " + entry.getKey());
+						log.debug("EntryHashMapValue =  " + entry.getValue());
+						env1.putAll(entry.getValue());
+		
+						StringBuffer forLine = new StringBuffer("");
+						int index = forStart;
+						String line1 = null;
 						
-						if (line1.startsWith("#")) {
-							env.remove("_nextFor");
-							index = evalProcessorLine(index, env, lines, ret1, templatePath);
-							String nextFor = (String) env.get("_nextFor");
-							env.remove("_nextFor");
-							if (nextFor != null && nextFor.equals("true")) {
-								break;
-							}
+						while (index < forEnd) {
 							line1 = lines.get(index);
+							
+							if (line1.startsWith("#")) {
+								env1.remove("_nextFor");
+								index = evalProcessorLine(index, env1, lines, ret1, templatePath);
+								String nextFor = (String) env1.get("_nextFor");
+								env1.remove("_nextFor");
+								if (nextFor != null && nextFor.equals("true")) {
+									break;
+								}
+							} else {	
+								String newLine = replaceVariables(line1, env1);
+								log.debug("newLine = " + newLine);
+								ret1.append(newLine);
+								Boolean newlines = (Boolean) env1.get("newlines");
+								if (newlines==null || newlines)
+									ret1.append("\n");
+								index++;
+							}
 						}
-						
-						String newLine = replaceVariables(line1, env1);
-						log.debug("newLine = " + newLine);
-						ret1.append(newLine);
-						Boolean newlines = (Boolean) env.get("newlines");
-						if (newlines==null || newlines)
-							ret1.append("\n");
+						ret1.append(forLine);
 					}
-					ret1.append(forLine);
 				}
 				ret.append(ret1.substring(substring));
 			}
 			linenumber = forEnd;
 		}
-		else if (line.startsWith("#if") || line.startsWith("**NULL**#if")) {
+		else if (line.startsWith("#if")) {
 			int start = 4;
-			if (line.startsWith("**NULL**")) {
-				start += 8;	
-			}
 			String javascript = line.substring(start, line.lastIndexOf(')')+1);
 			log.debug("#if javascript = " + javascript);
 			String result = javascript(replaceVariables(javascript.toString(), env), env);
+			if (result == null) {
+				throw new XMLBuildException("Can't parse javascript");
+			}
 			log.debug("#if result = " + result);
 			String rest = line.substring(line.lastIndexOf(')')+1);
 			log.debug("rest = " + rest);

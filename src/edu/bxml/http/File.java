@@ -10,13 +10,14 @@ import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.javalobby.tnt.annotation.attribute;
 /**
  * Get an http web page
  * 
  */
 @attribute(value = "", required = false)
-public class File extends XmlObject {
+public class File extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(File.class);
 	java.io.File file = null;
 	

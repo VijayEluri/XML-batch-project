@@ -14,7 +14,6 @@ import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.sql.DataSource;
-
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -23,9 +22,9 @@ import org.apache.commons.logging.LogFactory;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 
-
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.browsexml.core.XmlParser;
 import com.javalobby.tnt.annotation.attribute;
 
@@ -38,7 +37,7 @@ import edu.bxml.jetty.Configure;
  * 
  */
 @attribute(value = "", required = true)
-public class Connection extends XmlObject {
+public class Connection extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(Connection.class);
 	public String login = null; 
 	public String password = null;
@@ -130,8 +129,16 @@ public class Connection extends XmlObject {
 			log.debug("url = " + url);
 			// Replace any single backslash with a double backslash
 			url = url.replaceAll("\\\\([^\\\\])", "\\\\$1");
-			con =  DriverManager.getConnection(url, login, password);
+			log.debug("url = " + url);
+			try {
+				con =  DriverManager.getConnection(url, login, password);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 		}
+		log.debug(" con = " + con);
 		return con;
 	}
 	
@@ -143,8 +150,9 @@ public class Connection extends XmlObject {
 		}
 		java.sql.Connection  result = null;
 			try {
-				
+				log.debug("getJndiConnection2...");
 		      Context initialContext = new InitialContext();
+		      log.debug("getJndiConnection3...");
 		      if ( initialContext == null){
 		        log.debug("JNDI problem. Cannot get InitialContext.");
 		        return null;
@@ -164,6 +172,7 @@ public class Connection extends XmlObject {
 		      DataSource datasource = null;
 			try {
 				datasource = (DataSource)initialContext.lookup(jndi);
+				log.debug("datasource = " + datasource);
 			} catch (javax.naming.NoInitialContextException e) {
                 	URL x = this.getClass().getClassLoader().getResource("jetty-env.xml");
                 	log.debug("jetty-env.xml = " + x);
@@ -204,6 +213,7 @@ public class Connection extends XmlObject {
 						}
                 	}           
 			}
+			log.debug("datasource = " + datasource);
 		      if (datasource != null) {
 		        result = datasource.getConnection();
 		      }
@@ -219,6 +229,7 @@ public class Connection extends XmlObject {
 		    	log.debug("Cannot get connection: " + ex);
 		    	ex.printStackTrace();
 		    }
+			log.debug("result = " + result);
 		    return result;
 		
 	}
@@ -227,14 +238,16 @@ public class Connection extends XmlObject {
 		if (this.getName() == null) {
 			throw new XMLBuildException("Name can't be null");
 		}
-		if (login == null)
-			throw new XMLBuildException("login can't be null");
-		if (password == null)
-			throw new XMLBuildException("password can't be null");
-		if (theClass == null)
-			throw new XMLBuildException("class can't be null");
-		if (url == null)
-			throw new XMLBuildException("connection can't be null");
+		if (jndi == null) {
+			if (login == null )
+				throw new XMLBuildException("login can't be null");
+			if (password == null )
+				throw new XMLBuildException("password can't be null");
+			if (theClass == null)
+				throw new XMLBuildException("class can't be null");
+			if (url == null)
+				throw new XMLBuildException("connection can't be null");
+		}
 	}
 	
 	/**

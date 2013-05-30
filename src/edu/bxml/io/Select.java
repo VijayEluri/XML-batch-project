@@ -2,8 +2,9 @@ package edu.bxml.io;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 
-public class Select extends XmlObject {
+public class Select extends XmlObjectImpl implements XmlObject {
 	String field = null;
 	String type = "string";
 

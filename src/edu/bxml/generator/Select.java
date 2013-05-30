@@ -9,13 +9,14 @@ import org.apache.commons.logging.LogFactory;
 import com.javalobby.tnt.annotation.attribute;
 
 import edu.bxml.io.FilterAJ;
+import edu.bxml.io.FilterAJImpl;
 /**
  * Specify the query that needs formatting
  * @author ritcheyg
  *
  */
 @attribute(value = "", required = true)
-public class Select extends FilterAJ {
+public class Select extends FilterAJImpl implements FilterAJ {
 	private static Log log = LogFactory.getLog(Select.class);
 	List<Field> fields = new ArrayList<Field>();
 

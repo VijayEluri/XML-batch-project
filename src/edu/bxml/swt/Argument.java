@@ -4,15 +4,16 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
-import com.browsexml.core.XmlParser;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
+import com.browsexml.core.XmlParser;
 import com.javalobby.tnt.annotation.attribute;
 
 /**
  * 
  */
 @attribute(value = "", required = false)
-public class Argument extends XmlObject {
+public class Argument extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(Argument.class);
 	String text = null;
 	

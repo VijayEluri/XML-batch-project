@@ -2,13 +2,14 @@ package edu.bxml.swt;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.javalobby.tnt.annotation.attribute;
 
 /**
  * Add a cell of data to a table.  The data is contained in the body of the tag.
  */
 @attribute(value = "", required = false)
-public class Td extends XmlObject {
+public class Td extends XmlObjectImpl implements XmlObject {
 	String text = "";
 	org.eclipse.swt.graphics.Color color = null;
 	

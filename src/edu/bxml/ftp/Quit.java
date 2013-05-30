@@ -5,6 +5,7 @@ import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.javalobby.tnt.annotation.attribute;
 import com.jcraft.jsch.ChannelSftp;
 /**
@@ -15,7 +16,7 @@ import com.jcraft.jsch.ChannelSftp;
  * 
  */
 @attribute(value = "", required = true)
-public class Quit extends XmlObject {
+public class Quit extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(Quit.class);
 	@Override
 	public void check() throws XMLBuildException {

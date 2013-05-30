@@ -43,8 +43,9 @@ import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.javalobby.tnt.annotation.attribute;
-public class InstallCert extends XmlObject {
+public class InstallCert extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(InstallCert.class);
 	String host = null;
 	char[] passphrase = "changeit".toCharArray();

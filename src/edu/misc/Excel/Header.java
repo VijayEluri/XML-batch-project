@@ -2,8 +2,8 @@ package edu.misc.Excel;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.javalobby.tnt.annotation.attribute;
-import com.sun.org.apache.xerces.internal.xni.parser.XMLParseException;
 
 /**
  * Specify the query that needs formatting
@@ -11,7 +11,7 @@ import com.sun.org.apache.xerces.internal.xni.parser.XMLParseException;
  *
  */
 @attribute(value = "", required = true)
-public class Header extends XmlObject {
+public class Header extends XmlObjectImpl implements XmlObject {
 
 	
 	/**

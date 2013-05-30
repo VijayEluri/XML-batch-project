@@ -8,6 +8,7 @@ import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.javalobby.tnt.annotation.attribute;
 
 /**
@@ -15,7 +16,7 @@ import com.javalobby.tnt.annotation.attribute;
  * 
  */
 @attribute(value = "", required = false)
-public class Entity extends XmlObject {
+public class Entity extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(Entity.class);
 	java.io.File file = null;
 	String type = null;

@@ -7,8 +7,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
-import com.browsexml.core.XmlParser;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
+import com.browsexml.core.XmlParser;
 import com.javalobby.tnt.annotation.attribute;
 
 import edu.bxml.io.Select;
@@ -23,7 +24,7 @@ import edu.bxml.io.TypeTemplate;
  * 
  */
 @attribute(value = "", required = true)
-public class Replace extends XmlObject {
+public class Replace extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(Replace.class);
 
 	public List<TypeTemplate> typeList = new ArrayList<TypeTemplate>();

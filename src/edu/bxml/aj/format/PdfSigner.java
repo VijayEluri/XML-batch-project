@@ -17,15 +17,14 @@ import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
 import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfSignatureAppearance;
 import com.itextpdf.text.pdf.PdfStamper;
 
 import edu.bxml.io.FilterAJ;
+import edu.bxml.io.FilterAJImpl;
 
-public class PdfSigner extends FilterAJ {
+public class PdfSigner extends FilterAJImpl implements FilterAJ {
 	private static Log log = LogFactory.getLog(PdfSigner.class);
 	String keyfile;
 	String keystorePassword;

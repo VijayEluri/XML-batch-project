@@ -22,6 +22,7 @@ import com.browsexml.core.XmlObject;
 import com.javalobby.tnt.annotation.attribute;
 
 import edu.bxml.io.FilterAJ;
+import edu.bxml.io.FilterAJImpl;
 /**
  * Represent how to format all the fields of a query.
  * 
@@ -29,7 +30,7 @@ import edu.bxml.io.FilterAJ;
  * 
  */
 @attribute(value = "", required = true)
-public class Select extends FilterAJ {
+public class Select extends FilterAJImpl implements FilterAJ {
 	private static Log log = LogFactory.getLog(Select.class);
 	public String delimit = "\t";
 	public Header header = null;

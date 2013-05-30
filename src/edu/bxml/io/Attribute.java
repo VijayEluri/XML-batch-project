@@ -1,7 +1,5 @@
 package edu.bxml.io;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,8 +8,9 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
-import com.browsexml.core.XmlParser;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
+import com.browsexml.core.XmlParser;
 import com.javalobby.tnt.annotation.attribute;
 
 import edu.bxml.format.Replace;
@@ -24,7 +23,7 @@ import edu.bxml.format.Replace;
  * 
  */
 @attribute(value = "", required = true)
-public class Attribute extends XmlObject {
+public class Attribute extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(Attribute.class);
 	String attribute = null;
 	List<Replace> replacements = new ArrayList<Replace>();
