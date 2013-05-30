@@ -9,14 +9,15 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 
-public class Filter extends XmlObject {
+public class Filter extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(Filter.class);
 	private String searchText;
 	
 	public String getSearchTextType() {
 		for (Interface i: interfaces) {
-			if (i.getName().equals(searchText)) {
+			if (searchText != null && searchText.equals(i.getName())) {
 				Field f = i.getFields().get(0);
 				return f.getJavaType();
 			}
@@ -31,7 +32,7 @@ public class Filter extends XmlObject {
 	}
 	@Override
 	public void check() {
-		
+
 	}
 	@Override
 	public void execute() {
@@ -54,7 +55,10 @@ public class Filter extends XmlObject {
 					if (i.getFields().size() > 1) {
 						ret.put("index", "" + place);
 						ret.put("separator", i.getSeparator());
-						if (i.getOperator().equals("like"))
+						
+						if (i.getOperator() == null)
+							log.error("operator for filter '" + getName() + "', interface '" + i.getName() + "', should not be null");
+						if ("like".equals(i.getOperator()))
 							ret.put("wildcard", "%");
 						else
 							ret.put("wildcard", "");

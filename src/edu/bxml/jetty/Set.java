@@ -5,11 +5,11 @@ import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
-import com.browsexml.core.XmlParser;
 
 import edu.bxml.io.FilterAJ;
+import edu.bxml.io.FilterAJImpl;
 
-public class Set extends FilterAJ {
+public class Set extends FilterAJImpl implements FilterAJ {
 	private static Log log = LogFactory.getLog(Set.class);
 	
 	//Override base name to implement Set.  Set's name property will not be a unique identifier

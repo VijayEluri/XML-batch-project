@@ -3,11 +3,8 @@ package edu.bxml.svg;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.batik.dom.svg.SVGDOMImplementation;
 import org.apache.batik.swing.JSVGCanvas;
 import org.w3c.dom.Element;
-import org.w3c.dom.svg.SVGDocument;
-import org.w3c.dom.svg.SVGSVGElement;
 
 import com.browsexml.core.XMLBuildException;
 
@@ -38,6 +35,7 @@ public class Table extends MovableObject {
 	}
 	
 	public void create(JSVGCanvas canvas) {	
+		/*
 		System.err.println("id = " + getId());
 		SVGDocument document = canvas.getSVGDocument();
 		SVGSVGElement svg = document.getRootElement();
@@ -94,6 +92,7 @@ public class Table extends MovableObject {
 		this.gHandle = g;
 		
 		move(x, y);
+		*/
 
 	}
 	

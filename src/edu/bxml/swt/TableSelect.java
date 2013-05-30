@@ -1,20 +1,15 @@
 package edu.bxml.swt;
 
-import java.util.Vector;
-
-import org.eclipse.swt.SWT;
-import org.xml.sax.Attributes;
-
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.javalobby.tnt.annotation.attribute;
-import com.sun.org.apache.xerces.internal.xni.parser.XMLParseException;
 
 /**
  * Select rows of a table 
  */
 @attribute(value = "", required = false)
-public class TableSelect extends XmlObject {
+public class TableSelect extends XmlObjectImpl implements XmlObject {
 	
 	private int index = -1;
 	

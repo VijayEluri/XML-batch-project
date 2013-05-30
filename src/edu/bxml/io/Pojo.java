@@ -1,6 +1,5 @@
 package edu.bxml.io;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 import org.apache.commons.logging.Log;
@@ -8,8 +7,9 @@ import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 
-public class Pojo extends XmlObject {
+public class Pojo extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(Pojo.class);
 	String className = null;
 	String key = null;

@@ -8,8 +8,9 @@ import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 
-public class MasterDetail  extends XmlObject  {
+public class MasterDetail  extends XmlObjectImpl implements XmlObject  {
 	String pojoName = null;
 	String dir = ".";
 	List<XmlObject> children = new ArrayList<XmlObject>();

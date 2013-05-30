@@ -1,6 +1,5 @@
 package edu.bxml.format;
 
-import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Vector;
@@ -10,9 +9,8 @@ import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.javalobby.tnt.annotation.attribute;
-
-import edu.bxml.io.FilterAJ;
 
 /**
  * Hold information about how to format the header
@@ -20,7 +18,7 @@ import edu.bxml.io.FilterAJ;
  *
  */
 @attribute(value = "", required = true)
-public class Header extends XmlObject {
+public class Header extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(Header.class);
 	
 	private StringBuffer outBuffer;

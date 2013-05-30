@@ -18,8 +18,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import com.browsexml.core.XMLBuildException;
-import com.browsexml.core.XmlParser;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
+import com.browsexml.core.XmlParser;
 import com.javalobby.tnt.annotation.attribute;
 import com.sun.org.apache.xerces.internal.xni.parser.XMLParseException;
 
@@ -32,7 +33,7 @@ import edu.bxml.swt.Interface;
  * 
  */
 @attribute(value = "", required = false)
-public class Get extends XmlObject {
+public class Get extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(Get.class);
 	private String url = null;
 	private boolean print = false;
@@ -164,7 +165,7 @@ public class Get extends XmlObject {
 				if (true) 
 					log.debug("RESPNSE: " + new String(response));
 				f.setSource(url);
-				f.parse(response, null);
+				f.parse(response);
 				f.execute();
 			} catch (Exception e) {
 				log.debug("HERE  msg = " + e.getMessage());

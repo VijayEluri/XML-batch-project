@@ -15,8 +15,9 @@ import com.browsexml.core.XmlParser;
 import com.javalobby.tnt.annotation.attribute;
 
 import edu.bxml.io.FilterAJ;
+import edu.bxml.io.FilterAJImpl;
 
-public class New extends FilterAJ {
+public class New extends FilterAJImpl implements FilterAJ {
 	private static Log log = LogFactory.getLog(New.class);
 	
 	String id;

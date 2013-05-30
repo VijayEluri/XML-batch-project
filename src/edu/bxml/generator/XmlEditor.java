@@ -26,8 +26,9 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import edu.bxml.io.FilterAJ;
+import edu.bxml.io.FilterAJImpl;
 
-public class XmlEditor  extends FilterAJ {
+public class XmlEditor  extends FilterAJImpl implements FilterAJ {
 	private static Log log = LogFactory.getLog(XmlEditor.class);
 	File xmlFile;
 	Map<String, Object> env = new HashMap<String, Object>();

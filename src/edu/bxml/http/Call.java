@@ -2,19 +2,18 @@ package edu.bxml.http;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Enumeration;
 import java.util.Vector;
-
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.javalobby.tnt.annotation.attribute;
 /**
  * Get an http web page
  * 
  */
 @attribute(value = "", required = false)
-public class Call extends XmlObject {
+public class Call extends XmlObjectImpl implements XmlObject {
 	private URL url = null;
 	private String uri = null;
 	private String method = null;

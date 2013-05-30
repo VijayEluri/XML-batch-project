@@ -7,6 +7,7 @@ import org.eclipse.swt.widgets.Control;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.browsexml.core.XmlParser;
 import com.javalobby.tnt.annotation.attribute;
 
@@ -14,7 +15,7 @@ import com.javalobby.tnt.annotation.attribute;
  * Create a menu
  */
 @attribute(value = "", required = false)
-public class Menu extends XmlObject {
+public class Menu extends XmlObjectImpl implements XmlObject {
 	Control cntParent = null;
 	org.eclipse.swt.widgets.MenuItem miParent = null;
 	org.eclipse.swt.widgets.Shell shellParent = null;

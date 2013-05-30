@@ -19,8 +19,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import com.browsexml.core.XMLBuildException;
-import com.browsexml.core.XmlParser;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
+import com.browsexml.core.XmlParser;
 import com.javalobby.tnt.annotation.attribute;
 import com.sun.org.apache.xerces.internal.xni.parser.XMLParseException;
 /**
@@ -28,7 +29,7 @@ import com.sun.org.apache.xerces.internal.xni.parser.XMLParseException;
  * 
  */
 @attribute(value = "", required = false)
-public class Post extends XmlObject {
+public class Post extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(Post.class);
 	private String url = null;
 	private boolean followRedirects = false;
@@ -135,7 +136,7 @@ public class Post extends XmlObject {
 				if (print) 
 					log.debug("RESPNSE: " + new String(response));
 				parser.setSource(url);
-				parser.parse(response, null);
+				parser.parse(response);
 			} catch (Exception e) {
 				log.error(e.getStackTrace());
 				if (e.getMessage().endsWith(".Html")) {

@@ -17,6 +17,7 @@ import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.javalobby.tnt.annotation.attribute;
 
 /**
@@ -26,7 +27,7 @@ import com.javalobby.tnt.annotation.attribute;
  * 
  */
 @attribute(value = "", required = true)
-public class Http extends XmlObject {
+public class Http extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(Http.class);
 	private HttpClient client;
 	private boolean mutithreaded = false;

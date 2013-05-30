@@ -15,10 +15,11 @@ import org.apache.commons.net.ftp.FTPFile;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.javalobby.tnt.annotation.attribute;
 import com.jcraft.jsch.ChannelSftp;
-import com.jcraft.jsch.SftpException;
 import com.jcraft.jsch.ChannelSftp.LsEntry;
+import com.jcraft.jsch.SftpException;
 /**
  * List the contents of a remote directory.
  * Implements Command.
@@ -27,7 +28,7 @@ import com.jcraft.jsch.ChannelSftp.LsEntry;
  * 
  */
 @attribute(value = "", required = true)
-public class List extends XmlObject {
+public class List extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(List.class);
 	String dir = ".";
 	private boolean recursive = false;

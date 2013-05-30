@@ -4,15 +4,16 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Display;
 
 import com.browsexml.core.XMLBuildException;
-import com.browsexml.core.XmlParser;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
+import com.browsexml.core.XmlParser;
 import com.javalobby.tnt.annotation.attribute;
 
 /**
  * 
  */
 @attribute(value = "", required = false)
-public class Color extends XmlObject {
+public class Color extends XmlObjectImpl implements XmlObject {
 
 	org.eclipse.swt.graphics.Color color = null;
 	org.eclipse.swt.widgets.Shell s = null;

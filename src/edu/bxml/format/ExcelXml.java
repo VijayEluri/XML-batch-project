@@ -10,6 +10,7 @@ import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.javalobby.tnt.annotation.attribute;
 
 import edu.misc.Excel.Workbook;
@@ -20,7 +21,7 @@ import edu.misc.Excel.Workbook;
  *
  */
 @attribute(value = "", required = true)
-public class ExcelXml extends XmlObject {
+public class ExcelXml extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(ExcelXml.class);
 	boolean truncateFirst = false;
 	String dir = null;

@@ -21,9 +21,10 @@ import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.javalobby.tnt.annotation.attribute;
 
-public class Email extends XmlObject {
+public class Email extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(Email.class);
 	private String host = null;
 	private String user = null;

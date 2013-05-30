@@ -9,6 +9,7 @@ import org.apache.commons.logging.LogFactory;
 import com.javalobby.tnt.annotation.attribute;
 
 import edu.bxml.io.FilterAJ;
+import edu.bxml.io.FilterAJImpl;
 /**
  * Specify the query that needs formatting
  * @author ritcheyg
@@ -19,7 +20,7 @@ import edu.bxml.io.FilterAJ;
  *
  */
 @attribute(value = "", required = true)
-public class Field extends FilterAJ {
+public class Field extends FilterAJImpl implements FilterAJ {
 	private static Log log = LogFactory.getLog(Field.class);
 
 	SqlAnalyzer analyzer;
@@ -40,6 +41,8 @@ public class Field extends FilterAJ {
 		fields.put("width", width.toString());
 		fields.put("visible", visible.toString());
 		fields.put("separator", separator);
+		fields.put("key", fieldName);
+		fields.put("Key", fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1));
 		return fields;
 	}
 	

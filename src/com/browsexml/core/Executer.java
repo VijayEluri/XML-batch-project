@@ -17,7 +17,7 @@ import edu.bxml.format.Properties;
  * 
  */
 @attribute(value = "", required = true)
-public class Executer extends XmlObject {
+public class Executer extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(Executer.class);
 	List<XmlObject> commands = new ArrayList<XmlObject>();
 	

@@ -8,7 +8,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.apache.commons.codec.binary.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -16,6 +15,7 @@ import com.browsexml.core.XMLBuildException;
 import com.javalobby.tnt.annotation.attribute;
 
 import edu.bxml.io.FilterAJ;
+import edu.bxml.io.FilterAJImpl;
 
 /**
  * Output the results of a select query to an Excel xml format
@@ -24,7 +24,7 @@ import edu.bxml.io.FilterAJ;
  * 
  */
 @attribute(value = "", required = true)
-public class Excel extends FilterAJ {
+public class Excel extends FilterAJImpl implements FilterAJ {
 	
 	PrintStream localOut = null;
 	public static String newline = "\n";//System.getProperty("line.separator");
@@ -66,14 +66,19 @@ public class Excel extends FilterAJ {
 			java.sql.Connection c = null;
 
 			try {
-				log.debug("sql = " + sql.getQuery());
+				log.debug("xxx sql = " + sql.getQuery());
 				c = connection.getConnection();
+				log.debug("connetion created");
 				stmt = c.createStatement();
+				log.debug("stmtn created");
 				rs = stmt.executeQuery(sql.getQuery());
-
+				log.debug("record set created");
 				printHeader();
+				log.debug("header printed");
 				printTable(rs);
+				log.debug("rs printed");
 				printFooter();
+				log.debug("footer printed");
 				
 
 			} catch (XMLBuildException e) {
@@ -141,14 +146,14 @@ log.debug("rs count = " + rs.getFetchSize());
 		while (rs.next()) {
 			localOut.println("<Row ss:AutoFitHeight=\"0\" ss:Height=\"12.75\">");
 			for (Column column: columns) {
-				printDataLine(rs.getObject(column.getIndex()));
+				printDataLine(rs.getObject(column.getIndex()), column);
 			}
 			localOut.println("</Row>");
 		}
 		localOut.println("</Table>");
 	}
 
-	public void printDataLine(Object data) {
+	public void printDataLine(Object data, Column column) {
 		String strData = "";
 		if (data != null) {
 			strData = data.toString();
@@ -159,8 +164,13 @@ log.debug("rs count = " + rs.getFetchSize());
 		}
 		
 		strData = escHtml(strData);
+		int formatNumber = column.getFormatNumber();
+		String formatType = "DateTime";
+		if (formatNumber == 62) {
+			formatType = "String";
+		}
 		
-		localOut.println("<Cell ss:StyleID=\"s70\"><Data ss:Type=\"String\">"
+		localOut.println("<Cell ss:StyleID=\"s" + formatNumber + "\"><Data ss:Type=\"" + formatType + "\">"
 				+ strData + "</Data></Cell>");
 	}
 	
@@ -244,12 +254,36 @@ log.debug("rs count = " + rs.getFetchSize());
 				+ "   <Alignment ss:Vertical=\"Bottom\"/> " + "   <Borders/> "+ newline 
 				+ "   <Font ss:FontName=\"MS Sans Serif\"/> "+ newline 
 				+ "   <Interior/> " + "   <NumberFormat ss:Format=\"Fixed\"/> "+ newline 
-				+ "  </Style> " + " </Styles>"+ newline 
+				+ "  </Style> ");
+		
+			int i = 1;
+			for (Column column: columns) {
+				column.setFormatNumber(62);
+				String format = column.getDateTimeFormat();
+				if (format  != null) {
+					int id = 70+i++;
+					column.setFormatNumber(id);
+					localOut.println(createNumberStyle(id, 70, format));
+				}
+			}
+			localOut.println(
+				 " </Styles>"+ newline 
 				+ "<Worksheet ss:Name=\"" + queryName + "\">"+ newline );
 	}
 	
 	public void addColumn(Column column) {
 		columns.add(column);
+	}
+	
+	public String createNumberStyle(int id, int parentId, String format) {
+		  String ret = "<Style ss:ID=\"s" + id + "\" ss:Parent=\"s" + parentId + "\">" + newline
+				  + "<Alignment ss:Vertical=\"Bottom\"/>" + newline
+				  + "<Borders/> " + newline
+				  + "<Font ss:FontName=\"MS Sans Serif\"/> " + newline
+				  + "<Interior/> " + newline
+				  + "<NumberFormat ss:Format=\"" + format + "\"/> " + newline
+				  + "</Style> " + newline;
+		return ret;
 	}
 
 }

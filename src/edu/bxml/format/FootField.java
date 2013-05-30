@@ -3,8 +3,6 @@ package edu.bxml.format;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
@@ -15,6 +13,7 @@ import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.javalobby.tnt.annotation.attribute;
 
 /**
@@ -25,7 +24,7 @@ import com.javalobby.tnt.annotation.attribute;
  * 
  */
 @attribute(value = "", required = true)
-public class FootField extends XmlObject {
+public class FootField extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(FootField.class);
 	Vector <Select> selections = new Vector<Select>();
 	Select select = null;

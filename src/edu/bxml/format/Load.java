@@ -23,6 +23,7 @@ import com.browsexml.core.XMLBuildException;
 import com.javalobby.tnt.annotation.attribute;
 
 import edu.bxml.io.FilterAJ;
+import edu.bxml.io.FilterAJImpl;
 /**
  * Load data from a flat file into a database table
  * 
@@ -30,7 +31,7 @@ import edu.bxml.io.FilterAJ;
  * 
  */
 @attribute(value = "", required = true)
-public class Load extends FilterAJ {
+public class Load extends FilterAJImpl implements FilterAJ {
 	private static Log log = LogFactory.getLog(Load.class);
 	public String delimit = "\t";
 	public boolean fixedWidth = false;

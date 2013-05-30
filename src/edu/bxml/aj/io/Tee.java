@@ -12,6 +12,7 @@ import com.browsexml.core.XMLBuildException;
 import com.javalobby.tnt.annotation.attribute;
 
 import edu.bxml.io.FilterAJ;
+import edu.bxml.io.FilterAJImpl;
 import edu.bxml.io.TeeOutputStream;
 
 /**
@@ -21,7 +22,7 @@ import edu.bxml.io.TeeOutputStream;
  * 
  */
 @attribute(value = "", required = true)
-public class Tee extends FilterAJ  {
+public class Tee extends FilterAJImpl implements FilterAJ  {
 	private static Log log = LogFactory.getLog(Tee.class);
 	OutputStream teeOut = null;
 	

@@ -8,6 +8,7 @@ import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.javalobby.tnt.annotation.attribute;
 /**
  * Declare a property (variable).  The property is created as soon as the end-tag
@@ -16,7 +17,7 @@ import com.javalobby.tnt.annotation.attribute;
  *
  */
 @attribute(value = "", required = true)
-public class Property extends XmlObject {
+public class Property extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(Property.class);
 
 	public String value = "";

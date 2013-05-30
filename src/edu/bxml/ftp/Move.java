@@ -7,10 +7,11 @@ import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.javalobby.tnt.annotation.attribute;
 import com.jcraft.jsch.ChannelSftp;
-import com.jcraft.jsch.SftpException;
 import com.jcraft.jsch.ChannelSftp.LsEntry;
+import com.jcraft.jsch.SftpException;
 /**
  * Move a remote file to another remote location on the same FTP server.
  * Implements Command.
@@ -18,7 +19,7 @@ import com.jcraft.jsch.ChannelSftp.LsEntry;
  * 
  */
 @attribute(value = "", required = true)
-public class Move extends XmlObject {
+public class Move extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(Move.class);
 	String dir = null;
 	String file = null;

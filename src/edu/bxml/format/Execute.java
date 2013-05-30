@@ -14,7 +14,7 @@ import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
-import com.browsexml.core.XmlParser;
+import com.browsexml.core.XmlObjectImpl;
 import com.javalobby.tnt.annotation.attribute;
 
 /**
@@ -24,7 +24,7 @@ import com.javalobby.tnt.annotation.attribute;
  * 
  */
 @attribute(value = "", required = true)
-public class Execute extends XmlObject {
+public class Execute extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(Execute.class);
 	
 	public String mainSql = null;

@@ -10,6 +10,7 @@ import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.javalobby.tnt.annotation.attribute;
 /**
  * Copy files from an archive directory to a processing directory
@@ -17,7 +18,7 @@ import com.javalobby.tnt.annotation.attribute;
  * 
  */
 @attribute(value = "", required = true)
-public class SyncOnArchive extends XmlObject {
+public class SyncOnArchive extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(SyncOnArchive.class);
 	private File liveDir = null;
 	private File archiveBase = null;

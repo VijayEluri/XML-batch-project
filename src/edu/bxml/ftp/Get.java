@@ -12,6 +12,7 @@ import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.javalobby.tnt.annotation.attribute;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.SftpException;
@@ -23,7 +24,7 @@ import com.jcraft.jsch.SftpException;
  * 
  */
 @attribute(value = "", required = true)
-public class Get extends XmlObject {
+public class Get extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(Get.class);
 	String src = null;
 	String dst = null;

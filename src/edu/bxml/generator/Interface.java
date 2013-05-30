@@ -3,9 +3,14 @@ package edu.bxml.generator;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.browsexml.core.XmlObject;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
-public class Interface extends XmlObject {
+import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
+
+public class Interface extends XmlObjectImpl implements XmlObject {
+	private static Log log = LogFactory.getLog(Interface.class);
 	String label;
 	String operator;
 	String width;
@@ -38,7 +43,9 @@ public class Interface extends XmlObject {
 	}
 	@Override
 	public void check() {
-		
+		if (operator == null) {
+			log.error("operator for " + getName() + " should not be null");
+		}
 	}
 	@Override
 	public void execute() {

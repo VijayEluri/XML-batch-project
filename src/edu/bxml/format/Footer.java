@@ -1,14 +1,12 @@
 package edu.bxml.format;
 
-import java.io.PrintStream;
 import java.sql.SQLException;
 import java.util.Vector;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.javalobby.tnt.annotation.attribute;
-
-import edu.bxml.io.FilterAJ;
 
 /**
  * Hold information about how to format the footer
@@ -16,7 +14,7 @@ import edu.bxml.io.FilterAJ;
  *
  */
 @attribute(value = "", required = true)
-public class Footer extends XmlObject {
+public class Footer extends XmlObjectImpl implements XmlObject {
 	String separator = null;
 	private Vector<FootField> footerFields = new Vector<FootField>();
 	Select parent = null;

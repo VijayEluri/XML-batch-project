@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Display;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.javalobby.tnt.annotation.attribute;
 
 import edu.bxml.http.Get;
@@ -18,7 +19,7 @@ import edu.bxml.http.Parameter;
  * Execute children when an event of the given type occurs
  */
 @attribute(value = "", required = false)
-public class LocationListener extends XmlObject {
+public class LocationListener extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(LocationListener.class);
 	org.eclipse.swt.browser.Browser parent = null;
 	Vector<XmlObject>actions = new Vector<XmlObject>();

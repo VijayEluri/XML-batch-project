@@ -7,15 +7,15 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
-import com.browsexml.core.XmlParser;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.javalobby.tnt.annotation.attribute;
 
 /**
  * A debug tool that sends the contents of the xml tag's body to System.out
  */
 @attribute(value = "", required = false)
-public class Redirect extends XmlObject {
+public class Redirect extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(Redirect.class);
 	String name = null;
 	Object object = null;

@@ -10,15 +10,14 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.browsexml.core.XmlParser;
 import com.javalobby.tnt.annotation.attribute;
 /**
@@ -28,7 +27,7 @@ import com.javalobby.tnt.annotation.attribute;
  *
  */
 @attribute(value = "", required = true)
-public class Properties extends XmlObject {
+public class Properties extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(Properties.class);
 
 	public String value = "";

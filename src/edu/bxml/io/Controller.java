@@ -11,8 +11,9 @@ import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 
-public class Controller extends XmlObject {
+public class Controller extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(Controller.class);
 	String packageName = null;
 	final String classExtendedName = "Controller";

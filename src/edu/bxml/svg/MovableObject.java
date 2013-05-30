@@ -9,8 +9,9 @@ import org.w3c.dom.Element;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 
-public  class MovableObject extends XmlObject {
+public  class MovableObject extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(MovableObject.class);
 	static private int idCount = 0;
 

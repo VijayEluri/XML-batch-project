@@ -1,6 +1,7 @@
 package edu.bxml.format;
 
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.javalobby.tnt.annotation.attribute;
 /**
  * Specify the unique id after all groups have been
@@ -11,7 +12,7 @@ import com.javalobby.tnt.annotation.attribute;
  *
  */
 @attribute(value = "", required = true)
-public class Key extends XmlObject {
+public class Key extends XmlObjectImpl implements XmlObject {
 	
 	public String name = null;
 	

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -37,6 +38,7 @@ import com.javalobby.tnt.annotation.attribute;
 import edu.bxml.aj.format.Query;
 import edu.bxml.format.Sql;
 import edu.bxml.io.FilterAJ;
+import edu.bxml.io.FilterAJImpl;
 
 /**
  * Specify the query that needs formatting
@@ -45,7 +47,7 @@ import edu.bxml.io.FilterAJ;
  * 
  */
 @attribute(value = "", required = true)
-public class SqlAnalyzer extends FilterAJ {
+public class SqlAnalyzer extends FilterAJImpl implements FilterAJ {
 	private static Log log = LogFactory.getLog(SqlAnalyzer.class);
 
 	String queryName;
@@ -133,6 +135,8 @@ public class SqlAnalyzer extends FilterAJ {
 		CCJSqlParserManager parserManager = new CCJSqlParserManager();
 		Generator generator = getAncestorOfType(Generator.class);
 		Query query = getAncestorOfType(Query.class);
+		log.debug("query = " + query);
+		log.debug("queryName = " + queryName);
 		Sql sql = query.getSql(queryName);
 		PlainSelect select = parse(parserManager, sql);
 		log.debug("analyzer where variables = " + whereVariables.get());
@@ -256,6 +260,7 @@ public class SqlAnalyzer extends FilterAJ {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+			log.debug("maptables put " + t.getName() + "  value = " + columns);
 			mapTables.get().put(t.getName(), columns);
 		}
 		printWhere(plain.getWhere(), null, null);
@@ -333,6 +338,7 @@ public class SqlAnalyzer extends FilterAJ {
 			env.put("javaType", javaType);
 			String key = matcher.group(3);
 			env.put("key", key);
+			env.put("Key", Character.toUpperCase(key.charAt(0)) + key.substring(1));
 			String interfaceType = "variable";
 			if (workingPerson != null && key != null
 					&& workingPerson.equals(key)) {
@@ -340,7 +346,14 @@ public class SqlAnalyzer extends FilterAJ {
 			}
 			translateJavaToGui(javaType, key, env);
 
-			Set<String> s = constants.getItems();
+			Set<String> s = null;
+			if (constants == null) {
+				s = new HashSet();
+				log.warn("No constants are defined for sqlAnalyzer.  Constants tell which elements of your where clause should not be set by the interface.");
+			}
+			else {
+				s = constants.getItems();
+			}
 			log.debug("constants =  " + s);
 			log.debug("key = '" + key + "'");
 			if (key != null && s.contains(key)) {
@@ -461,6 +474,7 @@ public class SqlAnalyzer extends FilterAJ {
 		}
 		ResultSet rs = null;
 		try {
+			log.debug("query = " + query);
 			rs = x.executeQuery(query);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

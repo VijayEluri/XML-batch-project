@@ -2,18 +2,18 @@ package edu.bxml.swt;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.TableItem;
-import org.xml.sax.SAXParseException;
 
 import com.browsexml.core.XMLBuildException;
-import com.browsexml.core.XmlParser;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
+import com.browsexml.core.XmlParser;
 import com.javalobby.tnt.annotation.attribute;
 
 /**
  * Add a row of data to a table.
  */
 @attribute(value = "", required = false)
-public class Tr extends XmlObject {
+public class Tr extends XmlObjectImpl implements XmlObject {
 	org.eclipse.swt.widgets.Table GUIParent = null;
 	int style = 0;
 	TableItem item = null;

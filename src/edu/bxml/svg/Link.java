@@ -4,8 +4,9 @@ import org.w3c.dom.Element;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 
-public class Link extends XmlObject {
+public class Link extends XmlObjectImpl implements XmlObject {
 	private Element stroke;
 	private LineEndPoint endPoint;
 	

@@ -8,6 +8,7 @@ import org.apache.commons.logging.LogFactory;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.javalobby.tnt.annotation.attribute;
 
 import edu.bxml.format.Properties;
@@ -21,7 +22,7 @@ import edu.bxml.format.Properties;
  * 
  */
 @attribute(value = "", required = true)
-public class Io extends XmlObject {
+public class Io extends XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(Io.class);
 	List<XmlObject> commands = new ArrayList<XmlObject>();
 	

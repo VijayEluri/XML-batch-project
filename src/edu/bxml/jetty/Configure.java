@@ -12,8 +12,9 @@ import org.apache.commons.logging.LogFactory;
 import com.browsexml.core.XMLBuildException;
 
 import edu.bxml.io.FilterAJ;
+import edu.bxml.io.FilterAJImpl;
 
-public class Configure extends FilterAJ {
+public class Configure extends FilterAJImpl implements FilterAJ {
 	private static Log log = LogFactory.getLog(Configure.class);
 	
 	String clazz;

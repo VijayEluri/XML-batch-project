@@ -4,6 +4,7 @@ import java.util.Vector;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.javalobby.tnt.annotation.attribute;
 
 /**
@@ -12,7 +13,7 @@ import com.javalobby.tnt.annotation.attribute;
  *
  */
 @attribute(value = "", required = true)
-public class Worksheet extends XmlObject {
+public class Worksheet extends XmlObjectImpl implements XmlObject {
 	Vector <Table> tables = new Vector<Table>();
 	
 	/**

@@ -7,13 +7,14 @@ import org.apache.commons.httpclient.methods.multipart.Part;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
+import com.browsexml.core.XmlObjectImpl;
 import com.javalobby.tnt.annotation.attribute;
 /**
  * Get an http web page
  * 
  */
 @attribute(value = "", required = false)
-public class Parts extends XmlObject {
+public class Parts extends XmlObjectImpl implements XmlObject {
 
 	Vector<XmlObject> parts = new Vector<XmlObject>();
 	Part part[] = null;
