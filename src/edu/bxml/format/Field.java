@@ -35,6 +35,75 @@ public abstract class Field extends XmlObjectImpl implements XmlObject {
 
 	public String fieldName = null;
 	public String headerName = null;
+	public String comment = null;
+	public String valid = null;
+	public String validateColumn = null;
+
+	public boolean isColumnValid(String line) {
+		if (validateColumn == null) {
+			return true;
+		}
+		String[] equations = validateColumn.split(" *= *");
+		if (equations.length != 2) {
+			log.warn(getName() + ": validateColumn (" + validateColumn + ") must be of the form nnn = x1+x2+x3...");
+			return false;
+		}
+		
+		int value = Integer.parseInt(equations[0]);
+		int total = 0;
+		for (String summand: equations[1].split(" *\\+ *")) {
+			total += Integer.parseInt(summand);
+		}
+		if (total != value) {
+			log.warn(getName() + ": validateColumn: total (" + total + ") does not equal value (" + value + ")");
+		}
+		
+		if (value != line.length()) {
+			log.warn(getName() + ": validateColumn: line (" + line + ") length != " + value);
+			return false;
+		}
+
+		return true;
+	}
+	
+	public String getValidateColumn() {
+		return validateColumn;
+	}
+
+	public void setValidateColumn(String validateColumn) {
+		this.validateColumn = validateColumn;
+	}
+
+	public String getValid() {
+		return valid;
+	}
+
+	public void setValid(String valid) {
+		this.valid = valid;
+	}
+	
+	public Boolean isValid(Object value) {
+		if (valid == null) {
+			return true;
+		}
+		if (value == null) { 
+			log.warn(value + " does not match (validate) against " + valid);
+			return false;
+		}
+		if (value.toString().matches(valid)) {
+			return true;
+		}
+		log.warn(value + " does not match (validate) against " + valid);
+		return false;
+	}
+
+	public String getComment() {
+		return comment;
+	}
+
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
 
 	public Types type = null;
 
@@ -99,8 +168,13 @@ public abstract class Field extends XmlObjectImpl implements XmlObject {
 	public String toString() {
 		return ("name: " + getName() + "  fieldName: " + fieldName + "  type: " + type + "   size: " + size + "  delimit: " + delimit);
 	}
+
 	
-	public abstract String format(Object value) throws XMLBuildException;
+	public String format(Object value) throws XMLBuildException {
+		isValid(value+"");
+		return value + "";
+	}
+	
 	public abstract String insertFormat(String value) throws XMLBuildException;
 	public abstract Object getObject(String value) throws XMLBuildException;
 	

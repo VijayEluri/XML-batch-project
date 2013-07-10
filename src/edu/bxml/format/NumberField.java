@@ -56,6 +56,7 @@ public class NumberField extends Field {
 		if (v == null) {
 			returnValue = defaultValue;
 		}
+		
 		if (min != null &&  ((Integer) v) < min) {
 			returnValue = defaultValue;
 		}
@@ -93,6 +94,9 @@ public class NumberField extends Field {
 					log.debug(getFieldName() + ": " + " truncated, value = '" + value + "'.");
 				}
 			}
+		}
+		if (!isValid(returnValue)) {
+			log.warn("field " + this.getName() + " does not validate");
 		}
 		if (pretext == null) 
 			return returnValue;

@@ -35,6 +35,7 @@ public class Executer extends XmlObjectImpl implements XmlObject {
 	 * Called after complete parsing of XML document to evaluate the document.
 	 */
 	public void execute() throws XMLBuildException {
+		log.debug("executer commands count = " + commands.size());
 		for (XmlObject command: commands) {
 			try {
 				log.debug("Execute: " + command.toString());
@@ -51,7 +52,7 @@ public class Executer extends XmlObjectImpl implements XmlObject {
 	 * @param file
 	 */
 	@attribute(value = "", required = false)
-	public void addXmlObject(XmlObject object) {
+	public void addXmlObjectImpl(XmlObjectImpl object) {
 		log.debug("ADD XML OBJECT " + object);
 		commands.add(object);
 	}

@@ -38,17 +38,17 @@
 		</repository>
 	</repositories>
 	<dependencies>
-			<dependency>
+		<dependency>
 			<groupId>cglib</groupId>
 			<artifactId>cglib-nodep</artifactId>
 			<version>2.2</version>
 		</dependency>
-	<dependency>
-		<groupId>org.osgilab.bundles</groupId>
+		<dependency>
+			<groupId>org.osgilab.bundles</groupId>
 			<artifactId>monitoradmin</artifactId>
-				<version>1.0.1</version>
-				</dependency>
-				            
+			<version>1.0.1</version>
+		</dependency>
+
 		<dependency>
 			<groupId>com.microsoft.jdbcdriver</groupId>
 			<artifactId>sqljdbc</artifactId>
@@ -194,10 +194,10 @@
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
-		   <groupId>org.openengsb.wrapped</groupId>
-		      <artifactId>com.jcraft.jsch-all</artifactId>
-		         <version>0.1.42.w1</version>
-		         </dependency>
+			<groupId>org.openengsb.wrapped</groupId>
+			<artifactId>com.jcraft.jsch-all</artifactId>
+			<version>0.1.42.w1</version>
+		</dependency>
 		<dependency>
 			<groupId>net.sourceforge.jtds</groupId>
 			<artifactId>jtds</artifactId>
@@ -329,12 +329,12 @@
 			<artifactId>jface</artifactId>
 			<version>3.3.0-I20070606-0010</version>
 		</dependency>
-	
-    <dependency>
-      <groupId>org.apache.felix</groupId>
-      <artifactId>org.osgi.core</artifactId>
-      <version>0.8.0-incubator</version>
-    </dependency>
+
+		<dependency>
+			<groupId>org.apache.felix</groupId>
+			<artifactId>org.osgi.core</artifactId>
+			<version>0.8.0-incubator</version>
+		</dependency>
 
 	</dependencies>
 
@@ -345,27 +345,27 @@
 		<testSourceDirectory>test</testSourceDirectory>
 
 		<plugins>
-            <plugin>  
-                <groupId>org.apache.felix</groupId>  
-                <artifactId>maven-bundle-plugin</artifactId>  
-                <version>2.0.1</version>  
-                <extensions>true</extensions>  
-                <!-- maven-bundle-plugin configuration [4] -->  
-                <configuration>  
-                    <instructions>  
-                        <Bundle-Activator>  
-                            org.osgilab.bundles.monitoradmin.Activator  
-                        </Bundle-Activator>  
-                        <Bundle-SymbolicName>  
-                            ${project.groupId}.${project.artifactId};singleton:=true  
-                        </Bundle-SymbolicName>  
-                        <Bundle-RequiredExecutionEnvironment>  
-                            J2SE-1.5  
-                        </Bundle-RequiredExecutionEnvironment>  
-                        <Import-Package>!com.sun.*, *</Import-Package>
-                    </instructions>  
-                </configuration>  
-            </plugin>  
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<version>2.0.1</version>
+				<extensions>true</extensions>
+				<!-- maven-bundle-plugin configuration [4] -->
+				<configuration>
+					<instructions>
+						<Bundle-Activator>
+							org.osgilab.bundles.monitoradmin.Activator
+						</Bundle-Activator>
+						<Bundle-SymbolicName>
+							${project.groupId}.${project.artifactId};singleton:=true
+						</Bundle-SymbolicName>
+						<Bundle-RequiredExecutionEnvironment>
+							J2SE-1.5
+						</Bundle-RequiredExecutionEnvironment>
+						<Import-Package>!com.sun.*, *</Import-Package>
+					</instructions>
+				</configuration>
+			</plugin>
 
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -421,40 +421,60 @@
 		</plugins>
 	</build>
 
-       <profiles>
-                <profile>
-                        <id>progress</id>
-                        <activation>
-                                <property>
-                                        <name>TEG</name>
-                                </property>
-                        </activation>
-                        <build>
-                                <plugins>
-                                        <plugin>
-                                                <groupId>org.codehaus.mojo</groupId>
-                                                <artifactId>exec-maven-plugin</artifactId>
-                                                <version>1.2.1</version>
-                                                <executions>
-                                                        <execution>
-                                                                <goals>
-                                                                        <goal>java</goal>
-                                                                </goals>
-                                                        </execution>
-                                                </executions>
-                                                <configuration>
-                                                        <includeProjectDependencies>true</includeProjectDependencies>
-                                                        <includePluginDependencies>true</includePluginDependencies>
-                                                        <mainClass>com.browsexml.core.Main</mainClass>
-                                                        <arguments>
-                                                                <argument>TEG.xml</argument>
-                                                        </arguments>
-                                                </configuration>
-                                        </plugin>
-                                </plugins>
-                        </build>
-                </profile>
-        </profiles>
+	<profiles>
+		<profile>
+			<id>progress</id>
+			<activation>
+				<property>
+					<name>TEG</name>
+				</property>
+			</activation>
+			<build>
+
+		<filters>
+			<filter>build.properties</filter>
+		</filters>
+
+		<resources>
+			<resource>
+				<directory>src</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>1.2.1</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>java</goal>
+								</goals>
+							</execution>
+						</executions>
+	
+						<!-- mvn exec:java -DTEG >k 2>&1 -->
+						<configuration>
+							<includeProjectDependencies>true</includeProjectDependencies>
+							<includePluginDependencies>true</includePluginDependencies>
+							<mainClass>com.browsexml.core.Main</mainClass>
+							<arguments>
+								<argument>TEG.xml</argument>
+							</arguments>
+							<systemProperties>
+								<systemProperty>
+									<key>java.naming.factory.initial</key>
+									<value>com.ritchey.naming.InitialContextFactory</value>
+								</systemProperty>
+							</systemProperties>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 
 </project>

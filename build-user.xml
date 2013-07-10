@@ -206,7 +206,7 @@
 		<arg value="loadTAClasses.xml" />
 	</java>
 </target>
-<target name="load TX Grant" depends="build" description="load Texas Grant">
+<target name="TEG" depends="build" description="load Texas Grant">
 	<java dir="." logError="true" fork="true"
 		classname="com.browsexml.core.Main">
 		<classpath refid="browsexml.classpath" />
