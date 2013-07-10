@@ -10,32 +10,12 @@
         </layout>
     </appender>
     
-    <logger name="edu.bxml.format.Load">
-    	<level value="DEBUG"/>
-    </logger>
-    
-    <logger name="com.browsexml">
-    	<level value="WARN"/>
-    </logger>
-
-    <logger name="edu.bxml.format.Excel">
-    	<level value="DEBUG"/>
-    </logger>
-    
-    <logger name="edu.bxml.io.FilterAJ">
-    	<level value="DEBUG"/>
-    </logger>
-
     <logger name="edu.bxml">
-    	<level value="WARN"/>
-    </logger>
-    
-    <logger name="com.browsexml.core.XmlParser">
-    	<level value="WARN"/>
+    	<level value="DEBUG"/>
     </logger>
 
     <root>
-        <level value="WARN"/>
+        <level value="DEBUG"/>
         <appender-ref ref="CONSOLE"/>
     </root>
     

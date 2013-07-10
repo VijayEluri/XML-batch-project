@@ -74,6 +74,9 @@ public class CharField extends Field {
 		if (quoteStrings) {
 			return "\"" + returnValue + "\"";
 		}
+		if (!isValid(returnValue)) {
+			log.warn("field " + this.getName() + " does not validate");
+		}
 		return returnValue;
 	}
 

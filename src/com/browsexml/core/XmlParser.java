@@ -352,7 +352,7 @@ public class XmlParser {
 		Exception ex = null;
 		String name = null;
 		log.debug("Add to parent");
-		if (!endTag) {
+		if (endTag) {
 			if (parent instanceof FilterAJ && current instanceof FilterAJ) {
 				Object parentPojo = ((FilterAJ) parent).getPojo();
 				Object currentPojo = ((FilterAJ) current).getPojo();
@@ -387,6 +387,25 @@ public class XmlParser {
 			}
 		}
 		arguments[0] = current;
+		for (Method m: c.getMethods()) {
+			if (m.getName().equals("add") && m.getParameterTypes().length == 1) {
+				try {
+					log.debug("Call " + m);
+					m.invoke(parent, arguments);
+					log.debug("Call SUCCESS");
+					success = true;
+				} catch (IllegalArgumentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 		for (Class t = current.getClass(); !success && t != null; t = t
 				.getSuperclass()) {
 			try {
@@ -470,9 +489,12 @@ public class XmlParser {
 	}
 
 	public void execute() throws XMLBuildException {
-		log.debug("ROOT EXECUTE  is a " + root.getClass().getName());
-		if (root != null)
+		log.debug("ROOT EXECUTE g  is a " + root.getClass().getName());
+		if (root != null) {
+			log.debug("root not null ");
 			root.execute();
+			log.debug("done execute");
+		}
 		else {
 			new Exception().printStackTrace();
 		}
@@ -754,12 +776,14 @@ public class XmlParser {
 		public void endDocument() throws SAXException {
 			log.debug("END DOCUMENT");
 			for (String key: symbolTable.keySet() ) {
+				log.debug("key = " + key);
 				Object object = symbolTable.get(key);
 				if (object != null) {
 					if (object instanceof FilterAJ) {
 						log.debug("FilterAJ  = " + object.getClass().getName());
 						Object currentPojo = ((FilterAJ) object).getPojo();
 						if (currentPojo != null) {
+							log.debug("POJO = " + currentPojo.getClass().getName());
 							for (Method m: currentPojo.getClass().getMethods()) {
 								if (m.isAnnotationPresent(EndDocument.class)) {
 									log.debug("ANNOTATION on " + m.toString());
@@ -991,13 +1015,20 @@ public class XmlParser {
 					}
 					o.setFromTextContent(strBuffer);
 					if (o instanceof FilterAJ) {
-						log.debug("FilterAJ  = " + o.getClass().getName());
+						log.debug("looking for VALUE FilterAJ  = " + o.getClass().getName());
 						Object currentPojo = ((FilterAJ) o).getPojo();
 						if (currentPojo != null) {
+							log.debug("looking for VALUE pojo  = " + currentPojo.getClass().getName());
 							for (Method m: currentPojo.getClass().getMethods()) {
 								if (m.isAnnotationPresent(Value.class)) {
-									log.debug("ANNOTATION on " + m.toString());
+									log.debug("VALUE ANNOTATION on " + m.toString());
 									try {
+										Class[] parameterTypes = new Class[1];
+										Object[] arguments = new Object[1];
+										
+										parameterTypes[0] = String.class;
+										arguments[0] = strBuffer;
+										
 										m.invoke(currentPojo, strBuffer);
 									} catch (IllegalArgumentException e) {
 										e.printStackTrace();

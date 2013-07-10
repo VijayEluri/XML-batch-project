@@ -51,6 +51,7 @@ public class Connection extends XmlObjectImpl implements XmlObject {
 
 
 	public void setJndi(String jndi) {
+		log.debug("set jndi to " + jndi);
 		this.jndi = jndi;
 	}
 
@@ -240,7 +241,7 @@ public class Connection extends XmlObjectImpl implements XmlObject {
 		}
 		if (jndi == null) {
 			if (login == null )
-				throw new XMLBuildException("login can't be null");
+				throw new XMLBuildException("both jndi and login can't be null");
 			if (password == null )
 				throw new XMLBuildException("password can't be null");
 			if (theClass == null)

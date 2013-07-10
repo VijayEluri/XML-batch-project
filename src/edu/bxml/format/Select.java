@@ -696,7 +696,10 @@ public class Select extends FilterAJImpl implements FilterAJ {
 				delimit = f.getDelimit();
 				if (delimit == null) 
 					delimit = this.delimit;
-				outline.append(f.format(value)).append(delimit);
+				String formattedValue = f.format(value);
+				log.debug(f.fieldName + " column = " + outline.length());
+				outline.append(formattedValue).append(delimit);
+				f.isColumnValid(outline.toString());
 			}
 		}
 		outline.setLength(outline.length()-delimit.length());

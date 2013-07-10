@@ -7,7 +7,7 @@ import java.io.OutputStream;
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
 
-public interface FilterAJ extends Runnable, XmlObject {
+public interface FilterAJ extends HasPojo, Runnable, XmlObject {
 
 	boolean isHereFile();
 	void setHereFile(boolean isHereFile);
@@ -31,6 +31,5 @@ public interface FilterAJ extends Runnable, XmlObject {
 	void setOutFile(File outFile);
 	void setArchive(String archive);
 	void setDir(String dir);
-	Object getPojo();
 	boolean isIff();
 }
