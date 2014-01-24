@@ -108,6 +108,8 @@ public class SqlAnalyzer extends FilterAJImpl implements FilterAJ {
 	}
 
 	public static boolean isVariable() {
+		if (variable.get() == null)
+			return false;
 		return variable.get();
 	}
 

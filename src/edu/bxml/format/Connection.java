@@ -123,7 +123,7 @@ public class Connection extends XmlObjectImpl implements XmlObject {
 		java.sql.Connection con = null;
 		
 		con = getJndiConnection();
-		
+		log.debug("the class = " + theClass);
 		if (con == null) {
 			Class.forName(theClass);
 			this.execute();
@@ -219,15 +219,15 @@ public class Connection extends XmlObjectImpl implements XmlObject {
 		        result = datasource.getConnection();
 		      }
 		      else {
-		    	  log.debug("Failed to lookup datasource.");
+		    	  log.error("Failed to lookup datasource.");
 		      }
 		    }
 		    catch ( NamingException ex ) {
-		    	log.debug("Cannot get connection: " + ex);
+		    	log.error("Cannot get connection: " + ex);
 		    	ex.printStackTrace();
 		    }
 		    catch(SQLException ex){
-		    	log.debug("Cannot get connection: " + ex);
+		    	log.error("Cannot get connection: " + ex);
 		    	ex.printStackTrace();
 		    }
 			log.debug("result = " + result);

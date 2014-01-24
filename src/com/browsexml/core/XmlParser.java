@@ -5,6 +5,7 @@ import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -17,6 +18,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
@@ -514,6 +516,13 @@ public class XmlParser {
 			e.printStackTrace();
 		}
 	}
+	
+	public XmlParser(byte[] data, SAXParserFactory factory, Map env)
+			throws Exception {
+		saxParser = factory.newSAXParser();
+		symbolTable.put("_#env", env);
+		parse(data);
+	}
 
 	public XmlParser(String xmlFile, SAXParserFactory factory, Map env)
 			throws XMLBuildException, IOException, SAXParseException,
@@ -688,10 +697,113 @@ public class XmlParser {
 		System.arraycopy(second, 0, result, first.length, second.length);
 		return result;
 	}
+	
+	static Stack<PrintStream> oStack = new Stack<PrintStream>();
+	static Stack<InputStream> iStack = new Stack<InputStream>();
+	static PrintStream currentOut = System.out;
+	static PrintStream sysOut = System.out;
+	static InputStream currentIn = System.in;
+
+	public static void endDocument(Object currentPojo) throws SAXException {
+		log.debug(new Exception("STATIC END DOC " + currentPojo.getClass().getName() ).getStackTrace());
+		FilterAJ wrapper = (FilterAJ) pojoToWrapper.get(currentPojo);
+		if (wrapper != null) {
+			log.debug("POJO = " + currentPojo.getClass().getName());
+			log.debug("SUPER = " + currentPojo.getClass().getSuperclass().getName());
+			try {
+				log.debug("Name = " + wrapper.getName());
+			} catch (Exception e1) {
+				
+				e1.printStackTrace();
+				System.exit(1);
+			}
+			for (Method m: currentPojo.getClass().getMethods()) {
+				if (m.isAnnotationPresent(EndDocument.class)) {
+					for (Class<?> x: currentPojo.getClass().getInterfaces()) {
+						log.debug("INTERFACE = " + x);
+					}
+					
+					log.debug("ANNOTATION on " + m.toString());
+			
+					log.debug("current pojo = " + currentPojo);
+					log.debug("end document: wrappers = " + pojoToWrapper);
+
+
+					
+					if (!wrapper.isIff()) {
+						return;
+					}
+					try {
+						replaceAllVariables(wrapper);
+						oStack.push(currentOut);
+						iStack.push(currentIn);
+						log.debug("Wrapper getIN");
+						log.debug("wrapper.getFile = " + wrapper.getDir() + "/" + wrapper.getFile());
+						currentIn = wrapper.getIn();
+						currentOut = new PrintStream(wrapper.getOut());
+						System.setOut(currentOut);
+						System.setIn(currentIn);
+						
+		
+						m.invoke(currentPojo, (Object[]) null);
+						currentOut = oStack.pop();
+						currentIn = iStack.pop();
+						System.setOut(currentOut);
+						wrapper.closeIn();
+						wrapper.closeOut();
+						
+					} catch (IllegalArgumentException e) {
+						e.printStackTrace();
+					} catch (IllegalAccessException e) {
+						e.printStackTrace();
+					} catch (InvocationTargetException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+	}
+	
+	/*
+	 * Replace all parameters of form ${name} with the actual values
+	 * in preperation for a call to the @EndDocument (previously execute) method
+	 */
+	public static void replaceAllVariables(XmlObject x) {
+    	Set c = x.getVariableParameters().entrySet();   
+    	log.debug("size of variable parameters = " + c.size());
+    	Iterator itr = c.iterator();
+    	
+    	// Call all setter methods
+    	while(itr.hasNext()) {
+    		Object[] arguments = new Object[1];
+    		Entry<Method, String> hmItem = (Entry<Method, String>) itr.next();
+    		
+    		arguments[0] = XmlParser.processMacros(x.getSymbolTable(), XmlParser.replacePoundMacros(hmItem.getValue()));
+    		log.debug("aspect before execute " + x.getName() + ": " + x.getClass().getName() + ": " + hmItem.getValue() + " = " + arguments[0]);
+    		try {
+				hmItem.getKey().invoke(x, arguments);
+			} catch (IllegalArgumentException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			}
+    	}
+	}
+
+	public static Map<Object, FilterAJ> getPojoToWrapper() {
+		return pojoToWrapper;
+	}
+
+	public static void setPojoToWrapper(Map<Object, FilterAJ> pojoToWrapper) {
+		XmlParser.pojoToWrapper = pojoToWrapper;
+	}
 
 	public static <S, W> W createWrapper(final S pojo,
 			final Class<W> wrapperClass) {
 
+		log.debug("create wrapper:  pojo type = " + pojo.getClass().getName() + "  wrapper class = " + wrapperClass.getName());
 		InterfaceMaker m = new InterfaceMaker();
 		m.add(pojo.getClass());
 
@@ -713,7 +825,8 @@ public class XmlParser {
 				}
 
 				Object ret = null;
-				if (Arrays.asList(wrapperClass.getMethods()).contains(method)) {
+				List<Method> list = Arrays.asList(wrapperClass.getMethods());
+				if (list.contains(method)) {
 					ret = methodProxy.invokeSuper(proxy, args);
 				}
 
@@ -722,7 +835,8 @@ public class XmlParser {
 							method.getName(), method.getParameterTypes());
 					ret = pojoMethod.invoke(pojo, args);
 				} catch (Exception e) {
-					e.printStackTrace();
+					// This is not an error; the pojo simply didn't implement a callable wrapper method
+					//e.printStackTrace();
 				}
 
 				return ret;
@@ -731,9 +845,13 @@ public class XmlParser {
 
 		});
 
-		return (W) enhancer.create();
+		W ret = (W) enhancer.create();
+		pojoToWrapper.put((Object) pojo, (FilterAJ) ret);
+		return ret;
 	}
-
+	
+	static Map<Object, FilterAJ> pojoToWrapper = new HashMap<Object, FilterAJ>();
+	
 	class QueryReader extends DefaultHandler {
 		StringBuffer textBuffer;
 		Locator locator;
@@ -745,7 +863,7 @@ public class XmlParser {
 
 		public void processingInstruction(String target, String data) {
 			if (target.equals("classpath")) {
-				String[] paths = data.split("xxxx");
+				String[] paths = data.split(";");
 				for (String path : paths) {
 					try {
 						urls.add(new URL(path));
@@ -772,6 +890,25 @@ public class XmlParser {
 			if (s != null)
 				s.close();
 		}
+		
+		public boolean parentAllowsEndDocCall(Object object) {
+			XmlObject parent = ((FilterAJ) object).getParent();
+			
+			if (parent instanceof FilterAJ) {
+				Object parentPojo = ((FilterAJ) parent).getPojo();
+				for (Method pm : parentPojo.getClass()
+						.getMethods()) {
+					if (pm.isAnnotationPresent(EndDocument.class)) {
+						EndDocument singleAnnotation = pm
+								.getAnnotation(EndDocument.class);
+						if (singleAnnotation.overrideImmediateChildren()) {
+							return false;
+						}
+					}
+				}
+			}
+			return true;
+		}
 
 		public void endDocument() throws SAXException {
 			log.debug("END DOCUMENT");
@@ -779,26 +916,14 @@ public class XmlParser {
 				log.debug("key = " + key);
 				Object object = symbolTable.get(key);
 				if (object != null) {
+					
 					if (object instanceof FilterAJ) {
-						log.debug("FilterAJ  = " + object.getClass().getName());
-						Object currentPojo = ((FilterAJ) object).getPojo();
-						if (currentPojo != null) {
-							log.debug("POJO = " + currentPojo.getClass().getName());
-							for (Method m: currentPojo.getClass().getMethods()) {
-								if (m.isAnnotationPresent(EndDocument.class)) {
-									log.debug("ANNOTATION on " + m.toString());
-									try {
-										m.invoke(currentPojo, null);
-									} catch (IllegalArgumentException e) {
-										e.printStackTrace();
-									} catch (IllegalAccessException e) {
-										e.printStackTrace();
-									} catch (InvocationTargetException e) {
-										e.printStackTrace();
-									}
-								}
-							}
+						log.debug("object is FILTERAJ = " + key);
+						if (!parentAllowsEndDocCall(object)) {
+							continue;
 						}
+						log.debug("static end = " + key);
+						XmlParser.endDocument(((FilterAJ) object).getPojo());
 					}
 					
 				}
@@ -859,8 +984,11 @@ public class XmlParser {
 				try {
 					currentObject = (XmlObject) o;
 				} catch (java.lang.ClassCastException cce) {
+					log.debug("Create WRAPPER (cast exception)");
 					currentObject = (XmlObject) createWrapper(o,
 							FilterAJImpl.class);
+					currentObject.setTypeName(o.getClass().getName());
+					
 				}
 				String cname = attrs.getValue("name");
 				currentObject.setName(cname);
@@ -952,7 +1080,7 @@ public class XmlParser {
 										}
 										if (ancestor == null) {
 											throw new XMLBuildException("A class of type " + f.getType()  + " must be an ancestor of " + currentObject.getName() + 
-													" which is of type " + currentPojo.getClass().getName());
+													" which is of type " + currentPojo.getClass().getName() + "   with a type name of " + currentObject.getTypeName());
 										}
 									}
 								}

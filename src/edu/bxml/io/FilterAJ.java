@@ -32,4 +32,6 @@ public interface FilterAJ extends HasPojo, Runnable, XmlObject {
 	void setArchive(String archive);
 	void setDir(String dir);
 	boolean isIff();
+	String getFile();
+	String getDir();
 }

@@ -10,9 +10,12 @@ import org.xml.sax.Locator;
 
 import com.javalobby.tnt.annotation.attribute;
 
+import edu.bxml.io.FilterAJ;
+
 public abstract class XmlObjectImpl implements XmlObject {
 	private static Log log = LogFactory.getLog(XmlObjectImpl.class);
 	protected String _uniqName = null;
+	protected String typeName = null;
 	protected XmlObject parent = null;
 	HashMap symbolTable = null;
 	private XmlParser parser = null;
@@ -20,6 +23,16 @@ public abstract class XmlObjectImpl implements XmlObject {
 	private HashMap<Method, String> variableParameters = new HashMap<Method, String>();
 	private String value;
 	
+	@Override
+	public String getTypeName() {
+		return typeName;
+	}
+
+	public void setTypeName(String typeName) {
+		log.debug("set type name to " + typeName);
+		this.typeName = typeName;
+	}
+
 	@Override
 	public HashMap<Method, String> getVariableParameters() {
 		return variableParameters;
@@ -185,6 +198,7 @@ public abstract class XmlObjectImpl implements XmlObject {
 			log.debug("type = " + type);
 			return null;
 		}
+		String typeName = type.getName();
 		log.trace("current x = " + x.getName());
 		log.trace("current x.getParent() = " + x.getParent());
 		while (x != null && (x=x.getParent()) != null) {
@@ -193,9 +207,16 @@ public abstract class XmlObjectImpl implements XmlObject {
 					break;
 			if (type.equals(x.getClass().getGenericSuperclass()))
 					break;
+			log.debug("type name (" + typeName + " equals type " + x.getTypeName() + "  ???");
+			if (typeName.equals(x.getTypeName())) {
+				log.debug("YES");
+				return type.cast( ((FilterAJ) x).getPojo());
+			}
+			log.debug("NO");
 		}
 		return type.cast(x);
 	}
+
 	
 	 /* Return a name with the first character lower case. This is used for
 	 * source code generation to convert a class name into part of a default
