@@ -125,8 +125,9 @@ public class Pipe extends FilterAJImpl implements FilterAJ, UncaughtExceptionHan
 			
 			filters.clear();
 			for (FilterAJ filter : filtersMaster) {
-				if (filter.isIff())
+				if (filter.isIff()) {
 					filters.add(filter);
+				}
 			}
 			for (FilterAJ filter : filters) {
 						try {
@@ -235,8 +236,8 @@ public class Pipe extends FilterAJImpl implements FilterAJ, UncaughtExceptionHan
 //			}
 		}
 		if (!found) {
-			log.debug("no file in " + new File(dir).getAbsolutePath() + 
-					" matched " + file);
+			log.debug("no file in directory '" + dir + 
+					"' matched " + file);
 		}
 		try {
 			if (pout != null)
@@ -262,7 +263,7 @@ public class Pipe extends FilterAJImpl implements FilterAJ, UncaughtExceptionHan
 	 * @throws XMLBuildException 
 	 */
 	@attribute(value = "", required = false)
-	public void addFilterAJ(FilterAJ filter) throws XMLBuildException {
+	public void addFilterAJImpl(FilterAJImpl filter) throws XMLBuildException {
 		log.debug("Fiter adding is " + filter.getClass());
 		filtersMaster.add(filter);
 	}

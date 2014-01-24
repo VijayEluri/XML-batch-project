@@ -7,14 +7,15 @@
 package com.browsexml.core;
 
 import java.awt.SplashScreen;
+import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.Statement;
 
 import javax.xml.parsers.SAXParserFactory;
 
-import org.apache.batik.svggen.font.table.Program;
 import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -53,6 +54,15 @@ public class Main {
 		URL x = getClass().getClassLoader().getResource("log4j.xml");
 		if (x == null) 
 			x = getClass().getClassLoader().getResource("log4j.xml");
+		if (x == null) {
+			File f = new File(".", "log4j.xml");
+			try {
+				x = new URL("file:///" + f.getAbsolutePath());
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		log.debug("log file url = " + x);
 
 		try {

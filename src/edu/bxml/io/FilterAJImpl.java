@@ -130,22 +130,20 @@ public class FilterAJImpl extends XmlObjectImpl implements FilterAJ, XmlObject, 
 	@Override
 	public InputStream getIn() throws XMLBuildException {
 		FilterAJImpl ancestor = this.getAncestorOfType(FilterAJImpl.class);
-		log.debug("get IN for " + this.getClass().getName());
+		log.debug("get IN for " + this.getName());
+		System.err.println("set input to " + getDir() + "/" + getFile());
+		
 		if (in != null) { 
+			log.debug("in already set ");
 			return in;
-		}
-		if (ancestor != null) {
-			log.debug("ancestor class is " + ancestor.getClass().getName());
-			this.in = ancestor.getIn();
 		}
 		
 		if (getDir() != null) {
 			if (getFile() != null) {
 				try {
 					closeIn = true;
-					file = XmlParser.processAttributes(this, this.getFile());
 					in = new FileInputStream(new File(this.getDir(), this.getFile()));
-					getLog().debug("Filter file = " + getDir() + "/" + getFile());
+					log.debug("set input to " + getDir() + "/" + getFile());
 					log.debug("get IN DONE 1");
 					return in;
 				} catch (FileNotFoundException e) {
@@ -159,7 +157,13 @@ public class FilterAJImpl extends XmlObjectImpl implements FilterAJ, XmlObject, 
 			if (getText() != null && isHereFile()) {
 				log.debug("<<HERE file");
 				in = new ByteArrayInputStream(getText().getBytes());
+				return in;
 			}
+		}
+
+		if (ancestor != null) {
+			log.debug("ancestor class is " + ancestor.getClass().getName());
+			this.in = ancestor.getIn();
 		}
 		
 		if (in == null) {
@@ -173,17 +177,13 @@ public class FilterAJImpl extends XmlObjectImpl implements FilterAJ, XmlObject, 
 	@Override
 	public OutputStream getOut() {
 
-		FilterAJImpl ancestor = this.getAncestorOfType(FilterAJImpl.class);
-		log.debug("get OUT for " + this.getClass().getName());
 		if (out != null) {
 			log.debug("out already set ");
 			return out;
 		}
-		log.debug("out is null");
-		if (ancestor != null) {
-			log.debug("ancestor class is " + ancestor.getClass().getName());
-			this.out = ancestor.getOut();
-		}
+		
+		FilterAJImpl ancestor = this.getAncestorOfType(FilterAJImpl.class);
+		log.debug("get OUT for " + this.getClass().getName());
 
 		try {
 			if (getToDir() != null && getToFile() != null){
@@ -198,6 +198,14 @@ public class FilterAJImpl extends XmlObjectImpl implements FilterAJ, XmlObject, 
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
+		
+
+		log.debug("out is null");
+		if (ancestor != null) {
+			log.debug("ancestor class is " + ancestor.getClass().getName());
+			this.out = ancestor.getOut();
+		}
+
 		
 		if (out == null) {
 			out = System.out;
@@ -336,7 +344,7 @@ public class FilterAJImpl extends XmlObjectImpl implements FilterAJ, XmlObject, 
 		if (in != null) {
 			try {
 				 byte[] buf = new byte[4096];
-				 log.debug("filterAJ execute for...");
+				 log.debug("filterAJ execute for..." + this.getName());
 				 int len = in.read(buf);
 				for (; len > 0; len = in.read(buf)) {
 					out.write(buf, 0, len);
@@ -371,10 +379,12 @@ public class FilterAJImpl extends XmlObjectImpl implements FilterAJ, XmlObject, 
 		return text;
 	}
 
+	@Override
 	public String getFile() {
 		return file;
 	}
 
+	@Override
 	public String getDir() {
 		return dir;
 	}

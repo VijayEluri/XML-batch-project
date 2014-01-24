@@ -285,7 +285,12 @@ public class Select extends FilterAJImpl implements FilterAJ {
 		log.debug(getName() + ": query = " + query);
 		
 		if (query == null) {
-			throw new XMLBuildException("Parent query did not identify itself");
+			while (x != null && !((x = x.getParent()) instanceof edu.bxml.aj.format.Query)) {
+				log.debug(" x parent looking for query type = " + x.getClass().getName());
+			}
+			query = (Query) x;
+			if (query == null)
+				throw new XMLBuildException("Parent query did not identify itself");
 		}
 		if (dir == null) {
 			dir = new File(".");
@@ -378,12 +383,14 @@ public class Select extends FilterAJImpl implements FilterAJ {
 		}
 	}
 	public void setOutput(OutputStream outFile) {
+		if (outFile == null)
+			return;
 		setLock(true);
 		out = new PrintStream(outFile);
 	}
 	
 	/**
-	 * Primarity for debugging to reset the output reguardless of other settings
+	 * Primarity for debugging to reset the output regardless of other settings
 	 * @param o
 	 */
 //	public void setOutput(PrintStream o) {

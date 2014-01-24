@@ -15,6 +15,7 @@ public interface XmlObject {
 	void setParser(XmlParser x);
 	XmlParser getParser();
 	void setName(String name);
+	void setTypeName(String typeName);
 	HashMap<Method, String> getVariableParameters();
 	void setParent(XmlObject parent);
 	boolean isIff() throws XMLBuildException;
@@ -25,6 +26,7 @@ public interface XmlObject {
 	String getSource();
 	void setSource(String source);
 	String getName();
+	String getTypeName();
 	void setSymbolTable(HashMap st);
 	HashMap getSymbolTable();
 	Object symbolTableLookUp(String object);
