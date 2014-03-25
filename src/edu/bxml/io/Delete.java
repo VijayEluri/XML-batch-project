@@ -27,14 +27,14 @@ public class Delete  extends XmlObjectImpl implements XmlObject {
 	
 	public void check() throws XMLBuildException {
 		if (file == null) 
-			throw new XMLBuildException("file must be set.");
+			throw new XMLBuildException("file must be set.", this);
 		if (dir == null)
-			throw new XMLBuildException("dir must be set.");
+			throw new XMLBuildException("dir must be set.", this);
 	}
 	public void execute() throws XMLBuildException {
 		File[] files = (new File(dir)).listFiles();
 		if (files == null) {
-			throw new XMLBuildException("can't open " +dir);
+			throw new XMLBuildException("can't open " +dir, this);
 		}
 		for (File file : files) {
 			currentFile = file;

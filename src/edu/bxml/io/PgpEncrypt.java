@@ -145,13 +145,13 @@ public class PgpEncrypt extends Filter
 			key = readKey(keyFile);
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		} catch (IOException e) {
 			e.printStackTrace();
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		} catch (MessageException e) {
 			e.printStackTrace();
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		}
 	}
 	
@@ -170,13 +170,13 @@ public class PgpEncrypt extends Filter
 			this.signersPublicKey = readKey(keyFile);
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		} catch (IOException e) {
 			e.printStackTrace();
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		} catch (MessageException e) {
 			e.printStackTrace();
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		}
 	}
 

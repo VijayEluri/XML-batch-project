@@ -39,7 +39,7 @@ public class MessageBox extends XmlObjectImpl implements XmlObject {
 	public void execute() throws XMLBuildException {
 		result = messageBox.open();
 		if (continueStyle != null && continueStyle != result){
-			throw new XMLBuildException("chose not to continue");
+			throw new XMLBuildException("chose not to continue", this);
 		}
 	}
 	@Override

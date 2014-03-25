@@ -17,7 +17,7 @@ public class MenuItem extends GUIObject {
 	
 	public boolean processRawAttributes(org.xml.sax.Attributes attrs) throws XMLBuildException {
 		if (parentMenu == null) {
-			throw new XMLBuildException("Parent menu has not been set");
+			throw new XMLBuildException("Parent menu has not been set", this);
 		}
 		String style = attrs.getValue("style");
 		this.style = XmlParser.getFieldValues(SWT.class, style);

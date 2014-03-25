@@ -98,7 +98,7 @@ public class Jsp extends Copy {
 		for (String sel: selections) {
 			Class type = types.get(sel);
 			if (type == null) {
-				throw new XMLBuildException(sel + " not defined");
+				throw new XMLBuildException(sel + " not defined", this);
 			}
 			Select s = new Select();
 			Date x;

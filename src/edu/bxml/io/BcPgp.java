@@ -63,10 +63,10 @@ public class BcPgp extends Filter {
 
 	public void check() throws XMLBuildException {
 		if (secretKeyringFile == null && publicKeyringFile == null) {
-			throw new XMLBuildException("You must specify a secretKeyringFile to decrypt or a publicKeyringFile to encrypt");
+			throw new XMLBuildException("You must specify a secretKeyringFile to decrypt or a publicKeyringFile to encrypt", this);
 		}
 		if (passPhrase == null) {
-			throw new XMLBuildException("You must specify passPhrase");
+			throw new XMLBuildException("You must specify passPhrase", this);
 		}
 	}
 
@@ -101,7 +101,7 @@ public class BcPgp extends Filter {
 
 			if (outFile.exists()) {
 				throw new XMLBuildException(outFile.getAbsolutePath()
-						+ " already exists.");
+						+ " already exists.", this);
 			} else {
 				if (secretKeyringFile != null)
 					decryptFile(in, secretKeyringFile, passPhrase.toCharArray(), outFileName);

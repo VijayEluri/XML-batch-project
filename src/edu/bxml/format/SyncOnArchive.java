@@ -33,16 +33,16 @@ public class SyncOnArchive extends XmlObjectImpl implements XmlObject {
 	 */
 	public void check() throws XMLBuildException {
 		if (liveDir == null) {
-			throw new XMLBuildException("The live dir must be set.");
+			throw new XMLBuildException("The live dir must be set.", this);
 		}
 		if (archiveBase == null) {
-			throw new XMLBuildException("The archive base dir must be set.");
+			throw new XMLBuildException("The archive base dir must be set.", this);
 		}
 		if (!liveDir.exists()) {
-			throw new XMLBuildException(liveDir + " does not exist.");
+			throw new XMLBuildException(liveDir + " does not exist.", this);
 		}
 		if (!archiveBase.exists()) {
-			throw new XMLBuildException(archiveBase + " does not exist.");
+			throw new XMLBuildException(archiveBase + " does not exist.", this);
 		}
 		processedArchive = new File(liveDir, liveDirRelativeArchive);
 		log.debug("CHECK: processArchive = " + processedArchive);

@@ -197,13 +197,13 @@ public class XmlSelect extends XmlObjectImpl implements XmlObject {
 		log.debug(getName() + ": query = " + query);
 		
 		if (query == null) {
-			throw new XMLBuildException("Parent query did not identify itself");
+			throw new XMLBuildException("Parent query did not identify itself", this);
 		}
 		if (root == null) {
-			throw new XMLBuildException("You must specify the name of the root.");
+			throw new XMLBuildException("You must specify the name of the root.", this);
 		}
 		if (record == null) {
-			throw new XMLBuildException("You must specify the name of each record.");
+			throw new XMLBuildException("You must specify the name of each record.", this);
 		}
 		if (dir == null) {
 			dir = new File(".");
@@ -217,19 +217,19 @@ public class XmlSelect extends XmlObjectImpl implements XmlObject {
 			log.debug("file = " + outFile.getAbsolutePath());
 		}
 		if (queryName == null)
-			throw new XMLBuildException("queryName can't be null");
+			throw new XMLBuildException("queryName can't be null", this);
 		/*if (key == null) {// && groupsExist) {
 			throw new XMLBuildException("no key defined");// but there is grouping");
 		}*/
 
 		//formatString = getFormatString();
 		if (filename != null && filenameField != null) {
-			throw new XMLBuildException("file name and field name field are both set");
+			throw new XMLBuildException("file name and field name field are both set", this);
 		}
 		if (archive != null & filenameField != null) {
 			// Could keep a list of all files opened; then copy to 
 			// archive all files in the list
-			throw new XMLBuildException("you can't archive if you set filenameField");
+			throw new XMLBuildException("you can't archive if you set filenameField", this);
 		}
 	}
 
@@ -307,7 +307,7 @@ public class XmlSelect extends XmlObjectImpl implements XmlObject {
 				connection = sql.getConnection();
 			} catch (RuntimeException e) {
 				e.printStackTrace();
-				throw new XMLBuildException("The connection '" + queryName + "' could not be found");
+				throw new XMLBuildException("The connection '" + queryName + "' could not be found", this);
 			}
 			log.debug("sql = " + sql.getQuery());
 			//java.sql.Connection con = connection.getConnection();
@@ -336,10 +336,10 @@ public class XmlSelect extends XmlObjectImpl implements XmlObject {
 				s.printStackTrace();
 			}
 		} catch (ClassNotFoundException cnfe) {
-			throw new XMLBuildException(cnfe.getMessage());
+			throw new XMLBuildException(cnfe.getMessage(), this);
 		} catch (SQLException sqle) {
 			sqle.printStackTrace();
-			throw new XMLBuildException(sqle.getMessage());
+			throw new XMLBuildException(sqle.getMessage(), this);
 		}
 		finally {
 			try {
@@ -396,7 +396,7 @@ public class XmlSelect extends XmlObjectImpl implements XmlObject {
 						"</" + md.getColumnName(i) + ">");
 			}
 		} catch (SQLException e) {
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		}
 		System.out.println("</" + record + ">");
 	}

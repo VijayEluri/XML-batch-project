@@ -44,7 +44,7 @@ public class Cd extends XmlObjectImpl implements XmlObject {
 			c.cd(dir);
 		} catch (SftpException e1) {
 			e1.printStackTrace();
-			throw new XMLBuildException(e1.getMessage());
+			throw new XMLBuildException(e1.getMessage(), this);
 		}
 
 	}

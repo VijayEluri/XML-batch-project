@@ -1,7 +1,6 @@
 package edu.misc.report;
 
-import java.io.File;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -70,8 +69,8 @@ public class TestReport extends TestCase {
 		td.setAlignment("ALIGN_LEFT");
 		Phrase phrase = new Phrase();
 		
-		phrase.setSymbolTable(new HashMap());
-		HashMap st = phrase.getSymbolTable();
+		phrase.setSymbolTable(new ConcurrentHashMap());
+		ConcurrentHashMap st = phrase.getSymbolTable();
 		st.put("h9", h9);
 		
 		//phrase.setFont("h9");

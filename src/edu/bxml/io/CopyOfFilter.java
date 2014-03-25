@@ -189,7 +189,7 @@ public class CopyOfFilter extends XmlObjectImpl implements XmlObject, Runnable {
 					log.debug("file is " + fileToFile.getAbsolutePath());
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
-					throw new XMLBuildException(e.getMessage());
+					throw new XMLBuildException(e.getMessage(), this);
 				}
 			}
 			found = true;

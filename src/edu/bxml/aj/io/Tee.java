@@ -43,31 +43,31 @@ public class Tee extends FilterAJImpl implements FilterAJ  {
 	
 	@Override
 	public void execute() throws XMLBuildException  {
-		try {
-			// Replace the 'out' stream with the TeeOut stream
-			// before execute and then restore
-			teeOut = new FileOutputStream(outFile);
-			TeeOutputStream tee = new TeeOutputStream(teeOut, out);
-			OutputStream o = out;
-			out = tee;
-			super.execute();
-			out = o;
-			tee.close();
-			teeOut.close();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}catch (NullPointerException e) {
-			e.printStackTrace();
-		}
-		finally {
-			try {
-				teeOut.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+//		try {
+//			// Replace the 'out' stream with the TeeOut stream
+//			// before execute and then restore
+//			teeOut = new FileOutputStream(outFile);
+//			TeeOutputStream tee = new TeeOutputStream(teeOut, out);
+//			OutputStream o = out;
+//			out = tee;
+//			super.execute();
+//			out = o;
+//			tee.close();
+//			teeOut.close();
+//		} catch (FileNotFoundException e) {
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}catch (NullPointerException e) {
+//			e.printStackTrace();
+//		}
+//		finally {
+//			try {
+//				teeOut.close();
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//		}
 	}
 
 	/**
@@ -76,12 +76,12 @@ public class Tee extends FilterAJImpl implements FilterAJ  {
 	 */
 	public void check() throws XMLBuildException {
 		if (toDir == null) 
-			throw new XMLBuildException("toDir must be set");
+			throw new XMLBuildException("toDir must be set", this);
 		if (toFile == null) 
-			throw new XMLBuildException("toFile must be set");
+			throw new XMLBuildException("toFile must be set", this);
 		if (dir != null) 
-			throw new XMLBuildException("dir must not be set");
+			throw new XMLBuildException("dir must not be set", this);
 		if (file != null) 
-			throw new XMLBuildException("file must not be set");
+			throw new XMLBuildException("file must not be set", this);
 	}
 }

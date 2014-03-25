@@ -99,10 +99,10 @@ public class Pdf extends ReportObject {
 			this.size = (Rectangle) f.get(c);
 		} catch (NoSuchFieldException nsfe) {
 			nsfe.printStackTrace();
-			throw new XMLBuildException (nsfe.getMessage());
+			throw new XMLBuildException (nsfe.getMessage(), this);
 		} catch (IllegalAccessException iae) {
 			iae.printStackTrace();
-			throw new XMLBuildException (iae.getMessage());
+			throw new XMLBuildException (iae.getMessage(), this);
 		}
 	}
 	

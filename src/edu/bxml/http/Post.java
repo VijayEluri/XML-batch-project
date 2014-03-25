@@ -60,7 +60,7 @@ public class Post extends XmlObjectImpl implements XmlObject {
 		try {
 			setTimeout(Integer.parseInt(timeout));
 		} catch (NumberFormatException e) {
-			throw new XMLBuildException(timeout);
+			throw new XMLBuildException(timeout, this);
 		}
 	}
 
@@ -80,7 +80,7 @@ public class Post extends XmlObjectImpl implements XmlObject {
 				http = (Http) getAncestorOfType(Http.class);
 		}
 		if (http == null) {
-			throw new XMLBuildException("http definition " + httpName + " could not be found.");
+			throw new XMLBuildException("http definition " + httpName + " could not be found.", this);
 		}
 		
 		try {
@@ -90,7 +90,7 @@ public class Post extends XmlObjectImpl implements XmlObject {
 			if (entity == null) 
 				post.setFollowRedirects(followRedirects);
 		} catch (RuntimeException e) {
-			throw new XMLBuildException (e.getMessage());
+			throw new XMLBuildException (e.getMessage(), this);
 		}
 		
 		for (Iterator i = params.iterator();i.hasNext();) {
@@ -118,9 +118,9 @@ public class Post extends XmlObjectImpl implements XmlObject {
 			post.releaseConnection();
 		} catch (HttpException e) {
 			log.error(e.getStackTrace());
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		} catch (IOException e) {
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		}
 		
 		if (parse) {
@@ -163,7 +163,7 @@ public class Post extends XmlObjectImpl implements XmlObject {
 				}
 				// TODO Auto-generated catch block
 				
-				throw new XMLBuildException(e.getMessage());
+				throw new XMLBuildException(e.getMessage(), this);
 			}
 		}
 	}
@@ -191,7 +191,7 @@ public class Post extends XmlObjectImpl implements XmlObject {
 		try {
 			setFollowRedirects(Boolean.parseBoolean(text));
 		} catch (RuntimeException e) {
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		}
 	}
 	

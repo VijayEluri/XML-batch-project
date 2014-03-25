@@ -23,8 +23,8 @@ public abstract class ActsAsComposite extends ControlObject {
 	
 	public void execute() throws XMLBuildException {
 		if (layout == null) {
-			log.debug("at " + this.getLocator().getLineNumber());
-			new XMLBuildException (this.getName() + " layout is not set " ).printStackTrace();
+			log.debug("at " + this.getLineNumber());
+			new XMLBuildException (this.getName() + " layout is not set " , this).printStackTrace();
 		}
 		for (GUIObject child: children) {
 			child.setGUIParent(getGUIObject());

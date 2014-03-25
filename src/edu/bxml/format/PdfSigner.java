@@ -72,7 +72,7 @@ public class PdfSigner extends FilterAJImpl implements FilterAJ {
 			sign(keyfile, passphrase);
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		}
 	}
 	

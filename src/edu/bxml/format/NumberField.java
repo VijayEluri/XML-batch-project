@@ -144,7 +144,7 @@ public class NumberField extends Field {
 			}
 			catch (NumberFormatException  pe) {
 				pe.printStackTrace();
-				throw new XMLBuildException(getFieldName() + ": " + pe.getMessage());
+				throw new XMLBuildException(getFieldName() + ": " + pe.getMessage(), this);
 			}
 			if (javaFormat != null) {
 				NumberFormat decimalFormat = new DecimalFormat(javaFormat);
@@ -164,7 +164,7 @@ public class NumberField extends Field {
 			catch (NumberFormatException  pe) {
 				log.debug("number: " + value);
 				pe.printStackTrace();
-				throw new XMLBuildException(getFieldName() + ": " + pe.getMessage());
+				throw new XMLBuildException(getFieldName() + ": " + pe.getMessage(), this);
 			}
 			retValue.append(num + "");
 		}

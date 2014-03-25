@@ -25,7 +25,7 @@ public class Color extends XmlObjectImpl implements XmlObject {
 	@Override
 	public void check() throws XMLBuildException {
 		if (color == null) {
-			throw new XMLBuildException("systemColor must be set.");
+			throw new XMLBuildException("systemColor must be set.", this);
 		}
 	}
 	

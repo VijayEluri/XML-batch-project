@@ -3,6 +3,8 @@ package edu.bxml.io;
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PipedOutputStream;
+import java.io.PrintStream;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
@@ -20,9 +22,8 @@ public interface FilterAJ extends HasPojo, Runnable, XmlObject {
 	void closeIn();
 	void closeOut();
 	InputStream getIn() throws XMLBuildException;
-	OutputStream getOut();
+	PrintStream getOut();
 	void setInputStream(InputStream in);
-	void setOutputStream(OutputStream out);
 	void finish(OutputStream out);
 	void setFile(String file);
 	void setToDir(String toDir);
@@ -34,4 +35,9 @@ public interface FilterAJ extends HasPojo, Runnable, XmlObject {
 	boolean isIff();
 	String getFile();
 	String getDir();
+	String getToFile();
+	String getToDir();
+	void setOutputStream(PrintStream out);
+	void setOutputStream(OutputStream pout);
+	void setHereFile(String isHereFile);
 }

@@ -132,13 +132,13 @@ public class LoadBlob extends XmlObjectImpl implements XmlObject {
 	public void check() throws XMLBuildException {
 		files.setSize(0);
 		if (dir == null)
-			throw new XMLBuildException("dir not set");
+			throw new XMLBuildException("dir not set", this);
 		if (!dir.exists()) {
 			throw new XMLBuildException(dir.getAbsolutePath()
-					+ " does not exist");
+					+ " does not exist", this);
 		}
 		if (file == null)
-			throw new XMLBuildException("file not set");
+			throw new XMLBuildException("file not set", this);
 		File[] flist = dir.listFiles();
 		for (int i = 0; i < flist.length; i++) {
 			String name = flist[i].getName();
@@ -149,14 +149,14 @@ public class LoadBlob extends XmlObjectImpl implements XmlObject {
 			}
 		}
 		if (files.size() == 0) {
-			throw new XMLBuildException(file + ": no matching files exist");
+			throw new XMLBuildException(file + ": no matching files exist", this);
 		}
 
 		if (connectionString == null) {
-			throw new XMLBuildException("no connection");
+			throw new XMLBuildException("no connection", this);
 		}
 		if (table == null) {
-			throw new XMLBuildException("no table");
+			throw new XMLBuildException("no table", this);
 		}
 	}
 
@@ -172,21 +172,21 @@ public class LoadBlob extends XmlObjectImpl implements XmlObject {
 		connection = query.findConnection(connectionString);
 		// log.debug("connection = " + this.connection);
 		if (connection == null) {
-			throw new XMLBuildException("connection not found");
+			throw new XMLBuildException("connection not found", this);
 		}
 		java.sql.Connection c = null;
 		try {
 			c = connection.getConnection();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		}
 		loadBinaryData(c);
 		try {
 			c.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		}
 	}
 
@@ -210,7 +210,7 @@ public class LoadBlob extends XmlObjectImpl implements XmlObject {
 			sqlStatement = c.prepareStatement(query);
 		} catch (SQLException s) {
 			s.printStackTrace();
-			throw new XMLBuildException(s.getMessage());
+			throw new XMLBuildException(s.getMessage(), this);
 		}
 		InputStream inputFileInputStream = null;
 		for (File currentFile : files) {
@@ -229,7 +229,7 @@ public class LoadBlob extends XmlObjectImpl implements XmlObject {
 				s.printStackTrace();
 				continue;
 			} catch (IOException fio) {
-				throw new XMLBuildException(fio.getMessage());
+				throw new XMLBuildException(fio.getMessage(), this);
 			} finally {
 				try {
 					inputFileInputStream.close();

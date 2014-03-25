@@ -42,7 +42,7 @@ public class Column extends XmlObjectImpl implements XmlObject {
 
 	public void setIndex(Integer index) throws XMLBuildException {
 		if (index == null) {
-			throw new XMLBuildException(fieldName + " could not be found in the query");
+			throw new XMLBuildException(fieldName + " could not be found in the query", this);
 		}
 		this.index = index;
 	}
@@ -107,10 +107,10 @@ public class Column extends XmlObjectImpl implements XmlObject {
 	@Override
 	public void check() throws XMLBuildException {
 		if (header == null) {
-			throw new XMLBuildException("header must be set");
+			throw new XMLBuildException("header must be set", this);
 		}
 		if (fieldName == null) {
-			throw new XMLBuildException("field name must be set");
+			throw new XMLBuildException("field name must be set", this);
 		}
 	}
 

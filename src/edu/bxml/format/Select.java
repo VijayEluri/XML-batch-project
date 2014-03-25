@@ -290,7 +290,7 @@ public class Select extends FilterAJImpl implements FilterAJ {
 			}
 			query = (Query) x;
 			if (query == null)
-				throw new XMLBuildException("Parent query did not identify itself");
+				throw new XMLBuildException("Parent query did not identify itself", this);
 		}
 		if (dir == null) {
 			dir = new File(".");
@@ -300,22 +300,22 @@ public class Select extends FilterAJImpl implements FilterAJ {
 			log.debug("The output directory " + dir + " did not exist.  It has been created.");
 		}
 		if (queryName == null)
-			throw new XMLBuildException("queryName can't be null");
+			throw new XMLBuildException("queryName can't be null", this);
 		/*if (key == null) {// && groupsExist) {
 			throw new XMLBuildException("no key defined");// but there is grouping");
 		}*/
 
 		if (filename == null && archive != null) {
-			throw new XMLBuildException("you must set filename if archive is set");
+			throw new XMLBuildException("you must set filename if archive is set", this);
 		}
 		//formatString = getFormatString();
 		if (filename != null && filenameField != null) {
-			throw new XMLBuildException("file name and field name field are both set");
+			throw new XMLBuildException("file name and field name field are both set", this);
 		}
 		if (archive != null && filenameField != null) {
 			// Could keep a list of all files opened; then copy to 
 			// archive all files in the list
-			throw new XMLBuildException("you can't archive if you set filenameField");
+			throw new XMLBuildException("you can't archive if you set filenameField", this);
 		}
 	}
 
@@ -482,10 +482,10 @@ public class Select extends FilterAJImpl implements FilterAJ {
 				log.warn("can't archive because output isn't going to a file");
 			}
 		} catch (ClassNotFoundException cnfe) {
-			throw new XMLBuildException("class not found exception: " + cnfe.getMessage());
+			throw new XMLBuildException("class not found exception: " + cnfe.getMessage(), this);
 		} catch (IOException io) {
 			io.printStackTrace();
-			throw new XMLBuildException(arch.getAbsolutePath() + ": " + io.getMessage());
+			throw new XMLBuildException(arch.getAbsolutePath() + ": " + io.getMessage(), this);
 		}
 		finally {
 		}
@@ -554,7 +554,7 @@ public class Select extends FilterAJImpl implements FilterAJ {
 		try {
 			localOut.println(footer.output());
 		} catch (SQLException e) {
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		}
 	}
 	

@@ -32,10 +32,10 @@ public class Rm extends XmlObjectImpl implements XmlObject {
 	@Override
 	public void check() throws XMLBuildException {
 		if (dir == null) {
-			throw new XMLBuildException("Source directory (dir) must be specified.");
+			throw new XMLBuildException("Source directory (dir) must be specified.", this);
 		}
 		if (file == null) {
-			throw new XMLBuildException("File matching regular expresion (file) must be specified.");
+			throw new XMLBuildException("File matching regular expresion (file) must be specified.", this);
 		}
 	}
 	
@@ -83,7 +83,7 @@ public class Rm extends XmlObjectImpl implements XmlObject {
 			}
 		} catch (SftpException e1) {
 			e1.printStackTrace();
-			throw new XMLBuildException(e1.getMessage());
+			throw new XMLBuildException(e1.getMessage(), this);
 		}
 		}
 		else {

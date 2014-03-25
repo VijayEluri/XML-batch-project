@@ -1,6 +1,7 @@
 package edu.bxml.format;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -78,7 +79,7 @@ public class ExcelData extends XmlObjectImpl implements XmlObject {
 			}
 		}
 		else {
-			HashMap st = this.getSymbolTable();
+			Map st = this.getSymbolTable();
 			if (st == null) {
 				new Exception("Symbol table is null").printStackTrace();
 			}
@@ -100,16 +101,16 @@ public class ExcelData extends XmlObjectImpl implements XmlObject {
 			if (rows.length>1) {
 				this.maxRow = Integer.parseInt(rows[1]);
 				if (this.row < maxRow) {
-					HashMap st = this.getSymbolTable();
+					Map st = this.getSymbolTable();
 					if (st.get("iterator") != null) {
-						throw new XMLBuildException("more than one iterator row");
+						throw new XMLBuildException("more than one iterator row", this);
 					}
 					st.put("iterator", this);
 				}
 			}
 		}
 		else {
-			HashMap st = this.getSymbolTable();
+			Map st = this.getSymbolTable();
 			if (st == null) {
 				new Exception("Symbol table is null").printStackTrace();
 			}

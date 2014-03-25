@@ -35,7 +35,7 @@ public class Exception extends XmlObjectImpl implements XmlObject {
 		 messageBox.setMessage(message);
 		 messageBox.open();
 		 if (throwIt)
-			 throw new XMLBuildException(message);
+			 throw new XMLBuildException(message, this);
 	}
 	
 	/**

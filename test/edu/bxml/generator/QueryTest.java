@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 
 import junit.framework.TestCase;
 import net.sf.jsqlparser.schema.Table;
@@ -31,7 +32,7 @@ public class QueryTest extends TestCase {
 		java.util.Properties p = new java.util.Properties();
 		
 		Query query = new Query();
-		HashMap s = new HashMap();
+		ConcurrentHashMap s = new ConcurrentHashMap();
 		query.setSymbolTable(s);
 		
 		Properties properties = new Properties();

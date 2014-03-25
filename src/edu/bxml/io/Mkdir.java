@@ -24,7 +24,7 @@ public class Mkdir extends XmlObjectImpl implements XmlObject {
 	 */
 	public void check() throws XMLBuildException {
 		if (dir == null) {
-			throw new XMLBuildException("dir must be set");
+			throw new XMLBuildException("dir must be set", this);
 		}
 
 	}
@@ -34,7 +34,7 @@ public class Mkdir extends XmlObjectImpl implements XmlObject {
 	 */
 	public void execute() throws XMLBuildException {
 		if (! new File(dir).mkdirs())
-			throw new XMLBuildException("mkdirs: failed for " + dir);
+			throw new XMLBuildException("mkdirs: failed for " + dir, this);
 	}
 	
 	/**

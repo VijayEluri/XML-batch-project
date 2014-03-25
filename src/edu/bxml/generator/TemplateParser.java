@@ -147,7 +147,7 @@ public class TemplateParser {
 			log.debug("#if javascript = " + javascript);
 			String result = javascript(replaceVariables(javascript.toString(), env), env);
 			if (result == null) {
-				throw new XMLBuildException("Can't parse javascript");
+				throw new XMLBuildException("Can't parse javascript", null);
 			}
 			log.debug("#if result = " + result);
 			String rest = line.substring(line.lastIndexOf(')')+1);

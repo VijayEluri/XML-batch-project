@@ -56,13 +56,13 @@ public class Tee extends Filter  {
 	 */
 	public void check() throws XMLBuildException {
 		if (toDir == null) 
-			throw new XMLBuildException("toDir must be set");
+			throw new XMLBuildException("toDir must be set", this);
 		if (toFile == null) 
-			throw new XMLBuildException("toFile must be set");
+			throw new XMLBuildException("toFile must be set", this);
 		if (dir != null) 
-			throw new XMLBuildException("dir must not be set");
+			throw new XMLBuildException("dir must not be set", this);
 		if (file != null) 
-			throw new XMLBuildException("file must not be set");
+			throw new XMLBuildException("file must not be set", this);
 		this.teeFile = toFile;
 		this.teeDir = toDir;
 		toFile = null;

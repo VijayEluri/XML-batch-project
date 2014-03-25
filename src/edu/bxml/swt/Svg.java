@@ -52,7 +52,7 @@ public class Svg extends XmlObjectImpl implements XmlObject {
 	@Override
 	public void check() throws XMLBuildException {
 		if (uri == null) 
-			throw new XMLBuildException("The uri has not been set");
+			throw new XMLBuildException("The uri has not been set", this);
 	}
 	
 	/**

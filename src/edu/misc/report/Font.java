@@ -48,7 +48,7 @@ public class Font extends ReportObject {
 		}
 		catch (NumberFormatException nfe) {
 			nfe.printStackTrace();
-			throw new XMLBuildException (nfe.getMessage());
+			throw new XMLBuildException (nfe.getMessage(), this);
 		}
 	}
 	

@@ -58,7 +58,7 @@ public class Paragraph extends ReportObject {
 			document.add(paragraph);
 		} catch (DocumentException e) {
 			e.printStackTrace();
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		}
 	}
 }

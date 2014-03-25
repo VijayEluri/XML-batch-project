@@ -35,7 +35,7 @@ public class Parameter extends XmlObjectImpl implements XmlObject {
 	@Override
 	public void check() throws XMLBuildException {
 		if (key == null) {
-			throw new XMLBuildException("key must be set");
+			throw new XMLBuildException("key must be set", this);
 		}
 
 	}
@@ -118,7 +118,7 @@ public class Parameter extends XmlObjectImpl implements XmlObject {
 		try {
 			this.type = Class.forName(type);
 		} catch (ClassNotFoundException e) {
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		}
 	}
 	

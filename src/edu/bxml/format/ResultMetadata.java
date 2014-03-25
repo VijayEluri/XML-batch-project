@@ -50,7 +50,7 @@ public class ResultMetadata extends Filter  {
 			connection = sql.getConnection();
 		} catch (RuntimeException e) {
 			e.printStackTrace();
-			throw new XMLBuildException("The connection '" + queryName + "' could not be found");
+			throw new XMLBuildException("The connection '" + queryName + "' could not be found", this);
 		}
 		try {
 			
@@ -102,10 +102,10 @@ public class ResultMetadata extends Filter  {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		}
 		finally {
 			try {

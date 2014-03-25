@@ -262,13 +262,13 @@ public class Email extends XmlObjectImpl implements XmlObject {
 	@Override
 	public void check() throws XMLBuildException {
 		if (host == null) {
-			throw new XMLBuildException("Host must be set");
+			throw new XMLBuildException("Host must be set", this);
 		}
 		if (user == null) 
-			throw new XMLBuildException("User must be set");
+			throw new XMLBuildException("User must be set", this);
 
 		if (toList == null) {
-			throw new XMLBuildException("emailList of recipients must be set");
+			throw new XMLBuildException("emailList of recipients must be set", this);
 		}
 	}
 
@@ -278,7 +278,7 @@ public class Email extends XmlObjectImpl implements XmlObject {
 			postMail();
 		} catch (MessagingException em) {
 			em.printStackTrace();
-			throw new XMLBuildException(em.getMessage());
+			throw new XMLBuildException(em.getMessage(), this);
 		}
 
 	}
