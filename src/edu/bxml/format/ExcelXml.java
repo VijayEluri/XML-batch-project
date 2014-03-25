@@ -51,11 +51,11 @@ public class ExcelXml extends XmlObjectImpl implements XmlObject {
 	 */
 	public void check() throws XMLBuildException {
 		if (file == null || dir == null) {
-			throw new XMLBuildException("File and dir must be set");
+			throw new XMLBuildException("File and dir must be set", this);
 		}
 		inFile = new File(dir, file);
 		if (!inFile.exists()) {
-			throw new XMLBuildException("File " + inFile + " does not exit.");
+			throw new XMLBuildException("File " + inFile + " does not exit.", this);
 		}
 		log.debug("infile = " + inFile.getAbsolutePath());
 	}

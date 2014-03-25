@@ -2,6 +2,7 @@ package com.browsexml.core;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.Locator;
@@ -21,18 +22,18 @@ public interface XmlObject {
 	boolean isIff() throws XMLBuildException;
 	void setIff(String iff);
 	void setLocator(Locator locator);
-	Locator getLocator();
 	String getLineNumber();
 	String getSource();
 	void setSource(String source);
 	String getName();
 	String getTypeName();
-	void setSymbolTable(HashMap st);
-	HashMap getSymbolTable();
+	void setSymbolTable(ConcurrentHashMap st);
+	ConcurrentHashMap getSymbolTable();
 	Object symbolTableLookUp(String object);
 	void execute() throws XMLBuildException;
 	void init(XmlObject parent) throws XMLBuildException;
 	boolean processRawAttributes(Attributes attrs);
 	void check() throws XMLBuildException;
 	void setFromTextContent(String text) throws XMLBuildException;
+	Boolean hasAncestorWithName(String name);
 }

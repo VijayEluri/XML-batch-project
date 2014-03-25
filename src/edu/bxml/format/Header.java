@@ -80,11 +80,11 @@ public class Header extends XmlObjectImpl implements XmlObject {
 	public void check() throws XMLBuildException {
 		
 		if (separator == null) {
-			throw new XMLBuildException("Delimiter has not been set");
+			throw new XMLBuildException("Delimiter has not been set", this);
 		}
 		
 		/*if (setToColumnNames  && footerFields.size() != 0) {
-			throw new XMLBuildException("Only one of ColumnNames and footer fields may be used");
+			throw new XMLBuildException("Only one of ColumnNames and footer fields may be used", this);
 		}*/
 	}
 	

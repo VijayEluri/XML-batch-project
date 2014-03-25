@@ -64,9 +64,9 @@ public class Ldap extends Filter {
 		// if (query == null)
 		// throw new XMLBuildException("query must be set");
 		if (attributes == null)
-			throw new XMLBuildException("attributes must be set");
+			throw new XMLBuildException("attributes must be set", this);
 		if (searchBase == null)
-			throw new XMLBuildException("searchBase must be set");
+			throw new XMLBuildException("searchBase must be set", this);
 	}
 
 	// @Override
@@ -78,7 +78,7 @@ public class Ldap extends Filter {
 	// }
 	// if (in != null) {
 	// if (out == null) {
-	// log.debug("out is null in Copy");
+	// log.debug("out is null in Copy", this);
 	// File to = new File(toDir, getToFile());
 	// try {
 	// log.debug("COPY OUT FILE = " + to);
@@ -116,7 +116,7 @@ public class Ldap extends Filter {
 	// log.debug("Copying " + file.getName() + ".... to dir " + this.toDir);
 	// if (this.toDir != null) {
 	// if (super.getToFile() == null) {
-	// log.debug("toFILE null = " + super.getToFile());
+	// log.debug("toFILE null = " + super.getToFile(), this);
 	// to = new File(toDir, file.getName());
 	// }
 	// else {
@@ -289,7 +289,7 @@ public class Ldap extends Filter {
 
 			}
 		} catch (IOException e) {
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		}
 
 	}

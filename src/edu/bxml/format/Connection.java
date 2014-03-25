@@ -237,17 +237,17 @@ public class Connection extends XmlObjectImpl implements XmlObject {
 	
 	public void check() throws XMLBuildException {
 		if (this.getName() == null) {
-			throw new XMLBuildException("Name can't be null");
+			throw new XMLBuildException("Name can't be null" ,this);
 		}
 		if (jndi == null) {
 			if (login == null )
-				throw new XMLBuildException("both jndi and login can't be null");
+				throw new XMLBuildException("both jndi and login can't be null", this);
 			if (password == null )
-				throw new XMLBuildException("password can't be null");
+				throw new XMLBuildException("password can't be null", this);
 			if (theClass == null)
-				throw new XMLBuildException("class can't be null");
+				throw new XMLBuildException("class can't be null", this);
 			if (url == null)
-				throw new XMLBuildException("connection can't be null");
+				throw new XMLBuildException("connection can't be null", this);
 		}
 	}
 	

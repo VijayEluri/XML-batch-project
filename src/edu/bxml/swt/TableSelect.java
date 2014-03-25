@@ -20,7 +20,7 @@ public class TableSelect extends XmlObjectImpl implements XmlObject {
 	@Override
 	public void check() throws XMLBuildException {
 		if (index < 0) {
-			throw new XMLBuildException("The index must be set");
+			throw new XMLBuildException("The index must be set", this);
 		}
 	}
 	

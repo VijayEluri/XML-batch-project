@@ -157,7 +157,7 @@ public class Pdfform extends FilterAJImpl implements FilterAJ {
 			log.debug("SIGN is true");
 			if (keyfile == null || keystorePassword == null || passphrase == null || signatureField == null) {
 				throw new XMLBuildException("one of keyfile, keyhstorePassword, passphrase or signatureField is present indicating " +
-						"you wish to sign the document, while at the same time one or more of those required fields for signing is missing.");
+						"you wish to sign the document, while at the same time one or more of those required fields for signing is missing.", this);
 			}
 		}
 	}
@@ -224,7 +224,7 @@ public class Pdfform extends FilterAJImpl implements FilterAJ {
 			}
 		} catch (ClassNotFoundException cnfe) {
 			throw new XMLBuildException("class not found exception: "
-					+ cnfe.getMessage());
+					+ cnfe.getMessage(), this);
 		} finally {
 		}
 	}
@@ -249,7 +249,7 @@ public class Pdfform extends FilterAJImpl implements FilterAJ {
 					sign(filledOutForm, keyfile, keystorePassword, passphrase, signatureField, reason, location);
 				} catch (Exception e) {
 					e.printStackTrace();
-					throw new XMLBuildException(e.getMessage());
+					throw new XMLBuildException(e.getMessage(), this);
 				} 
 			}
 			acroFields = filledOutForm.getAcroFields();

@@ -79,7 +79,7 @@ public class Move extends XmlObjectImpl implements XmlObject {
 	public void execute() throws XMLBuildException  {
 		File existingFile = new File(dir, file);
 		if (!existingFile.exists()) {
-			throw new XMLBuildException (existingFile + " does not exist");
+			throw new XMLBuildException (existingFile + " does not exist", this);
 		}
 		Util.move(new File(dir, file), toDir, toFile, force);
 	}
@@ -87,13 +87,13 @@ public class Move extends XmlObjectImpl implements XmlObject {
 	@Override
 	public void check() throws XMLBuildException {
 		if (toDir == null) {
-			throw new XMLBuildException ("you must set the destination directory (toDir)");
+			throw new XMLBuildException ("you must set the destination directory (toDir)", this);
 		}
 		if (dir == null) {
-			throw new XMLBuildException ("you must set the source directory (dir)");
+			throw new XMLBuildException ("you must set the source directory (dir)", this);
 		}
 		if (file == null) {
-			throw new XMLBuildException ("you must set the source filename (file)");
+			throw new XMLBuildException ("you must set the source filename (file)", this);
 		}
 
 	}

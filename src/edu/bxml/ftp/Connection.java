@@ -151,7 +151,7 @@ public class Connection extends XmlObjectImpl implements XmlObject, UserInfo {
 		else 
 			log.debug("Name = " + getName());
 		if (knownHosts == null && trust == false) {
-			throw new XMLBuildException("You must set the knownHosts file location.");
+			throw new XMLBuildException("You must set the knownHosts file location.", this);
 		}
 		
 	}
@@ -175,10 +175,10 @@ public class Connection extends XmlObjectImpl implements XmlObject, UserInfo {
 			ftp.connect(host);
 		} catch (SocketException e1) {
 			e1.printStackTrace();
-			throw new XMLBuildException(e1.getMessage());
+			throw new XMLBuildException(e1.getMessage(), this);
 		} catch (IOException e1) {
 			e1.printStackTrace();
-			throw new XMLBuildException(e1.getMessage());
+			throw new XMLBuildException(e1.getMessage(), this);
 		}
         int reply = ftp.getReplyCode();    
         if(!FTPReply.isPositiveCompletion(reply)) {
@@ -188,19 +188,19 @@ public class Connection extends XmlObjectImpl implements XmlObject, UserInfo {
                 System.err.println("Unable to disconnect from FTP server " +
                                    "after server refused connection. "+e.toString());
             }
-            throw new XMLBuildException ("FTP server refused connection.");
+            throw new XMLBuildException ("FTP server refused connection.", this);
         }  
         try {
 			if (!ftp.login(user, password)) {
 			    throw new XMLBuildException ("Unable to login to FTP server " +
 			                         "using username "+user+" " +
-			                         "and password "+password);
+			                         "and password "+password, this);
 			}
 			ftp.setFileType(FTP.BINARY_FILE_TYPE);
 
 		} catch (IOException e) {
 			e.printStackTrace();
-			throw new XMLBuildException (e.getMessage());
+			throw new XMLBuildException (e.getMessage(), this);
 		}
 		log.debug("Connected ftp...");
 
@@ -218,7 +218,7 @@ public class Connection extends XmlObjectImpl implements XmlObject, UserInfo {
 			session.setTimeout(timeout);
 		} catch (JSchException e) {
 			e.printStackTrace();
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		}
 		if (keyfile != null) {
 			try {
@@ -226,7 +226,7 @@ public class Connection extends XmlObjectImpl implements XmlObject, UserInfo {
 				log.debug("Added key file: " + keyfile);
 			} catch (JSchException e) {
 				e.printStackTrace();
-				throw new XMLBuildException(e.getMessage());
+				throw new XMLBuildException(e.getMessage(), this);
 			}
 		}
 		//session.setUserInfo(new MyUserInfo());
@@ -243,7 +243,7 @@ public class Connection extends XmlObjectImpl implements XmlObject, UserInfo {
 			if (msg != null && msg.indexOf("reject") >= 0)
 				msg = "Trust is false and " + host + " is not in knownHosts(" + knownHosts + ").  If you connect with trust set to true, this host will be added to knownHosts and you can set trust to false again.";
 
-			throw new XMLBuildException(msg);
+			throw new XMLBuildException(msg, this);
 		}
 		log.debug("Connected sftp...");
 		//timer.stop = true;
@@ -260,7 +260,7 @@ public class Connection extends XmlObjectImpl implements XmlObject, UserInfo {
 				ftp.disconnect();
 			} catch (IOException e) {
 				e.printStackTrace();
-				throw new XMLBuildException(e.getMessage());
+				throw new XMLBuildException(e.getMessage(), this);
 			}
 		}
 	}

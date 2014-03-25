@@ -63,7 +63,7 @@ public class DateField extends Field {
 		try {d=format.parse(value);
 		}
 		catch (ParseException  pe) {
-			throw new XMLBuildException(getFieldName() + ": " + pe.getMessage());
+			throw new XMLBuildException(getFieldName() + ": " + pe.getMessage(), this);
 		}
 		
 		StringBuffer retValue = new StringBuffer(outFormat.format(d));
@@ -117,7 +117,7 @@ public class DateField extends Field {
 			sqlDate = new java.sql.Date(d.getTime());
 		}
 		catch (Exception s) {
-			throw new XMLBuildException(s.getMessage());
+			throw new XMLBuildException(s.getMessage(), this);
 		}
 		return sqlDate;
 	}

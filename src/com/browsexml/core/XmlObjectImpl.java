@@ -3,6 +3,8 @@ package com.browsexml.core;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -17,7 +19,7 @@ public abstract class XmlObjectImpl implements XmlObject {
 	protected String _uniqName = null;
 	protected String typeName = null;
 	protected XmlObject parent = null;
-	HashMap symbolTable = null;
+	ConcurrentHashMap symbolTable = null;
 	private XmlParser parser = null;
 	private String iff = "true";
 	private HashMap<Method, String> variableParameters = new HashMap<Method, String>();
@@ -44,7 +46,10 @@ public abstract class XmlObjectImpl implements XmlObject {
 	}
 	@Override
 	public boolean isIff() throws XMLBuildException {
-		Boolean ret = Boolean.parseBoolean(XmlParser.processMacros((HashMap)this.symbolTable, iff));
+		String booleanValue = XmlParser.processMacros((Map)this.symbolTable, iff);
+		log.debug("inside isIff  boolean string returned is " + booleanValue);
+		Boolean ret = Boolean.parseBoolean(booleanValue);
+		log.debug("so isiff returns " + ret);
 		return ret;
 	}
 	/**
@@ -114,20 +119,17 @@ public abstract class XmlObjectImpl implements XmlObject {
 		this.value = text;
 	}
 	
-	protected Locator locator = null;
+	protected int locator = 0;
 	protected String source = null;
 	
 	@Override
 	public void setLocator(Locator locator) {
-		this.locator = locator;
+		this.locator = locator.getLineNumber();
 	}
-	@Override
-	public Locator getLocator() {
-		return this.locator;
-	}
+
 	@Override
 	public String getLineNumber() {
-		return "" + this.locator.getLineNumber();
+		return "line: " + locator;
 	}
 
 	/**
@@ -135,6 +137,8 @@ public abstract class XmlObjectImpl implements XmlObject {
 	 */
 	@Override
 	public String getSource() {
+		if (source == null) 
+			return "<Xml File is Standard Input>";
 		return source;
 	}
 
@@ -150,12 +154,12 @@ public abstract class XmlObjectImpl implements XmlObject {
 		return _uniqName;
 	}
 	@Override
-	public void setSymbolTable(HashMap st) {
+	public void setSymbolTable(ConcurrentHashMap st) {
 		this.symbolTable = st;
 	}
 	
 	@Override
-	public HashMap getSymbolTable() {
+	public ConcurrentHashMap getSymbolTable() {
 		return this.symbolTable;
 	}
 	
@@ -188,9 +192,20 @@ public abstract class XmlObjectImpl implements XmlObject {
 		}
 		catch (NumberFormatException nfe) {
 			nfe.printStackTrace();
-			throw new XMLBuildException(nfe.getMessage());
+			throw new XMLBuildException(nfe.getMessage(), this);
 		}
 	}
+	
+	@Override
+	public Boolean hasAncestorWithName(String name) {
+		XmlObject x = this;
+		while (x != null && (x=x.getParent()) != null) {
+			if (x.getName().equals(name))
+				return true;
+		}
+		return false;
+	}
+	
 	@Override
 	public <T> T getAncestorOfType(Class<T> type) {
 		XmlObject x = this;
@@ -202,6 +217,14 @@ public abstract class XmlObjectImpl implements XmlObject {
 		log.trace("current x = " + x.getName());
 		log.trace("current x.getParent() = " + x.getParent());
 		while (x != null && (x=x.getParent()) != null) {
+			
+			if (x instanceof FilterAJ) {
+				Object y = ((FilterAJ) x).getPojo();
+				if (y != null && type.equals(y.getClass())) {
+					return type.cast(((FilterAJ) x).getPojo());
+				}
+			}
+			
 			log.trace("current x = " + x.getName());
 			if (type.equals(x.getClass()))
 					break;

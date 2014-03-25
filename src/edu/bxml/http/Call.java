@@ -71,13 +71,13 @@ public class Call extends XmlObjectImpl implements XmlObject {
 	@Override
 	public void check() throws XMLBuildException {
 		if (url == null) {
-			throw new XMLBuildException("the url must be set");
+			throw new XMLBuildException("the url must be set", this);
 		}
 		if (uri == null) {
-			throw new XMLBuildException("the uri must be set");
+			throw new XMLBuildException("the uri must be set", this);
 		}
 		if (method == null) {
-			throw new XMLBuildException("the method must be set");
+			throw new XMLBuildException("the method must be set", this);
 		}
 	}
 	
@@ -89,7 +89,7 @@ public class Call extends XmlObjectImpl implements XmlObject {
 		try {
 			this.url = new URL(url);
 		} catch (MalformedURLException e) {
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		}
 	}
 	

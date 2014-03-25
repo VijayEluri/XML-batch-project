@@ -63,7 +63,7 @@ public class Pipe extends Filter {
 		if (dir != null) {
 			files = (new File(dir)).listFiles();
 			if (files == null) {
-				throw new XMLBuildException("can't open " +dir);
+				throw new XMLBuildException("can't open " +dir, this);
 			}
 		}
 		else {
@@ -84,7 +84,7 @@ public class Pipe extends Filter {
 					out = new FileOutputStream(new File(toDir, toFile));
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
-					throw new XMLBuildException(e.getMessage());
+					throw new XMLBuildException(e.getMessage(), this);
 				}
 			}
 			if (out == null) 
@@ -191,7 +191,7 @@ public class Pipe extends Filter {
 				pipeInput.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		}
 		log.debug("DONE");
 	}

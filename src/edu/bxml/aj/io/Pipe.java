@@ -70,7 +70,7 @@ public class Pipe extends FilterAJImpl implements FilterAJ, UncaughtExceptionHan
 		if (dir != null) {
 			files = (new File(dir)).listFiles();
 			if (files == null) {
-				throw new XMLBuildException("can't open " +dir);
+				throw new XMLBuildException("can't open " +dir, this);
 			}
 		}
 		else {
@@ -248,7 +248,7 @@ public class Pipe extends FilterAJImpl implements FilterAJ, UncaughtExceptionHan
 				pipeInput.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		}
 		log.debug("DONE");
 	}

@@ -77,7 +77,7 @@ public class Exists extends XmlObjectImpl implements XmlObject {
 		log.debug(getName() + ": query = " + query);
 		
 		if (query == null) {
-			throw new XMLBuildException("Parent query did not identify itself");
+			throw new XMLBuildException("Parent query did not identify itself", this);
 		}
 	}
 
@@ -97,7 +97,7 @@ public class Exists extends XmlObjectImpl implements XmlObject {
 				connection = sql.getConnection();
 			} catch (RuntimeException e) {
 				e.printStackTrace();
-				throw new XMLBuildException("The connection '" + queryName + "' could not be found");
+				throw new XMLBuildException("The connection '" + queryName + "' could not be found", this);
 			}
 			log.debug("sql = " + sql.getQuery());
 			//java.sql.Connection con = connection.getConnection();
@@ -121,7 +121,7 @@ public class Exists extends XmlObjectImpl implements XmlObject {
 			if (recordCount > 0) {
 				if (trueCmd != null) {
 					if (trueCmd.toLowerCase().trim().equals("exit")) {
-						log.debug("Exit caused by XML object at line " + this.getLocator().getLineNumber());
+						log.debug("Exit caused by XML object at line " + this.getLineNumber());
 						System.exit(0);
 					}
 				}
@@ -129,16 +129,16 @@ public class Exists extends XmlObjectImpl implements XmlObject {
 			else {
 				if (falseCmd != null) {
 					if (falseCmd.toLowerCase().trim().equals("exit")) {
-						log.debug("Exit caused by XML object at line " + this.getLocator().getLineNumber());
+						log.debug("Exit caused by XML object at line " + this.getLineNumber());
 						System.exit(0);
 					}
 				}
 			}
 		} catch (ClassNotFoundException cnfe) {
-			throw new XMLBuildException(cnfe.getMessage());
+			throw new XMLBuildException(cnfe.getMessage(), this);
 		} catch (SQLException sqle) {
 			sqle.printStackTrace();
-			throw new XMLBuildException(sqle.getMessage());
+			throw new XMLBuildException(sqle.getMessage(), this);
 		}
 		finally {
 			try {

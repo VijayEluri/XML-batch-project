@@ -45,10 +45,10 @@ public class Pgp extends Filter {
 
 	public void check() throws XMLBuildException {
 		if (privateArmouredKeyFile == null) {
-			throw new XMLBuildException("You must specify privateArmouredKeyFile");
+			throw new XMLBuildException("You must specify privateArmouredKeyFile", this);
 		}
 		if (passPhrase == null) {
-			throw new XMLBuildException("You must specify passPhrase");
+			throw new XMLBuildException("You must specify passPhrase", this);
 		}
 	}
 
@@ -87,13 +87,13 @@ public class Pgp extends Filter {
             bundle = kbm.getKeyBundle();
         
         } catch (IOException ioe) {
-        	throw new XMLBuildException(ioe.getMessage());
+        	throw new XMLBuildException(ioe.getMessage(), this);
         } catch (NoSuchAlgorithmException nsae) {
         	throw new XMLBuildException("Cannot find the OpenPGP MessageFactory. "+
                 "This usually means that the Cryptix OpenPGP provider is not "+
-                "installed correctly.");
+                "installed correctly.", this);
         } catch (MessageException me) {
-        	throw new XMLBuildException("Reading keybundle failed.");
+        	throw new XMLBuildException("Reading keybundle failed.", this);
         }
         finally {
         	try {
@@ -159,7 +159,7 @@ public class Pgp extends Filter {
             
             if (outFile.exists()) {
             	System.out.println(((LiteralMessage)msg).getTextData());
-            	throw new XMLBuildException(outFile.getAbsolutePath() + " already exists.");
+            	throw new XMLBuildException(outFile.getAbsolutePath() + " already exists.", this);
             }
             else {
             	//PrintStream out = null;
@@ -190,11 +190,11 @@ public class Pgp extends Filter {
             
         
         } catch (NotEncryptedToParameterException netpe) {
-        	throw new XMLBuildException("Not encrypted to this key.");
+        	throw new XMLBuildException("Not encrypted to this key.", this);
         } catch (UnrecoverableKeyException uke) {
-        	throw new XMLBuildException("Invalid passphrase.");
+        	throw new XMLBuildException("Invalid passphrase.", this);
         } catch (MessageException me) {
-        	throw new XMLBuildException("Decrypting message failed.");
+        	throw new XMLBuildException("Decrypting message failed.", this);
         }  
 	}
 	

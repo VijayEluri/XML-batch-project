@@ -38,7 +38,7 @@ public class File extends XmlObjectImpl implements XmlObject {
 			log.debug("getting part... file = " + file);
 			return new FilePart(file.getName(), file);
 		} catch (FileNotFoundException e) {
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		}
 	}
 }

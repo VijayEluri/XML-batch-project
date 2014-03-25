@@ -49,7 +49,7 @@ public class Put extends Filter {
 			if (this.file != null) 
 				this.toFile = this.file;
 			else
-				throw new XMLBuildException("to file must not be null");
+				throw new XMLBuildException("to file must not be null", this);
 		}
 		
 		log.debug("toFile = " + toFile);
@@ -88,7 +88,7 @@ public class Put extends Filter {
 				}
 			} catch (SftpException e1) {
 				e1.printStackTrace();
-				throw new XMLBuildException(e1.getMessage());
+				throw new XMLBuildException(e1.getMessage(), this);
 			}
 		}
 		else {
@@ -97,7 +97,7 @@ public class Put extends Filter {
 				conn.getFtp().setSoTimeout(conn.getTimeout());
 			} catch (SocketException e2) {
 				e2.printStackTrace();
-				throw new XMLBuildException(e2.getMessage());
+				throw new XMLBuildException(e2.getMessage(), this);
 			}
 			try {
 				String path = absoluteFile;
@@ -114,10 +114,10 @@ public class Put extends Filter {
 				}
 			} catch (FileNotFoundException e1) {
 				e1.printStackTrace();
-				throw new XMLBuildException(e1.getMessage());
+				throw new XMLBuildException(e1.getMessage(), this);
 			} catch (IOException e1) {
 				e1.printStackTrace();
-				throw new XMLBuildException(e1.getMessage());
+				throw new XMLBuildException(e1.getMessage(), this);
 			}
 		}
 

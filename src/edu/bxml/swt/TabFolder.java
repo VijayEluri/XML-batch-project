@@ -32,8 +32,8 @@ public class TabFolder extends ActsAsComposite {
 	@Override
 	public void execute() throws XMLBuildException {
 		if (layout != null) {
-			log.debug("at " + this.getLocator().getLineNumber());
-			new XMLBuildException (this.getName() + " layout should never be set for tabFolder" ).printStackTrace();
+			log.debug("at " + this.getLineNumber());
+			new XMLBuildException (this.getName() + " layout should never be set for tabFolder" , this).printStackTrace();
 		}
 		if (gridData != null) {
 			gridData.execute();

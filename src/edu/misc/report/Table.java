@@ -1,26 +1,18 @@
 package edu.misc.report;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.io.PrintStream;
-import java.lang.reflect.Method;
-import java.net.ConnectException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map.Entry;
-import java.util.Set;
+import java.util.Map;
 
 import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlParser;
@@ -50,7 +42,7 @@ public class Table extends ReportObject {
 			throws XMLBuildException {
 		String strWidths = attrs.getValue("widths");
 		if (strWidths == null) {
-			throw new XMLBuildException("you must set the widths of the table.");
+			throw new XMLBuildException("you must set the widths of the table.", this);
 		}
 		implSetWidths(strWidths);
 		table = new com.itextpdf.text.pdf.PdfPTable(widths.length);
@@ -67,7 +59,7 @@ public class Table extends ReportObject {
 //		log.debug("left = " + document.left());
 //		log.debug("width = " + pageWidth);
 
-		//table.setTotalWidth(pageWidth);
+		//table.setTotalWidth(pageWidth, this);
 
 		
 		return true;
@@ -116,7 +108,7 @@ public class Table extends ReportObject {
 		}
 		catch (NumberFormatException n) {
 			n.printStackTrace(); 
-			throw new XMLBuildException(n.getMessage());
+			throw new XMLBuildException(n.getMessage(), this);
 		}
 	}
 	
@@ -140,7 +132,7 @@ public class Table extends ReportObject {
 			}
 			catch (NumberFormatException e) {
 				e.printStackTrace();
-				throw new XMLBuildException (e.getMessage());
+				throw new XMLBuildException (e.getMessage(), this);
 			}
 		}
 
@@ -224,7 +216,7 @@ public class Table extends ReportObject {
 			document.add(table);
 		} catch (DocumentException e) {
 			e.printStackTrace();
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		}
 			
 	}
@@ -242,7 +234,7 @@ public class Table extends ReportObject {
 
 			log.debug("f = " + f);
 			f.setParent(this);
-			HashMap map = this.getSymbolTable();
+			Map map = this.getSymbolTable();
 
 			try {
 				log.debug("sql = " + sql.getQuery());
@@ -282,7 +274,7 @@ public class Table extends ReportObject {
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
-				//localOut.close();
+				//localOut.close(, this);
 			}	
 		}
 	
@@ -291,7 +283,7 @@ public class Table extends ReportObject {
 		
 		while (rs.next()) {
 			log.debug("LOOP ");
-			HashMap newSymbolTable = this.getSymbolTable();
+			Map newSymbolTable = this.getSymbolTable();
 
 			for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
 				newSymbolTable.put(rs.getMetaData().getColumnName(i), rs.getObject(i));

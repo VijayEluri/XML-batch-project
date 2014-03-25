@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,7 @@ import net.sf.cglib.proxy.MethodProxy;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.eclipse.core.internal.runtime.PrintStackUtil;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
@@ -37,7 +39,7 @@ import com.javalobby.tnt.annotation.attribute;
 public class FilterAJImpl extends XmlObjectImpl implements FilterAJ, XmlObject, Runnable {
 	private static Log log = LogFactory.getLog(FilterAJImpl.class);
 	protected InputStream in;
-	protected OutputStream out;
+	protected PrintStream out;
 	protected String text = null;
 	protected boolean lock = false;
 	protected Object pojo = null;
@@ -52,6 +54,11 @@ public class FilterAJImpl extends XmlObjectImpl implements FilterAJ, XmlObject, 
 	@Override
 	public void setHereFile(boolean isHereFile) {
 		this.isHereFile = isHereFile;
+	}
+	
+	@Override
+	public void setHereFile(String isHereFile) {
+		this.isHereFile = Boolean.parseBoolean(isHereFile);
 	}
 
 	@Override
@@ -108,7 +115,7 @@ public class FilterAJImpl extends XmlObjectImpl implements FilterAJ, XmlObject, 
 
 	@Override
 	public void closeIn() {
-		if (closeIn)
+		if (closeIn && in != null)
 			try {
 				in.close();
 			} catch (IOException e) {
@@ -118,12 +125,8 @@ public class FilterAJImpl extends XmlObjectImpl implements FilterAJ, XmlObject, 
 	
 	@Override
 	public void closeOut() {
-		if (closeOut) {
-			try {
-				out.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+		if (closeOut && out != null) {
+			out.close();
 		}
 	}
 
@@ -131,8 +134,7 @@ public class FilterAJImpl extends XmlObjectImpl implements FilterAJ, XmlObject, 
 	public InputStream getIn() throws XMLBuildException {
 		FilterAJImpl ancestor = this.getAncestorOfType(FilterAJImpl.class);
 		log.debug("get IN for " + this.getName());
-		System.err.println("set input to " + getDir() + "/" + getFile());
-		
+		closeIn = false;
 		if (in != null) { 
 			log.debug("in already set ");
 			return in;
@@ -143,12 +145,13 @@ public class FilterAJImpl extends XmlObjectImpl implements FilterAJ, XmlObject, 
 				try {
 					closeIn = true;
 					in = new FileInputStream(new File(this.getDir(), this.getFile()));
+					closeIn =true;
 					log.debug("set input to " + getDir() + "/" + getFile());
 					log.debug("get IN DONE 1");
 					return in;
 				} catch (FileNotFoundException e) {
-					e.printStackTrace();
-					throw new XMLBuildException(e.getMessage());
+					new XMLBuildException(e.getMessage(), this).printStackTrace();
+					return null;
 				}
 			}
 		}
@@ -157,40 +160,51 @@ public class FilterAJImpl extends XmlObjectImpl implements FilterAJ, XmlObject, 
 			if (getText() != null && isHereFile()) {
 				log.debug("<<HERE file");
 				in = new ByteArrayInputStream(getText().getBytes());
+				closeIn =true;
 				return in;
 			}
 		}
 
 		if (ancestor != null) {
 			log.debug("ancestor class is " + ancestor.getClass().getName());
-			this.in = ancestor.getIn();
+			closeIn = false;
+			this.in = ancestor.in;
 		}
 		
 		if (in == null) {
 			log.debug("System.in");
-			in = System.in;
+			closeIn = false;
+			in = XmlParser.getOriginalSystemIn();
 		}
-		log.debug("get IN DONE 2");
+		log.debug("set input to " + getDir() + "/" + getFile());
+		log.debug("get IN DONE 2  input stream is " + in);
 		return in;
 	}
 
 	@Override
-	public OutputStream getOut() {
-
+	public PrintStream getOut() {
+		log.debug("getOut() to set System.out");
+		closeOut = false;
 		if (out != null) {
 			log.debug("out already set ");
 			return out;
 		}
 		
 		FilterAJImpl ancestor = this.getAncestorOfType(FilterAJImpl.class);
-		log.debug("get OUT for " + this.getClass().getName());
+		log.debug("get OUT for " + this.getName() + ((this.getPojo()!= null)?("   pojo type is " + this.getPojo().getClass().getName()):""));
 
 		try {
 			if (getToDir() != null && getToFile() != null){
 				
 				outFile = new File(toDir, toFile);
-				log.debug("set output file to " + outFile.getPath());
-				out = new FileOutputStream(outFile);
+				log.debug("toDir = " + toDir);
+				log.debug("toFile = " + toFile);
+				log.debug("set output file to " + outFile.getAbsolutePath());
+				
+				out = new PrintStream(new FileOutputStream(outFile));
+// Easy debug put info in output stream
+//				out.println("name = " + this.getName() + "   todir = " + toDir +  "   tofile = " + toFile);
+//				new Exception("set output file to " + outFile.getAbsolutePath()).printStackTrace(out);
 				closeOut = true;
 				return out;
 			}
@@ -203,12 +217,14 @@ public class FilterAJImpl extends XmlObjectImpl implements FilterAJ, XmlObject, 
 		log.debug("out is null");
 		if (ancestor != null) {
 			log.debug("ancestor class is " + ancestor.getClass().getName());
-			this.out = ancestor.getOut();
+			closeOut =false;
+			this.out = ancestor.out;
 		}
 
 		
 		if (out == null) {
-			out = System.out;
+			closeOut = false;
+			out = XmlParser.getOriginalSystemOut();
 		}
 		return out;
 	}
@@ -217,7 +233,7 @@ public class FilterAJImpl extends XmlObjectImpl implements FilterAJ, XmlObject, 
 	public FilterAJImpl() {
 	}
 
-	public FilterAJImpl(InputStream is, OutputStream os) {
+	public FilterAJImpl(InputStream is, PrintStream os) {
 		in = is;
 		out = os;
 	}
@@ -229,7 +245,7 @@ public class FilterAJImpl extends XmlObjectImpl implements FilterAJ, XmlObject, 
 	}
 
 	@Override
-	public void setOutputStream(OutputStream out) {
+	public void setOutputStream(PrintStream out) {
 		this.out = out;
 	}
 	
@@ -328,13 +344,11 @@ public class FilterAJImpl extends XmlObjectImpl implements FilterAJ, XmlObject, 
 		finally {
 		
 			log.debug("Ending THREAD: " + getName() + "  " + this.getClass().getName());
-			try {
+
 				out.flush();
-				if (!(out instanceof FileOutputStream))
+				if (!(out instanceof PrintStream))
 					out.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			
 			log.debug("Ended THREAD: " + getName() + "  " + this.getClass().getName());
 		}
 	}
@@ -344,6 +358,7 @@ public class FilterAJImpl extends XmlObjectImpl implements FilterAJ, XmlObject, 
 		if (in != null) {
 			try {
 				 byte[] buf = new byte[4096];
+				 log.debug("in != null   dir/file = " + dir + "/" + file);
 				 log.debug("filterAJ execute for..." + this.getName());
 				 int len = in.read(buf);
 				for (; len > 0; len = in.read(buf)) {
@@ -356,7 +371,7 @@ public class FilterAJImpl extends XmlObjectImpl implements FilterAJ, XmlObject, 
 			} 
 			catch (IOException e) {
 				e.printStackTrace();
-				throw new XMLBuildException(e.getMessage());
+				throw new XMLBuildException(e.getMessage(), this);
 			}
 		}
 		filters.clear();
@@ -389,10 +404,12 @@ public class FilterAJImpl extends XmlObjectImpl implements FilterAJ, XmlObject, 
 		return dir;
 	}
 
+	@Override
 	public String getToFile() {
 		return toFile;
 	}
 
+	@Override
 	public String getToDir() {
 		return toDir;
 	}
@@ -401,7 +418,7 @@ public class FilterAJImpl extends XmlObjectImpl implements FilterAJ, XmlObject, 
 		this.in = in;
 	}
 
-	public void setOut(OutputStream out) {
+	public void setOut(PrintStream out) {
 		this.out = out;
 	}
 
@@ -439,6 +456,21 @@ public class FilterAJImpl extends XmlObjectImpl implements FilterAJ, XmlObject, 
 	@Override
 	public Object getPojo() {
 		return pojo;
+	}
+	
+	@Override
+	public String getValue() throws XMLBuildException {
+		return XmlParser.getValue(this);
+	}
+	
+	@Override
+	public void setValue(String value) {
+		XmlParser.setValue(this, value);
+	}
+
+	@Override
+	public void setOutputStream(OutputStream pout) {
+		out = new PrintStream(pout);
 	}
 
 }

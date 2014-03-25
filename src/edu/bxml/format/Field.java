@@ -259,7 +259,7 @@ public abstract class Field extends XmlObjectImpl implements XmlObject {
 			setType(Types.valueOf(type));
 		} catch (IllegalArgumentException iae) {
 			throw new XMLBuildException("Type must be one of "
-					+ Arrays.toString(Types.values()));
+					+ Arrays.toString(Types.values()), this);
 		}
 	}
 	
@@ -307,7 +307,7 @@ public abstract class Field extends XmlObjectImpl implements XmlObject {
 	public void setPadleft(String padLeft) throws XMLBuildException {
 		leftPadding = true;
 		if (padLeft.length() != 1) {
-			throw new XMLBuildException("pad must be one character");
+			throw new XMLBuildException("pad must be one character", this);
 		}
 		padChar = padLeft.charAt(0);
 	}
@@ -320,7 +320,7 @@ public abstract class Field extends XmlObjectImpl implements XmlObject {
 	public void setPadright(String padRight) throws XMLBuildException {
 		rightPadding = true;
 		if (padRight.length() != 1) {
-			throw new XMLBuildException("pad must be one character");
+			throw new XMLBuildException("pad must be one character", this);
 		}
 		padChar = padRight.charAt(0);
 	}
@@ -366,7 +366,7 @@ public abstract class Field extends XmlObjectImpl implements XmlObject {
 			setGroup(Grouping.valueOf(group));
 		} catch (IllegalArgumentException iae) {
 			throw new XMLBuildException("Group must be one of "
-					+ Arrays.toString(Grouping.values()));
+					+ Arrays.toString(Grouping.values()), this);
 		}
 	}
 
@@ -385,7 +385,7 @@ public abstract class Field extends XmlObjectImpl implements XmlObject {
 		}
 		if (leftPadding || rightPadding) {
 			if (size < 1)
-				throw new XMLBuildException("padding set but size not set or less than 2.");
+				throw new XMLBuildException("padding set but size not set or less than 2.", this);
 			else {
 				char[] padding = new char[size];
 				log.debug("name = " + getName() + "   padChar = " + padChar);

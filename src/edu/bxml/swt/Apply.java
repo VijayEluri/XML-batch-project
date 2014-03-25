@@ -77,7 +77,7 @@ public class Apply extends XmlObjectImpl implements XmlObject {
 				setAttributes();
 			} catch (SAXParseException e) {
 				e.printStackTrace();
-				throw new XMLBuildException(e.getMessage());
+				throw new XMLBuildException(e.getMessage(), this);
 			}
 		}
 		for (XmlObject get: gets) {
@@ -144,7 +144,7 @@ public class Apply extends XmlObjectImpl implements XmlObject {
 	@Override
 	public void check() throws XMLBuildException {
 		if (objectName == null) {
-			throw new XMLBuildException("object must be specified");
+			throw new XMLBuildException("object must be specified", this);
 		}
 		if (object != null)
 			object.check();

@@ -48,7 +48,7 @@ public class Get extends XmlObjectImpl implements XmlObject {
 	@Override
 	public void check() throws XMLBuildException {
 		if (src == null || dst == null) 
-			throw new XMLBuildException("you must set the source and destination.");
+			throw new XMLBuildException("you must set the source and destination.", this);
 		
 	}
 
@@ -77,7 +77,7 @@ public class Get extends XmlObjectImpl implements XmlObject {
 			}
 		} catch (SftpException e1) {
 			e1.printStackTrace();
-			throw new XMLBuildException(e1.getMessage());
+			throw new XMLBuildException(e1.getMessage(), this);
 		}
 
 	}

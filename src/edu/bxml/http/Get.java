@@ -2,8 +2,8 @@ package edu.bxml.http;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Vector;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.xml.parsers.SAXParserFactory;
 
@@ -83,7 +83,7 @@ public class Get extends XmlObjectImpl implements XmlObject {
 		}
 		if (http == null) {
 			throw new XMLBuildException(
-					"http was not set.  It must an Ancestor or named by the http attribute.");
+					"http was not set.  It must an Ancestor or named by the http attribute.", this);
 		}
 		if (url.startsWith("/"))
 			url = http.getRoot() + url;
@@ -94,7 +94,7 @@ public class Get extends XmlObjectImpl implements XmlObject {
 			// keytool - genkey -keystore key.store -alias browse
 		} catch (RuntimeException e) {
 			log.error(e.getStackTrace());
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		}
 		get.setFollowRedirects(followRedirects);
 		// String strGetResponseBody = null;
@@ -107,14 +107,14 @@ public class Get extends XmlObjectImpl implements XmlObject {
 			// iGetResponseBody = get.getResponseBodyAsStream();
 			response = get.getResponseBody();
 		} catch (HttpException e) {
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		} catch (IOException e) {
 			log.error(e.getStackTrace());
-			throw new XMLBuildException("Connection refused: There appears to be a problem accessing " + url + ".  Make sure the web service is running!");
+			throw new XMLBuildException("Connection refused: There appears to be a problem accessing " + url + ".  Make sure the web service is running!", this);
 		} catch (IllegalArgumentException e) {
 			return;//throw new XMLBuildException(e.getMessage());
 		}
-		// log.debug("response: " + bGetResponseBody);
+		// log.debug("response: " + bGetResponseBody, this);
 
 		java.io.File workFile = null;
 		if (toTempFileSuffix != null && toTempFilePrefix != null && file == null) {
@@ -134,7 +134,7 @@ public class Get extends XmlObjectImpl implements XmlObject {
 				fo.write(response);
 				fo.close();
 			} catch (IOException e) {
-				throw new XMLBuildException(e.getMessage());
+				throw new XMLBuildException(e.getMessage(), this);
 			}
 		} else {
 
@@ -150,10 +150,10 @@ public class Get extends XmlObjectImpl implements XmlObject {
 				//f.setPackage("edu.wbu.swt");
 				log.debug("f = " + f);
 				f.setParent(this);
-				HashMap map = this.getSymbolTable();
+				ConcurrentHashMap map = this.getSymbolTable();
 				
 				if (newSymbolTable) {
-					HashMap newSymbolTable = new HashMap();
+					ConcurrentHashMap newSymbolTable = new ConcurrentHashMap();
 					String root = (String) map.get("_#root");
 					log.debug("root = " + root);
 					newSymbolTable.put("_#root", root);
@@ -194,7 +194,7 @@ public class Get extends XmlObjectImpl implements XmlObject {
 					//display.dispose();
 					//System.exit(1);
 				}
-				throw new XMLBuildException(e.getMessage());
+				throw new XMLBuildException(e.getMessage(), this);
 			}
 		}
 	}
@@ -273,7 +273,7 @@ public class Get extends XmlObjectImpl implements XmlObject {
 		try {
 			setFollowRedirects(Boolean.parseBoolean(text));
 		} catch (RuntimeException e) {
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		}
 	}
 	
@@ -333,7 +333,7 @@ public class Get extends XmlObjectImpl implements XmlObject {
 	
 	public void addInterface(Interface in) throws XMLBuildException {
 		if (f != null) {
-			f.setSymbolTable(new HashMap<String, Object>());
+			f.setSymbolTable(new ConcurrentHashMap<String, Object>());
 		}
 	}
 	

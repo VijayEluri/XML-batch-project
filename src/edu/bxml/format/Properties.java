@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -43,7 +44,7 @@ public class Properties extends XmlObjectImpl implements XmlObject {
 		this.separator = separator;
 	}
 
-	private HashMap<String, String> properties = new HashMap<String, String>();
+	private Map<String, String> properties = new HashMap<String, String>();
 	private List<Property> lstProperties = new ArrayList<Property>();
 	
 	public String getQueryName() {
@@ -61,7 +62,7 @@ public class Properties extends XmlObjectImpl implements XmlObject {
 	 */
 	public void check() throws XMLBuildException {
 		if (file == null && queryName == null) {
-			throw new XMLBuildException("You must set a file name or query name.");
+			throw new XMLBuildException("You must set a file name or query name.", this);
 		}
 		if (file != null) {
 			File props = new File(file);
@@ -69,13 +70,13 @@ public class Properties extends XmlObjectImpl implements XmlObject {
 			try {
 				p.load(new FileInputStream(props));
 			} catch (FileNotFoundException e) {
-				throw new XMLBuildException(file + ": does not exist.");
+				throw new XMLBuildException(file + ": does not exist.", this);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
-				throw new XMLBuildException(e.getMessage());
+				throw new XMLBuildException(e.getMessage(), this);
 			}
-			HashMap m = getSymbolTable(); 
+			Map m = getSymbolTable(); 
 			for (Enumeration e = p.keys();e.hasMoreElements();) {
 				String key = (String) e.nextElement();
 				String value = p.getProperty(key);
@@ -101,7 +102,7 @@ public class Properties extends XmlObjectImpl implements XmlObject {
 				if (strbfrProperties.length() > separator.length()) {
 					strProperties = strbfrProperties.substring(separator.length());
 					log.debug("strProperties = " + strProperties);
-					HashMap m = getSymbolTable(); 
+					Map m = getSymbolTable(); 
 					Sql sql = (Sql) m.get(queryName);
 					final Connection connection = sql.getConnection();
 					java.sql.Connection c = null;

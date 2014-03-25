@@ -88,7 +88,7 @@ public class List extends XmlObjectImpl implements XmlObject {
 				list(e.getConnection().getFtp(), dir);
 		} catch (SftpException e1) {
 			e1.printStackTrace();
-			throw new XMLBuildException(e1.getMessage());
+			throw new XMLBuildException(e1.getMessage(), this);
 		}
 
 	}

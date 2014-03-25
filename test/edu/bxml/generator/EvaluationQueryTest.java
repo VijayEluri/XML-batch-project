@@ -2,10 +2,10 @@ package edu.bxml.generator;
 
 import java.io.FileInputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 
 import junit.framework.TestCase;
 import net.sf.jsqlparser.schema.Table;
@@ -30,7 +30,7 @@ public class EvaluationQueryTest extends TestCase {
 		java.util.Properties p = new java.util.Properties();
 		
 		Query query = new Query();
-		HashMap s = new HashMap();
+		ConcurrentHashMap s = new ConcurrentHashMap();
 		query.setSymbolTable(s);
 		
 		Properties properties = new Properties();

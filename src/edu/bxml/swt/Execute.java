@@ -32,7 +32,7 @@ public class Execute extends XmlObjectImpl implements XmlObject {
 	@Override
 	public void check() throws XMLBuildException {
 		if (p == null) {
-			throw new XMLBuildException("The program to run could not be located.  Check that the extension you specifed is correct.");
+			throw new XMLBuildException("The program to run could not be located.  Check that the extension you specifed is correct.", this);
 		}
 	}
 	

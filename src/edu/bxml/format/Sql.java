@@ -47,7 +47,7 @@ public class Sql extends XmlObjectImpl implements XmlObject {
 	 */
 	public void check() throws XMLBuildException {
 		if (! (this.getParent() instanceof Connection)) {
-			throw new XMLBuildException("Parent of SQL is not a connection.");
+			throw new XMLBuildException("Parent of SQL is not a connection.", this);
 		}
 		log.debug("query = " + query);
 	}

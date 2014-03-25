@@ -81,7 +81,7 @@ public class FootField extends XmlObjectImpl implements XmlObject {
 			setType(FootFieldTypes.valueOf(type));
 		} catch (IllegalArgumentException iae) {
 			throw new XMLBuildException("Type must be one of "
-					+ Arrays.toString(FootFieldTypes.values()));
+					+ Arrays.toString(FootFieldTypes.values()), this);
 		}
 	}
 	/**
@@ -175,16 +175,16 @@ public class FootField extends XmlObjectImpl implements XmlObject {
 	 */
 	public void check() throws XMLBuildException {
 		if (type == null) {
-			throw new XMLBuildException("No type specified");
+			throw new XMLBuildException("No type specified", this);
 		}
 		if (outDateFormat == null && type.equals(FootFieldTypes.DATE)) {
-			throw new XMLBuildException("No date format given");
+			throw new XMLBuildException("No date format given", this);
 		}
 		if (type.equals(FootFieldTypes.CONSTANT) && super.getValue() == null) {
-			throw new XMLBuildException("Constant value specified but never set");
+			throw new XMLBuildException("Constant value specified but never set", this);
 		}
 		if (padLeft  && padRight) {
-			throw new XMLBuildException("only one of padleft and padright may be specified");
+			throw new XMLBuildException("only one of padleft and padright may be specified", this);
 		}
 		if (size > 0 && padChar != null) {
 			StringBuffer buffer = new StringBuffer();

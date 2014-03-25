@@ -99,7 +99,7 @@ public class XmlLoad extends XmlObjectImpl implements XmlObject {
 	@attribute(value = "", required = false)	
 	public void setDeleteFirst(String deleteFirst) throws XMLBuildException {
 		if (deleteFirst.indexOf("--") > -1) {
-			throw new XMLBuildException("Illegal characters in delete keys (--)");
+			throw new XMLBuildException("Illegal characters in delete keys (--)", this);
 		}
 		deleteFirstRaw = deleteFirst;
 		this.deleteFirst = deleteFirst.split(" *, *");
@@ -174,7 +174,7 @@ public class XmlLoad extends XmlObjectImpl implements XmlObject {
 		try {
 			setUpperCaseHeader(Boolean.parseBoolean(upper));
 		} catch (RuntimeException e) {
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		}
 	}
 	
@@ -357,7 +357,7 @@ public class XmlLoad extends XmlObjectImpl implements XmlObject {
 		connection = query.findConnection(connectionString);
 		//log.debug("connection  = " + this.connection);
 		if (connection == null) {
-			throw new XMLBuildException("connection not found");
+			throw new XMLBuildException("connection not found", this);
 		}
 		
 		try {
@@ -367,7 +367,7 @@ public class XmlLoad extends XmlObjectImpl implements XmlObject {
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		}
 		// Prepare delete query -- don't actually delete anything yet
 
@@ -384,7 +384,7 @@ public class XmlLoad extends XmlObjectImpl implements XmlObject {
 				Field f = fields.get(deleteFirst[i]);
 				if (f == null) {
 					throw new XMLBuildException("field " + deleteFirst[i] +
-							" from deleteFirst does not exist");
+							" from deleteFirst does not exist", this);
 				}
 				deleteFirstSQL.append("[" + f.getFieldName() + "] = ? and ");
 				deleteFirstSelect.append(", [" + f.getFieldName() + "]");
@@ -409,7 +409,7 @@ public class XmlLoad extends XmlObjectImpl implements XmlObject {
 			}
 			catch (SQLException s) {
 				log.debug("query = " + delFirstQuery);
-				throw new XMLBuildException("deleteFirst does not look like a valid comma separated list of fields in " + table);
+				throw new XMLBuildException("deleteFirst does not look like a valid comma separated list of fields in " + table, this);
 			}
 		}
 		log.debug("deleteFirstTypes = " + deleteFirstTypes);
@@ -430,7 +430,7 @@ public class XmlLoad extends XmlObjectImpl implements XmlObject {
 			c.close();
 		}
 		catch (Exception e) {
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		}
 	}
 	
@@ -493,7 +493,7 @@ public class XmlLoad extends XmlObjectImpl implements XmlObject {
 						
 					}
 					catch (IOException fio) {
-						throw new XMLBuildException (fio.getMessage());
+						throw new XMLBuildException (fio.getMessage(), this);
 					}
 				}
 				else if (Field.Types.CHAR.equals(f.getType())) {
@@ -578,7 +578,7 @@ public class XmlLoad extends XmlObjectImpl implements XmlObject {
 //					}
 //					// System.out.println("type of " + i + " is " +
 //					// strTypes[i]);
-//					String value = values[i].trim();
+//					String value = values[i].trim(, this);
 //					if (quoteText) {
 //						if (value.startsWith("\"") && value.endsWith("\"")) {
 //							value = value.substring(1,value.length()-1);
@@ -596,11 +596,11 @@ public class XmlLoad extends XmlObjectImpl implements XmlObject {
 //								log.debug("form = " + form);
 //								log.debug(f.insertFormat(value));
 //								try {pstmt.setObject(parm.index, f.getObject(value), parm.type);}
-//								catch (Exception s) {throw new XMLBuildException(s.getMessage());};
+//								catch (Exception s) {throw new XMLBuildException(s.getMessage(), this);};
 //							}
 //							else 
 //								try {pstmt.setObject(parm.index, value, parm.type);}
-//								catch (SQLException s) {throw new XMLBuildException(s.getMessage());};
+//								catch (SQLException s) {throw new XMLBuildException(s.getMessage(), this);};
 //						}
 //						fieldListSql.append("[").append(f.getFieldName()).append("],");
 //						sql.append(f.insertFormat(value));
@@ -685,7 +685,7 @@ public class XmlLoad extends XmlObjectImpl implements XmlObject {
 		Query query = (Query) getAncestorOfType(Query.class);
 		Sql sql = query.getSql(onerror);
 		if (sql == null) {
-			throw new XMLBuildException("Could not find " + onerror);
+			throw new XMLBuildException("Could not find " + onerror, this);
 		}
 		Connection connection = (Connection)sql.getConnection();
 		Statement stmt = null;
@@ -694,9 +694,9 @@ public class XmlLoad extends XmlObjectImpl implements XmlObject {
 			c = connection.getConnection();
 			stmt = c.createStatement();
 		} catch (SQLException e1) {
-			throw new XMLBuildException(e1.getMessage());
+			throw new XMLBuildException(e1.getMessage(), this);
 		} catch (ClassNotFoundException e1) {
-			throw new XMLBuildException(e1.getMessage());
+			throw new XMLBuildException(e1.getMessage(), this);
 		}
 		
 		String strQuery = sql.getQuery().replace("{error}", "'" + msg + "'");
@@ -705,7 +705,7 @@ public class XmlLoad extends XmlObjectImpl implements XmlObject {
 		try {
 			stmt.executeUpdate(strQuery);
 		} catch (SQLException e) {
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		}
 		finally {
 			try {

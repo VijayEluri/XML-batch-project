@@ -126,7 +126,7 @@ public class Execute extends XmlObjectImpl implements XmlObject {
 		f = (Ftp) getAncestorOfType(Ftp.class);
 		log.debug("FTP = " + f);
 		if (f == null) {
-			throw new XMLBuildException ("Could not find FTP parent of " + this.getName());
+			throw new XMLBuildException ("Could not find FTP parent of " + this.getName(), this);
 		}
 	}
 
@@ -135,7 +135,7 @@ public class Execute extends XmlObjectImpl implements XmlObject {
 		log.debug("EXECUTE execute");
 		connection = f.findConnection(connectionName);
 		if (connection == null) {
-			throw new XMLBuildException("Could not find the connection " + connectionName);
+			throw new XMLBuildException("Could not find the connection " + connectionName, this);
 		}
 		connection.connect();
 		for (XmlObject command: commands) {

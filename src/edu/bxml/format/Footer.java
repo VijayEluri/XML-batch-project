@@ -42,7 +42,7 @@ public class Footer extends XmlObjectImpl implements XmlObject {
 	public void check() throws XMLBuildException {
 		
 		if (parent == null) {
-			throw new XMLBuildException("Parent did not identity itself or is not a Select)");
+			throw new XMLBuildException("Parent did not identity itself or is not a Select)", this);
 		}
 		separator = parent.delimit;
 	}

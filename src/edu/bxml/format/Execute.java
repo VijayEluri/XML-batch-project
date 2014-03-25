@@ -50,16 +50,16 @@ public class Execute extends XmlObjectImpl implements XmlObject {
 	 */
 	public void check() throws XMLBuildException {
 		if (query == null) {
-			throw new XMLBuildException("Parent query did not identify itself");
+			throw new XMLBuildException("Parent query did not identify itself", this);
 		}
 		files.setSize(0);
 		if (dir == null) 
-			throw new XMLBuildException("dir not set");
+			throw new XMLBuildException("dir not set", this);
 		if (!dir.exists()){
-			throw new XMLBuildException(dir.getAbsolutePath() + " does not exist");
+			throw new XMLBuildException(dir.getAbsolutePath() + " does not exist", this);
 		}
 		if ((file == null)  && (mainSql == null))
-			throw new XMLBuildException("Either file or sql must be set");
+			throw new XMLBuildException("Either file or sql must be set", this);
 		if (file != null) { 
 			File[] flist = dir.listFiles();
 			for (int i = 0; i < flist.length; i++ ){
@@ -73,7 +73,7 @@ public class Execute extends XmlObjectImpl implements XmlObject {
 
 	
 			if (connectionString == null) {
-				throw new XMLBuildException("no connection");
+				throw new XMLBuildException("no connection", this);
 			}
 		}
 	}
@@ -129,7 +129,7 @@ public class Execute extends XmlObjectImpl implements XmlObject {
 	public void execute() throws XMLBuildException {
 		log.debug("EXECUTE ");
 		if ((file != null && dir != null) && files.size() == 0 ){
-			System.err.println(file + ": no matching files exist" + System.getProperty("line.separator") + "*** Error from object in XML at line " + this.getLocator().getLineNumber());
+			System.err.println(file + ": no matching files exist" + System.getProperty("line.separator") + "*** Error from object in XML at line " + this.getLineNumber());
 			return;
 		}
 		if (connectionString != null && files != null && files.size() > 0) {
@@ -138,7 +138,7 @@ public class Execute extends XmlObjectImpl implements XmlObject {
 
 		sql = query.getSql(mainSql);
 		if (sql == null) {
-			throw new XMLBuildException("Could not find " + mainSql);
+			throw new XMLBuildException("Could not find " + mainSql, this);
 		}
 		Connection connection = (Connection)sql.getConnection();
 		Sql s = query.getSql(alternateSql);
@@ -167,7 +167,7 @@ public class Execute extends XmlObjectImpl implements XmlObject {
 			if (recordCount == 0 && altQuery != null) {
 				System.err.println("here");
 				if (altQuery.trim().toLowerCase().equals("exit")) {
-					System.err.println("exit called by XML object at " + this.getLocator().getLineNumber());
+					System.err.println("exit called by XML object at " + this.getLineNumber());
 					System.err.flush();
 					System.exit(0);
 				}
@@ -176,7 +176,7 @@ public class Execute extends XmlObjectImpl implements XmlObject {
 		} catch (SQLException sqle) {			
 			sqle.printStackTrace();
 		} catch (ClassNotFoundException cnfe) {
-			throw new XMLBuildException(cnfe.getMessage());
+			throw new XMLBuildException(cnfe.getMessage(), this);
 		} finally {
 			try {
 				stmt.close();
@@ -195,7 +195,7 @@ public class Execute extends XmlObjectImpl implements XmlObject {
 		connection = query.findConnection(connectionString);
 		//System.err.println("connection  = " + this.connection);
 		if (connection == null) {
-			throw new XMLBuildException("connection not found");
+			throw new XMLBuildException("connection not found", this);
 		}
 		for (File f: files) {
 			try {

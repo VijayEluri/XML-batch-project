@@ -64,21 +64,21 @@ public class BlobLoad extends FilterAJImpl implements FilterAJ  {
 		connection = query.findConnection(connectionString);
 		
 		if (connection == null) {
-			throw new XMLBuildException("connection not found");
+			throw new XMLBuildException("connection not found", this);
 		}
 		java.sql.Connection c = null;
 		try {
 			c = connection.getConnection();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		}
 		loadBinaryData(c);
 		try {
 			c.close();
 		} catch (Exception e) {
 			e.printStackTrace();
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		}
 	}
 
@@ -88,13 +88,13 @@ public class BlobLoad extends FilterAJImpl implements FilterAJ  {
 	 */
 	public void check() throws XMLBuildException {
 		if (table == null) {
-			throw new XMLBuildException("table must be set");
+			throw new XMLBuildException("table must be set", this);
 		}
 		if (field == null) {
-			throw new XMLBuildException("table must be set");
+			throw new XMLBuildException("table must be set", this);
 		}
 		if (connectionString == null) {
-			throw new XMLBuildException("You must set the connection");
+			throw new XMLBuildException("You must set the connection", this);
 		}
 	}
 	
@@ -138,7 +138,7 @@ public class BlobLoad extends FilterAJImpl implements FilterAJ  {
 			sqlStatement = c.prepareStatement(query.toString(), sqlStatement.RETURN_GENERATED_KEYS);
 		} catch (SQLException s) {
 			s.printStackTrace();
-			throw new XMLBuildException(s.getMessage());
+			throw new XMLBuildException(s.getMessage(), this);
 		}
 		InputStream inputFileInputStream = in;
 

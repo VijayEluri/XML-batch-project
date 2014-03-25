@@ -51,7 +51,7 @@ public class Matches extends Filter {
         			fv = load.getValues().get(key);
         		}
         		if (fv == null) {
-        			throw new XMLBuildException("key '" + key + "' not declared.");
+        			throw new XMLBuildException("key '" + key + "' not declared.", this);
         		}
         	}
         	String value = fv.value;
@@ -83,7 +83,7 @@ public class Matches extends Filter {
 			delimit = ((Load)getParent()).delimit;
 		}
 		if (delimit == null) {
-			throw new XMLBuildException("must set delimiter");
+			throw new XMLBuildException("must set delimiter", this);
 		}
 	}
 	public void setText(String text) {

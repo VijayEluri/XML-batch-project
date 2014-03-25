@@ -72,10 +72,10 @@ public class Load  extends Matches  {
 				}
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
-				throw new XMLBuildException(e.getMessage());
+				throw new XMLBuildException(e.getMessage(), this);
 			} catch (IOException e) {
 				e.printStackTrace();
-				throw new XMLBuildException(e.getMessage());
+				throw new XMLBuildException(e.getMessage(), this);
 			}
 			if (localInput != null) {
 				try {

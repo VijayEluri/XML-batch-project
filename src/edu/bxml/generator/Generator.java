@@ -124,7 +124,7 @@ public class Generator extends FilterAJImpl implements FilterAJ {
 		log.debug("generator...");
 		log.debug("query3 = " + getAncestorOfType(Query.class));
 		if (analyzer == null) {
-			throw new XMLBuildException("Generator must have a child SqlAnalyzer");
+			throw new XMLBuildException("Generator must have a child SqlAnalyzer", this);
 		}
 		analyzer.execute();
 		

@@ -46,7 +46,7 @@ public class XPath extends Filter {
 					out = new FileOutputStream(to);
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
-					throw new XMLBuildException(e.getMessage());
+					throw new XMLBuildException(e.getMessage(), this);
 				}
 			}
 			log.debug("copy is a filter");
@@ -74,14 +74,14 @@ public class XPath extends Filter {
 			if (this.toDir == null && super.toDir != null) {
 				this.toDir = new File(super.toDir);
 				if (!this.dir.exists())
-					throw new XMLBuildException(dir + " must exist");
+					throw new XMLBuildException(dir + " must exist", this);
 				if (!toDir.isDirectory())
-					throw new XMLBuildException(toDir + " must be a directory");
+					throw new XMLBuildException(toDir + " must be a directory", this);
 			}
 			
 			
 			if ( this.dir.listFiles() == null) {
-				throw new XMLBuildException("can't get a list of files from " + this.dir.getAbsolutePath());
+				throw new XMLBuildException("can't get a list of files from " + this.dir.getAbsolutePath(), this);
 			}
 			for (File file:this.dir.listFiles()) {
 				try {
@@ -104,7 +104,7 @@ public class XPath extends Filter {
 					evaluate(file , to, this.out);
 				} catch (IOException e) {
 					e.printStackTrace();
-					throw new XMLBuildException("copy(" + file + ", " + to + ")   " + e.getMessage());
+					throw new XMLBuildException("copy(" + file + ", " + to + ")   " + e.getMessage(), this);
 				}
 			}
 		}

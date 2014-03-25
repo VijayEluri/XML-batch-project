@@ -39,7 +39,7 @@ public class Create extends XmlObjectImpl implements XmlObject {
 	public void check() throws XMLBuildException {
 		log.debug("CHECK Create");
 		if (diagram == null) {
-			throw new XMLBuildException("Diagram must be specified.");
+			throw new XMLBuildException("Diagram must be specified.", this);
 		}
 		
 	}

@@ -121,7 +121,7 @@ public class Load extends FilterAJImpl implements FilterAJ {
 	@attribute(value = "", required = false)	
 	public void setDeleteFirst(String deleteFirst) throws XMLBuildException {
 		if (deleteFirst.indexOf("--") > -1) {
-			throw new XMLBuildException("Illegal characters in delete keys (--)");
+			throw new XMLBuildException("Illegal characters in delete keys (--)", this);
 		}
 		deleteFirstRaw = deleteFirst;
 		this.deleteFirst = deleteFirst.split(" *, *");
@@ -188,7 +188,7 @@ public class Load extends FilterAJImpl implements FilterAJ {
 		try {
 			setUpperCaseHeader(Boolean.parseBoolean(upper));
 		} catch (RuntimeException e) {
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		}
 	}
 	
@@ -352,21 +352,21 @@ public class Load extends FilterAJImpl implements FilterAJ {
 	public void check() throws XMLBuildException {
 		files = null;
 		if (dir == null) 
-			throw new XMLBuildException("dir not set");
+			throw new XMLBuildException("dir not set", this);
 		if (!dir.exists()){
-			throw new XMLBuildException(dir.getAbsolutePath() + " does not exist");
+			throw new XMLBuildException(dir.getAbsolutePath() + " does not exist", this);
 		}
 		if (file == null) 
-			throw new XMLBuildException("file not set");
+			throw new XMLBuildException("file not set", this);
 		
 		if (outputToFile) 
 			return;
 
 		if (connectionString == null) {
-			throw new XMLBuildException("no connection");
+			throw new XMLBuildException("no connection", this);
 		}
 		if (table == null) {
-			throw new XMLBuildException("no table");
+			throw new XMLBuildException("no table", this);
 		}
 	}
 	
@@ -398,7 +398,7 @@ public class Load extends FilterAJImpl implements FilterAJ {
 			}
 		}
 		if (files.size() == 0 )
-			throw new XMLBuildException("no files to load");
+			throw new XMLBuildException("no files to load", this);
 		return files;
 	}
 	/**
@@ -412,7 +412,7 @@ public class Load extends FilterAJImpl implements FilterAJ {
 		connection = query.findConnection(connectionString);
 		//log.debug("connection  = " + this.connection);
 		if (connection == null) {
-			throw new XMLBuildException("connection not found");
+			throw new XMLBuildException("connection not found", this);
 		}
 		java.sql.Connection c = null;
 		Statement stmt = null;
@@ -423,7 +423,7 @@ public class Load extends FilterAJImpl implements FilterAJ {
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		}
 		// Prepare delete query -- don't actually delete anything yet
 
@@ -452,7 +452,7 @@ public class Load extends FilterAJImpl implements FilterAJ {
 			c.close();
 		}
 		catch (Exception e) {
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		}
 	}
 	
@@ -515,7 +515,7 @@ public class Load extends FilterAJImpl implements FilterAJ {
 						
 					}
 					catch (IOException fio) {
-						throw new XMLBuildException (fio.getMessage());
+						throw new XMLBuildException (fio.getMessage(), this);
 					}
 				}
 				else if (Field.Types.CHAR.equals(f.getType())) {
@@ -590,7 +590,7 @@ public class Load extends FilterAJImpl implements FilterAJ {
 					Field f = fields.get(deleteFirst[i]);
 					if (f == null) {
 						throw new XMLBuildException("field " + deleteFirst[i] +
-								" from deleteFirst does not exist");
+								" from deleteFirst does not exist", this);
 					}
 					deleteFirstSQL.append("[" + f.getFieldName() + "] = ? and ");
 					deleteFirstSelect.append(", [" + f.getFieldName() + "]");
@@ -614,7 +614,7 @@ public class Load extends FilterAJImpl implements FilterAJ {
 				}
 				catch (SQLException s) {
 					log.debug("query = " + delFirstQuery);
-					throw new XMLBuildException("deleteFirst does not look like a valid comma separated list of fields in " + table);
+					throw new XMLBuildException("deleteFirst does not look like a valid comma separated list of fields in " + table, this);
 				}
 			}
 			log.debug("deleteFirstTypes = " + deleteFirstTypes);
@@ -675,7 +675,7 @@ public class Load extends FilterAJImpl implements FilterAJ {
 							continue;
 						}
 						else
-							throw new XMLBuildException("no field defininition for header[" + i + "] " + headers[i]);
+							throw new XMLBuildException("no field defininition for header[" + i + "] " + headers[i], this);
 					}
 					// System.out.println("type of " + i + " is " +
 					// strTypes[i]);
@@ -697,11 +697,11 @@ public class Load extends FilterAJImpl implements FilterAJ {
 								log.debug("form = " + form);
 								log.debug(f.insertFormat(value));
 								try {pstmt.setObject(parm.index, f.getObject(value), parm.type);}
-								catch (Exception s) {throw new XMLBuildException(s.getMessage());};
+								catch (Exception s) {throw new XMLBuildException(s.getMessage(), this);};
 							}
 							else 
 								try {pstmt.setObject(parm.index, value, parm.type);}
-								catch (SQLException s) {throw new XMLBuildException(s.getMessage());};
+								catch (SQLException s) {throw new XMLBuildException(s.getMessage(), this);};
 						}
 						
 						fieldListSql.append(sqlOpenQuote).append(f.getFieldName()).append(sqlCloseQuote).append(",");
@@ -709,10 +709,10 @@ public class Load extends FilterAJImpl implements FilterAJ {
 					} catch (NullPointerException e) {
 						e.printStackTrace();
 						throw new XMLBuildException("line: " + lineCount + " field: " +
-								fieldName + "  value: " + value + "   "+ e.getMessage());
+								fieldName + "  value: " + value + "   "+ e.getMessage(), this);
 					} catch (XMLBuildException e) {
 						e.printStackTrace();
-						throw new XMLBuildException("line: " + lineCount + "  " + e.getMessage());
+						throw new XMLBuildException("line: " + lineCount + "  " + e.getMessage(), this);
 					}
 					if (printFieldValue	)
 						log.debug(f.getFieldName() + "  value = " + value + "  insert value = " + f.insertFormat(value));
@@ -726,7 +726,7 @@ public class Load extends FilterAJImpl implements FilterAJ {
 						pstmt.clearParameters();
 					}
 					catch (SQLException s) {
-						throw new XMLBuildException(s.getMessage());
+						throw new XMLBuildException(s.getMessage(), this);
 					}
 				}
 				sql = new StringBuffer("insert into " + table).
@@ -833,7 +833,7 @@ public class Load extends FilterAJImpl implements FilterAJ {
 		Query query = (Query) getAncestorOfType(Query.class);
 		Sql sql = query.getSql(onerror);
 		if (sql == null) {
-			throw new XMLBuildException("Could not find " + onerror);
+			throw new XMLBuildException("Could not find " + onerror, this);
 		}
 		Connection connection = (Connection)sql.getConnection();
 		java.sql.Connection c;
@@ -841,17 +841,17 @@ public class Load extends FilterAJImpl implements FilterAJ {
 			c = connection.getConnection();
 		} catch (SQLException e2) {
 			e2.printStackTrace();
-			throw new XMLBuildException(e2.getMessage());
+			throw new XMLBuildException(e2.getMessage(), this);
 			
 		} catch (ClassNotFoundException e2) {
 			e2.printStackTrace();
-			throw new XMLBuildException(e2.getMessage());
+			throw new XMLBuildException(e2.getMessage(), this);
 		}
 		Statement stmt = null;
 		try {
 			stmt = c.createStatement();
 		} catch (SQLException e1) {
-			throw new XMLBuildException(e1.getMessage());
+			throw new XMLBuildException(e1.getMessage(), this);
 		} 
 		
 		String strQuery = sql.getQuery().replace("{error}", "'" + msg + "'");
@@ -860,7 +860,7 @@ public class Load extends FilterAJImpl implements FilterAJ {
 		try {
 			stmt.executeUpdate(strQuery);
 		} catch (SQLException e) {
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		}
 		finally {
 			try {

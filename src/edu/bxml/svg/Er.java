@@ -81,7 +81,7 @@ public class Er extends XmlObjectImpl implements XmlObject {
 		}
 		
 		if (parent == null) {
-			throw new XMLBuildException("Svg ancestor could not be found");
+			throw new XMLBuildException("Svg ancestor could not be found", this);
 		}
 		canvas = parent.getCanvas();
 
@@ -126,7 +126,7 @@ public class Er extends XmlObjectImpl implements XmlObject {
 				oldY     = 100;
 
 				Element stroke = doc.getElementById("eStroke");
-				ball1 = new MovableObject(doc.getElementById("gHandle"));
+				ball1 = new MovableObject(doc.getElementById("gHandle"), this);
 				//ball1.addLink(stroke, LEFT);
 				ball2 = new MovableObject(doc.getElementById("gBall"));
 				//ball2.addLink(stroke, RIGHT);

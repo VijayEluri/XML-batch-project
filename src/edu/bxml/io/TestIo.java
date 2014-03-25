@@ -2,6 +2,7 @@ package edu.bxml.io;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
@@ -190,8 +191,8 @@ public class TestIo extends TestCase {
 		matches.setExpression("^E");
 		load.addMatches(matches);
 		matches.setFromTextContent("${pipe.file.lastModified}");
-		matches.setSymbolTable(new HashMap());
-		HashMap st = matches.getSymbolTable();
+		matches.setSymbolTable(new ConcurrentHashMap());
+		ConcurrentHashMap st = matches.getSymbolTable();
 		st.put("pipe", pipe);
 		
 		try {
@@ -272,7 +273,7 @@ public class TestIo extends TestCase {
 			toFile="%{pipe.currentFile.name}.gz"/>
 		<gZip unzip="true"/>
 		 */
-		HashMap st = new HashMap();
+		ConcurrentHashMap st = new ConcurrentHashMap();
 		Io io = new Io();
 		Pipe pipe = new Pipe();
 		pipe.setDir("test/");

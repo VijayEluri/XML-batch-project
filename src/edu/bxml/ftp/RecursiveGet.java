@@ -71,11 +71,11 @@ public class RecursiveGet extends Filter {
 				recursiveGet(c);
 			} catch (IOException e1) {
 				e1.printStackTrace();
-				throw new XMLBuildException(e1.getMessage());
+				throw new XMLBuildException(e1.getMessage(), this);
 			}
 		} catch (SftpException e1) {
 			e1.printStackTrace();
-			throw new XMLBuildException(e1.getMessage());
+			throw new XMLBuildException(e1.getMessage(), this);
 		}
 
 	}

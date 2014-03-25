@@ -158,7 +158,7 @@ public class Filter extends XmlObjectImpl implements XmlObject, Runnable {
 					out = new FileOutputStream(new File(toDir, toFile));
 				} catch (FileNotFoundException e) {
 					e.printStackTrace();
-					throw new XMLBuildException(e.getMessage());
+					throw new XMLBuildException(e.getMessage(), this);
 				}
 			}
 			log.debug("Filter toFile = " + toDir + "/" + toFile);
@@ -174,7 +174,7 @@ public class Filter extends XmlObjectImpl implements XmlObject, Runnable {
 				in = new FileInputStream(new File(dir, file));
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
-				throw new XMLBuildException(e.getMessage());
+				throw new XMLBuildException(e.getMessage(), this);
 			}
 		}
 		else {
@@ -199,7 +199,7 @@ public class Filter extends XmlObjectImpl implements XmlObject, Runnable {
 
 			} catch (IOException e) {
 				e.printStackTrace();
-				throw new XMLBuildException(e.getMessage());
+				throw new XMLBuildException(e.getMessage(), this);
 			}
 		}
 		for (Filter filter : filters) {

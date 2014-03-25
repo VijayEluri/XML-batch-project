@@ -1,6 +1,5 @@
 package edu.bxml.format;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
@@ -54,7 +53,7 @@ public class Property extends XmlObjectImpl implements XmlObject {
 	 * element has been reached and processed.
 	 */
 	public void check() throws XMLBuildException {
-		HashMap m = getSymbolTable(); 
+		Map m = getSymbolTable(); 
 		if (m.get("_#env") != null) {
 			log.debug("env not null");
 			Object value = ((Map)(m.get("_#env"))).get(getName());

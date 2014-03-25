@@ -56,7 +56,7 @@ public class Http extends XmlObjectImpl implements XmlObject {
 		try {
 			setMultiThreaded(Boolean.parseBoolean(text));
 		} catch (RuntimeException e) {
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		}
 	}
 	
@@ -71,7 +71,7 @@ public class Http extends XmlObjectImpl implements XmlObject {
 		try {
 			setTimeout(Integer.parseInt(text));
 		} catch (NumberFormatException e) {
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		}
 	}
     
@@ -93,7 +93,7 @@ public class Http extends XmlObjectImpl implements XmlObject {
 		try {
 			ret = URLEncoder.encode(value, encode);
 		} catch (UnsupportedEncodingException e) {
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		}
 		return ret;
 	}
@@ -157,13 +157,13 @@ public class Http extends XmlObjectImpl implements XmlObject {
 		try {
 			this.policy = (String) c.getField(policy).get(c);
 		} catch (IllegalArgumentException e) {
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		} catch (SecurityException e) {
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		} catch (IllegalAccessException e) {
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		} catch (NoSuchFieldException e) {
-			throw new XMLBuildException(e.getMessage());
+			throw new XMLBuildException(e.getMessage(), this);
 		}
 	}
 	

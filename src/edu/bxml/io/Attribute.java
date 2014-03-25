@@ -1,8 +1,8 @@
 package edu.bxml.io;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -36,7 +36,7 @@ public class Attribute extends XmlObjectImpl implements XmlObject {
 	 */
 	public void check() throws XMLBuildException {
 		if (this.attribute == null) 
-			throw new XMLBuildException("you must set the attribute");
+			throw new XMLBuildException("you must set the attribute", this);
 	}
 	
 	public void execute() throws XMLBuildException {
@@ -49,7 +49,7 @@ public class Attribute extends XmlObjectImpl implements XmlObject {
 			replace.execute();
 			text = replace.getText();
 		}
-		HashMap m = getSymbolTable(); 
+		Map m = getSymbolTable(); 
 		m.put("_#" + getName(), text);
 		log.debug("ATTRIBUTE: text = " + text);
 	}

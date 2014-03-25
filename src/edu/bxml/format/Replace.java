@@ -112,15 +112,15 @@ public class Replace extends XmlObjectImpl implements XmlObject {
 	 */
 	public void check() throws XMLBuildException {
 		if (expression == null) {
-			throw new XMLBuildException("You must set expression");
+			throw new XMLBuildException("You must set expression", this);
 		}
 		if (text == null && replacement == null) {
 			throw new XMLBuildException(
-					"You must set either replacement or text content");
+					"You must set either replacement or text content", this);
 		}
 		if (text != null && replacement != null) {
 			throw new XMLBuildException(
-					"Replacement and text content can't both be set");
+					"Replacement and text content can't both be set", this);
 		}
 
 	}
