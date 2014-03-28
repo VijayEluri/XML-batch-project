@@ -1243,15 +1243,9 @@ public class XmlParser {
 			if (m.isAnnotationPresent(Value.class)) {
 				log.debug("VALUE ANNOTATION on " + m.toString());
 
-					Class[] parameterTypes = new Class[1];
-					Object[] arguments = new Object[1];
-					
-					parameterTypes[0] = String.class;
-					arguments[0] = strBuffer;
-
 					try {
 						m.setAccessible(true);
-						m.set(currentPojo, strBuffer);
+						m.set(currentPojo, toObject(m.getType(), strBuffer));
 					} catch (IllegalArgumentException e) {
 						e.printStackTrace();
 					} catch (IllegalAccessException e) {
@@ -1260,6 +1254,17 @@ public class XmlParser {
 
 			}
 		}
+	}
+	
+	public static Object toObject( Class clazz, String value ) {
+	    if( Boolean.class == clazz ) return Boolean.parseBoolean( value );
+	    if( Byte.class == clazz ) return Byte.parseByte( value );
+	    if( Short.class == clazz ) return Short.parseShort( value );
+	    if( Integer.class == clazz ) return Integer.parseInt( value );
+	    if( Long.class == clazz ) return Long.parseLong( value );
+	    if( Float.class == clazz ) return Float.parseFloat( value );
+	    if( Double.class == clazz ) return Double.parseDouble( value );
+	    return value;
 	}
 	
 	public static String getValue(FilterAJ wrapper) {
