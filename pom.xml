@@ -13,30 +13,14 @@
 	</properties>
 
 	<packaging>jar</packaging>
-	<repositories>
+  	<distributionManagement>
 		<repository>
-			<id>spring-maven-release</id>
-			<name>Spring Maven Release Repository</name>
-			<url>http://maven.springframework.org/release</url>
+			<id>Europa</id>
+			<name>Europa-releases</name>
+			<url>http://europa.lcunet.lcu.edu:8080/artifactory/ext-release-local</url>
 		</repository>
-		<repository>
-			<id>spring-maven-milestone</id>
-			<name>Spring Maven Milestone Repository</name>
-			<url>http://maven.springframework.org/milestone</url>
-		</repository>
-		<repository>
-			<id>spring-roo-repository</id>
-			<name>Spring Roo Repository</name>
-			<url>http://spring-roo-repository.springsource.org/release</url>
-		</repository>
-		<!-- repository> <id>JBoss Repo</id> <url>https://repository.jboss.org/nexus/content/repositories/releases</url> 
-			<name>JBoss Repo</name> </repository -->
-		<repository>
-			<id>maven.springframework.org.external</id>
-			<url>http://maven.springframework.org/external</url>
-			<name>SpringSource Maven Repository - External Releases</name>
-		</repository>
-	</repositories>
+	</distributionManagement>
+
 	<dependencies>
 		<dependency>
 			<groupId>cglib</groupId>
