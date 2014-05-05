@@ -13,7 +13,6 @@ import org.apache.commons.logging.LogFactory;
 import com.browsexml.core.XMLBuildException;
 import com.javalobby.tnt.annotation.attribute;
 
-import edu.bxml.aj.format.Query;
 import edu.bxml.format.Connection;
 import edu.bxml.io.FilterAJ;
 import edu.bxml.io.FilterAJImpl;
@@ -60,8 +59,9 @@ public class BlobLoad extends FilterAJImpl implements FilterAJ  {
 
 	@Override
 	public void execute() throws XMLBuildException  {
-		Query query = (Query) this.getAncestorOfType(Query.class);
-		connection = query.findConnection(connectionString);
+		Object query = null;
+//		Query query = (Query) this.getAncestorOfType(Query.class);
+//		connection = query.findConnection(connectionString);
 		
 		if (connection == null) {
 			throw new XMLBuildException("connection not found", this);

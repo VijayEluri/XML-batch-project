@@ -1,9 +1,0 @@
-<example>
-<description>Disconnect from the remote FTP server.
-</description>
-<code><pre><![CDATA[
-	<quit/>
-]]></pre></code>
-<note>
-</note>
-</example>

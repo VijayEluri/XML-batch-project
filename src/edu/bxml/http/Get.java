@@ -22,11 +22,7 @@ import com.browsexml.core.XmlObject;
 import com.browsexml.core.XmlObjectImpl;
 import com.browsexml.core.XmlParser;
 import com.javalobby.tnt.annotation.attribute;
-import com.sun.org.apache.xerces.internal.xni.parser.XMLParseException;
 
-import edu.bxml.swt.ControlObject;
-import edu.bxml.swt.Data;
-import edu.bxml.swt.Interface;
 
 /**
  * Get an http web page
@@ -54,8 +50,8 @@ public class Get extends XmlObjectImpl implements XmlObject {
 	private String toTempFileSuffix = null;
 
 	private Vector<WebItem> webItems = new Vector<WebItem>();
-	private Vector<Data> datum = new Vector<Data>();
-	private Vector<Interface> interfaces = new Vector<Interface>();
+//	private Vector<Data> datum = new Vector<Data>();
+//	private Vector<Interface> interfaces = new Vector<Interface>();
 	private XmlParser f = null;
 
 	private byte[] response = null;
@@ -201,13 +197,13 @@ public class Get extends XmlObjectImpl implements XmlObject {
 
 	@Override
 	public void check() throws XMLBuildException {
-		ControlObject o = getAncestorOfType(ControlObject.class);
-		if (o != null && o.isShowUrl() == true) {
-			o.setToolTipText(url);
-		}
-		if ((toTempFilePrefix == null && toTempFileSuffix != null) ||
-		(toTempFilePrefix != null && toTempFileSuffix == null))
-			log.debug("temp file prefix and suffix should either both be set or neither set.");
+//		ControlObject o = getAncestorOfType(ControlObject.class);
+//		if (o != null && o.isShowUrl() == true) {
+//			o.setToolTipText(url);
+//		}
+//		if ((toTempFilePrefix == null && toTempFileSuffix != null) ||
+//		(toTempFilePrefix != null && toTempFileSuffix == null))
+//			log.debug("temp file prefix and suffix should either both be set or neither set.");
 	}
 
 	/**
@@ -284,7 +280,7 @@ public class Get extends XmlObjectImpl implements XmlObject {
 	public void setPrint(Boolean print) {
 		this.print = print;
 	}
-	public void setPrint(String print) throws XMLParseException {
+	public void setPrint(String print) throws Exception {
 		setPrint(Boolean.parseBoolean(print));
 	}
 
@@ -327,19 +323,19 @@ public class Get extends XmlObjectImpl implements XmlObject {
 		this.parse = Boolean.parseBoolean(parse);
 	}
 	
-	public void addData(Data data) throws XMLBuildException {
-		datum.add(data);
-	}
+//	public void addData(Data data) throws XMLBuildException {
+//		datum.add(data);
+//	}
+//	
+//	public void addInterface(Interface in) throws XMLBuildException {
+//		if (f != null) {
+//			f.setSymbolTable(new ConcurrentHashMap<String, Object>());
+//		}
+//	}
 	
-	public void addInterface(Interface in) throws XMLBuildException {
-		if (f != null) {
-			f.setSymbolTable(new ConcurrentHashMap<String, Object>());
-		}
-	}
-	
-	public void addInterfaceEnd(Interface in) throws XMLBuildException {
-		in.execute();
-	}
+//	public void addInterfaceEnd(Interface in) throws XMLBuildException {
+//		in.execute();
+//	}
 	
 	/**
 	 * the name of the 'Http' object.  
