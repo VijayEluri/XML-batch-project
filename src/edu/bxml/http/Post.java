@@ -12,18 +12,12 @@ import org.apache.commons.httpclient.methods.multipart.MultipartRequestEntity;
 import org.apache.commons.httpclient.methods.multipart.Part;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.SWTError;
-import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
 
 import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
 import com.browsexml.core.XmlObjectImpl;
 import com.browsexml.core.XmlParser;
 import com.javalobby.tnt.annotation.attribute;
-import com.sun.org.apache.xerces.internal.xni.parser.XMLParseException;
 /**
  * Get an http web page
  * 
@@ -140,26 +134,26 @@ public class Post extends XmlObjectImpl implements XmlObject {
 			} catch (Exception e) {
 				log.error(e.getStackTrace());
 				if (e.getMessage().endsWith(".Html")) {
-					//FIXME: this interface stuff should not be part of GET
-					//new Browser("text/html", new String(response));
-					Display display = new Display();
-					Shell shell = new Shell(display);
-					shell.setLayout(new FillLayout());
-					org.eclipse.swt.browser.Browser browser;
-					try {
-						browser = new org.eclipse.swt.browser.Browser(shell, SWT.NONE);
-					} catch (SWTError e1) {
-						System.out.println("Could not instantiate Browser: " + e1.getMessage());
-						return;
-					}
-					browser.setText(new String(response));
-					shell.open();
-					while (!shell.isDisposed()) {
-						if (!display.readAndDispatch())
-							display.sleep();
-					}
-					log.debug("display.dispose");
-					display.dispose();
+//					//FIXME: this interface stuff should not be part of GET
+//					//new Browser("text/html", new String(response));
+//					Display display = new Display();
+//					Shell shell = new Shell(display);
+//					shell.setLayout(new FillLayout());
+//					org.eclipse.swt.browser.Browser browser;
+//					try {
+//						browser = new org.eclipse.swt.browser.Browser(shell, SWT.NONE);
+//					} catch (SWTError e1) {
+//						System.out.println("Could not instantiate Browser: " + e1.getMessage());
+//						return;
+//					}
+//					browser.setText(new String(response));
+//					shell.open();
+//					while (!shell.isDisposed()) {
+//						if (!display.readAndDispatch())
+//							display.sleep();
+//					}
+//					log.debug("display.dispose");
+//					display.dispose();
 				}
 				// TODO Auto-generated catch block
 				
@@ -222,7 +216,7 @@ public class Post extends XmlObjectImpl implements XmlObject {
 	public void setPrint(Boolean print) {
 		this.print = print;
 	}
-	public void setPrint(String print) throws XMLParseException {
+	public void setPrint(String print) throws Exception {
 		setPrint(Boolean.parseBoolean(print));
 	}
 	

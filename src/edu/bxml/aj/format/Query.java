@@ -18,7 +18,6 @@ import edu.bxml.format.Property;
 import edu.bxml.format.ResultMetadata;
 import edu.bxml.format.Sql;
 import edu.bxml.format.SyncOnArchive;
-import edu.bxml.generator.Generator;
 import edu.bxml.io.FilterAJ;
 import edu.bxml.io.FilterAJImpl;
 import edu.misc.report.Pdf;
@@ -146,12 +145,12 @@ public class Query extends FilterAJImpl implements FilterAJ {
 		sqlCommands.add(p);
 	}	
 	
-	/**  */
-	@attribute(value = "", required = false)
-	public void addGenerator(Generator generator) {
-		log.debug("ADD generator");
-		sqlCommands.add(generator);
-	}
+//	/**  */
+//	@attribute(value = "", required = false)
+//	public void addGenerator(Generator generator) {
+//		log.debug("ADD generator");
+//		sqlCommands.add(generator);
+//	}
 	
 	/**  */
 	@attribute(value = "", required = false)

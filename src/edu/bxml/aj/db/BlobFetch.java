@@ -52,8 +52,8 @@ public class BlobFetch extends FilterAJImpl implements FilterAJ  {
 
 	@Override
 	public void execute() throws XMLBuildException  {
-		Query query = (Query) this.getAncestorOfType(Query.class);
-		connection = query.findConnection(connectionString);
+		Object query = null;//Query query = (Query) this.getAncestorOfType(Query.class);
+		//connection = query.findConnection(connectionString);
 		
 		if (connection == null) {
 			throw new XMLBuildException("connection not found", this);

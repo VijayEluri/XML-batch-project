@@ -9,7 +9,6 @@ import com.browsexml.core.XMLBuildException;
 import com.browsexml.core.XmlObject;
 import com.javalobby.tnt.annotation.attribute;
 
-import edu.bxml.aj.format.Pdfform;
 import edu.bxml.io.Filter;
 import edu.bxml.io.Pipe;
 import edu.misc.report.Pdf;
@@ -91,13 +90,13 @@ public class Query extends Filter {
 		sqlCommands.add(exists);
 	}
 	
-	/**
-	 * Fill in a pdf form
-	 */
-	@attribute(value = "", required = false)
-	public void addPdfform(Pdfform s) {
-		sqlCommands.add(s);
-	}
+//	/**
+//	 * Fill in a pdf form
+//	 */
+//	@attribute(value = "", required = false)
+//	public void addPdfform(Pdfform s) {
+//		sqlCommands.add(s);
+//	}
 
 	/**
 	 * Format the output of a select query.
