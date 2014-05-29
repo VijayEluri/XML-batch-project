@@ -768,9 +768,13 @@ public class XmlParser {
 		}
 
 		public void startDocument() throws SAXException {
-			SplashScreen s = SplashScreen.getSplashScreen();
-			if (s != null)
-				s.close();
+			try {
+				SplashScreen s = SplashScreen.getSplashScreen();
+				if (s != null)
+					s.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 		public void endDocument() throws SAXException {
