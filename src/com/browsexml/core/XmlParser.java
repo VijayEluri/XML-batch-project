@@ -1,6 +1,5 @@
 package com.browsexml.core;
 
-import java.awt.SplashScreen;
 import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -54,6 +53,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import com.browsexml.core.annotation.Add;
 import com.browsexml.core.annotation.Ancestor;
+import com.browsexml.core.annotation.Check;
 import com.browsexml.core.annotation.EndDocument;
 import com.browsexml.core.annotation.SymbolTable;
 import com.browsexml.core.annotation.Value;
@@ -758,8 +758,12 @@ public class XmlParser {
 				System.exit(1);
 			}
 			
+			Method endDocument = null;
+			Method check = null;
+			
 			for (Method m: currentPojo.getClass().getMethods()) {
 				if (m.isAnnotationPresent(EndDocument.class)) {
+					endDocument = m;
 					for (Class<?> x: currentPojo.getClass().getInterfaces()) {
 						log.debug("INTERFACE = " + x);
 					}
@@ -769,8 +773,30 @@ public class XmlParser {
 					log.debug("current pojo = " + currentPojo);
 					log.debug("current pojo name = " + XmlParser.getWrapper(currentPojo).getName());
 					log.debug("end document: wrappers = " + pojoToWrapper);
-
-
+				}
+				if (m.isAnnotationPresent(Check.class)) {
+					check = m;
+				}
+			}
+			
+			Boolean checkPassed = false;
+			if (check != null) {
+				checkPassed = true;
+				try {
+					check.invoke(currentPojo, (Object[]) null);
+				} catch (IllegalAccessException e) {
+					checkPassed = false;
+					e.printStackTrace();
+				} catch (IllegalArgumentException e) {
+					checkPassed = false;
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					checkPassed = false;
+					e.printStackTrace();
+				}
+			}
+			log.debug("check passed = " + checkPassed);
+			if (checkPassed && endDocument != null) {
 					log.debug("check iff");
 					if (!wrapper.isIff()) {
 						log.debug("skip " + wrapper.getName() + " do to iff evaluation");
@@ -790,7 +816,7 @@ public class XmlParser {
 						log.debug("execute pojo name is " + wrapper.getName());
 						log.debug("current in = " + currentIn);
 		
-						m.invoke(currentPojo, (Object[]) null);
+						endDocument.invoke(currentPojo, (Object[]) null);
 						
 						wrapper.closeIn();
 						wrapper.closeOut();
@@ -808,7 +834,7 @@ public class XmlParser {
 					}
 				}
 			}
-		}
+		
 		return false;
 	}
 	
