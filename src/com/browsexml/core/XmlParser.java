@@ -779,9 +779,8 @@ public class XmlParser {
 				}
 			}
 			
-			Boolean checkPassed = false;
+			Boolean checkPassed = true;
 			if (check != null) {
-				checkPassed = true;
 				try {
 					check.invoke(currentPojo, (Object[]) null);
 				} catch (IllegalAccessException e) {
@@ -795,6 +794,7 @@ public class XmlParser {
 					e.printStackTrace();
 				}
 			}
+
 			log.debug("check passed = " + checkPassed);
 			if (checkPassed && endDocument != null) {
 					log.debug("check iff");
@@ -1000,7 +1000,7 @@ public class XmlParser {
 					log.debug("static end = " + key);
 					try {
 						FilterAJ wrapper = XmlParser.getWrapper(key);
-						if (wrapper.isIff()) {
+						if (wrapper != null && wrapper.isIff()) {
 							XmlParser.endDocument(key.getPojo());
 						}
 						else {
