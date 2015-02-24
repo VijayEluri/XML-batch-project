@@ -11,14 +11,6 @@
 	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/3"/>
 	<classpathentry kind="con" path="org.eclipse.ajdt.core.ASPECTJRT_CONTAINER"/>
-	<classpathentry kind="lib" path="/Users/geoffreyritchey/.m2/repository/javalobby/javalobby/1.0.0/javalobby-1.0.0.jar">
-		<attributes>
-			<attribute name="maven.groupId" value="javalobby"/>
-			<attribute name="maven.artifactId" value="javalobby"/>
-			<attribute name="maven.version" value="1.0.0"/>
-			<attribute name="maven.scope" value="compile"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="con" path="aQute.bnd.classpath.container"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>
