@@ -55,6 +55,7 @@ import com.browsexml.core.annotation.Add;
 import com.browsexml.core.annotation.Ancestor;
 import com.browsexml.core.annotation.Check;
 import com.browsexml.core.annotation.EndDocument;
+import com.browsexml.core.annotation.Finally;
 import com.browsexml.core.annotation.SymbolTable;
 import com.browsexml.core.annotation.Value;
 import com.javalobby.tnt.annotation.attribute;
@@ -130,6 +131,15 @@ public class XmlParser {
 	static ScriptEngineManager sem = new ScriptEngineManager();
 	static ScriptEngine javascriptEngine = sem.getEngineByName("ECMAScript");
 
+	
+	static public String processMacros(Object pojo, String text) {
+		FilterAJ filter = XmlParser.pojoToWrapper.get(pojo);
+		if (filter == null) {
+			return null;
+		}
+		ConcurrentHashMap st = filter.getSymbolTable();
+		return processMacros(st, text);
+	}
 	/**
 	 * Replace strings of the form ${name} with the symbol-table value for name.
 	 * Name should be the name of a previously defined property or a system
@@ -627,6 +637,38 @@ public class XmlParser {
 		log.debug("URL file = " + xmlFile);
 		parse(xmlFile.openStream());
 	}
+	
+	public void doFinally() {
+		log.debug("FINALLY");
+		for (FilterAJ key : createOrder) {
+			log.debug("static end = " + key);
+
+			FilterAJ wrapper = XmlParser.getWrapper(key);
+			if (wrapper != null && wrapper.isIff()) {
+				try {
+					Object currentPojo = wrapper.getPojo();
+
+					for (Method m: currentPojo.getClass().getMethods()) {
+						if (m.isAnnotationPresent(Finally.class)) {
+							log.debug("FINALLY found");
+							m.invoke(currentPojo, (Object[])null);
+							break;
+						}
+					}
+				} catch (SecurityException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				} 
+			}
+
+		}
+	}
+	
 
 	public void parse(String xmlFile) throws ConnectException,
 			XMLBuildException, IOException, SAXParseException, SAXException {
@@ -659,6 +701,7 @@ public class XmlParser {
 			g.setUrl(xmlFile);
 			g.setSource(xmlFile);
 			g.execute();
+			doFinally();
 			// }
 			// catch (Exception e) {throw new
 			// XMLBuildException(e.getMessage());};
@@ -698,7 +741,7 @@ public class XmlParser {
 		}
 
 		finally {
-
+			doFinally();
 		}
 		/* TODO put formatString into sub classes */
 		// if (formatString.length()>0) // get rid of initial delimiter
@@ -980,6 +1023,7 @@ public class XmlParser {
 //				s.close();
 		}
 
+
 		public void endDocument() throws SAXException {
 			log.debug("END DOCUMENT");
 			XmlObject skipParent = null;
@@ -1012,7 +1056,8 @@ public class XmlParser {
 		
 			}
 		}
-
+		
+		
 		public void startElement(String namespaceURI, String sName,
 				String qName, Attributes attrs) throws SAXException {
 			// qName = qName.toLowerCase();
@@ -1401,4 +1446,27 @@ public class XmlParser {
 		}
 		return true;
 	}
+	
+	/**
+	 * Lookup an object in the symbol table without using a reference to the symbol table.
+	 * Object should be the pojo needing to lookup another object.
+	 * 
+	 * 	Connection connection = (Connection) lookup(this, "theConnection");
+	 * 
+	 * @param ob
+	 * @param key
+	 * @return
+	 */
+	public static Object lookup(Object ob, String key) {
+		FilterAJ filter = XmlParser.pojoToWrapper.get(ob);
+		if (filter == null)
+			return null;
+		ConcurrentHashMap st = filter.getSymbolTable();
+		FilterAJ o = (FilterAJ)st.get(key);
+		if (o != null) {
+			return o.getPojo();
+		}
+		return null;
+	}
+
 }
