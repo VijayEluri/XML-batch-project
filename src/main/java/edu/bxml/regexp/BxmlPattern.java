@@ -18,7 +18,7 @@ public abstract class BxmlPattern {
 	}
 
 	public abstract String replace(List<String> match, Map env);
-
+	
 	public String execute(String line, Map env) {
 		if (line == null)
 			return line;

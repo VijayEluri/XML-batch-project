@@ -29,6 +29,7 @@ public class Sql extends XmlObjectImpl implements XmlObject {
 	private String query = "";
 	
 	public String getQuery() throws XMLBuildException {
+		log.debug("sql 32  query = " + query);
 		return XmlParser.processMacros(this.getSymbolTable(), XmlParser.replacePoundMacros(query));
 	}
 
