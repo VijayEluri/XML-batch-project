@@ -163,7 +163,7 @@ log.debug("rs count = " + rs.getFetchSize());
 			}
 		}
 		
-		strData = escHtml(strData);
+		strData = cdata(strData);
 		int formatNumber = column.getFormatNumber();
 		String formatType = "DateTime";
 		if (formatNumber == 62) {
@@ -172,6 +172,10 @@ log.debug("rs count = " + rs.getFetchSize());
 		
 		localOut.println("<Cell ss:StyleID=\"s" + formatNumber + "\"><Data ss:Type=\"" + formatType + "\">"
 				+ strData + "</Data></Cell>");
+	}
+	
+	public String cdata(String strData) {
+		return org.apache.commons.lang.StringEscapeUtils.escapeXml(strData);
 	}
 	
 	public String escHtml(String strData) {
