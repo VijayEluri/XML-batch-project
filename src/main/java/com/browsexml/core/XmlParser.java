@@ -64,7 +64,6 @@ import edu.bxml.http.Get;
 import edu.bxml.http.Http;
 import edu.bxml.io.FilterAJ;
 import edu.bxml.io.FilterAJImpl;
-import edu.bxml.regexp.BxmlPattern;
 
 /**
  * Format a query's output
@@ -100,71 +99,7 @@ public class XmlParser {
 
 	SAXParser saxParser = null;
 
-	//static Pattern macroPattern = Pattern.compile("\\$\\{(\\S+?)\\}");
-    /**
-     * Replace all variables of the form ${variable_name} with its value
-     * Variables of the form ${and last_name like '%s':lastName} will replace 
-     * the %s with the value of lastName and include the whole clause "and last_name like 'value_of_lastName'"
-     * If lastName is null, the whole clause will not be included in the final value.
-     * 
-     */
-	static BxmlPattern macroPattern = new BxmlPattern("\\$\\{(.*?)\\}") {
-		
-
-		@Override
-		public String replace(List<String> match, Map env) {
-			String ret = "";
-			String key = match.get(1);
-			log.debug("key0 = " + key);
-			String prefix = null;
-			String[] components = key.split(":");
-			if (components.length > 1) {
-				prefix = components[0];
-				key = components[1];
-				log.debug("key1 = " + key);
-			}
-			String[] path = key.split("->");
-			if (path.length > 1) {
-				key = path[0];  // key points to the base object
-				log.debug("key2 = " + key);
-			}
-			log.debug("key3 = " + key);
-			Map subEnv = (Map)env.get("_#env");
-			log.debug("subenv = " + subEnv);
-			Object value = (subEnv!=null)?subEnv.get(key):null;
-			if (value == null) {
-				value = env.get(key);
-				if (value == null) {
-					value = System.getProperty(key);
-					if (value == null) {
-						value = System.getenv(key);
-						if (value == null) {
-							log.debug("value0 return" + value);
-							return "";
-						}
-					}
-				}
-			}
-
-			if (path.length > 1) {
-				value = "" + getAttributes((XmlObject) value, path[1]);
-				log.debug("value1 return" + value);
-			}
-			log.debug("value2 = " + value);
-			try {
-				if (prefix == null) {
-					return value.toString();
-				}
-				ret =  String.format(prefix, value.toString());
-				log.debug("value3 = " + ret);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return ret;
-		}
-		
-	};
-
+	static Pattern macroPattern = Pattern.compile("\\$\\{(\\S+?)\\}");
 	static Pattern attributePattern = Pattern.compile("\\%\\{(\\S+?)\\}");
 
 	ConcurrentHashMap<String, Object> symbolTable;
@@ -239,8 +174,36 @@ public class XmlParser {
 				ex.printStackTrace();
 			}
 		} else {
-			log.debug("symboltable = " + st);
-			return macroPattern.execute(text, st);
+			Matcher myMatcher = macroPattern.matcher(text);
+			String origVar = null;
+			String[] var = null;
+			while (myMatcher.find()) {
+				origVar = myMatcher.group(1);
+				var = origVar.split("->"); // Use arrow instead of dot (.) to
+											// denote structure elements
+				Object x = st.get("_#" + var[0]);
+				if (x == null) {
+					x = st.get(var[0]);
+				}
+				log.debug("PROCESS MACRO: " + var[0] + " = " + x);
+				if (x == null) {
+					x = System.getProperty(var[0]);
+					if (x == null) {
+						x = System.getenv(var[0]);
+					}
+				}
+				String val = (x != null) ? x.toString() : "";
+				if (var.length > 1) {
+					val = "" + getAttributes((XmlObject) x, var[1]);
+				}
+				String replace = "\\$\\{" + origVar + "\\}";
+				val = val.replaceAll("\\\\", "\\\\\\\\");
+				log.debug("replace = " + replace);
+				log.debug("val = " + val);
+				text = text.replaceAll(replace, val);
+			}
+			log.debug("return text = " + text);
+			return text;
 		}
 		return null;
 	}
@@ -619,6 +582,9 @@ public class XmlParser {
 			}
 		}
 		saxParser = factory.newSAXParser();
+		if (symbolTable == null) {
+			symbolTable = new ConcurrentHashMap<String, Object>();
+		}
 		if (env != null)
 			symbolTable.put("_#env", env);
 		parse(xmlFile);
@@ -885,24 +851,24 @@ public class XmlParser {
 					log.debug("iff evaluate normal");
 					try {
 						replaceAllVariables(wrapper);
-						oStack.push(currentOut);
-						iStack.push(currentIn);
-						log.debug("Wrapper getIN");
-						log.debug("wrapper.getFile = " + wrapper.getDir() + "/" + wrapper.getFile());
-						currentIn = wrapper.getIn();
-						currentOut = wrapper.getOut();
-						System.setOut(currentOut);
-						System.setIn(currentIn);
-						log.debug("execute pojo name is " + wrapper.getName());
-						log.debug("current in = " + currentIn);
+//						oStack.push(currentOut);
+//						iStack.push(currentIn);
+//						log.debug("Wrapper getIN");
+//						log.debug("wrapper.getFile = " + wrapper.getDir() + "/" + wrapper.getFile());
+//						currentIn = wrapper.getIn();
+//						currentOut = wrapper.getOut();
+//						System.setOut(currentOut);
+//						System.setIn(currentIn);
+//						log.debug("execute pojo name is " + wrapper.getName());
+//						log.debug("current in = " + currentIn);
 		
 						endDocument.invoke(currentPojo, (Object[]) null);
 						
-						wrapper.closeIn();
-						wrapper.closeOut();
-						
-						System.setIn(currentIn = iStack.pop());
-						System.setOut(currentOut = oStack.pop());
+//						wrapper.closeIn();
+//						wrapper.closeOut();
+//						
+//						System.setIn(currentIn = iStack.pop());
+//						System.setOut(currentOut = oStack.pop());
 
 						
 					} catch (IllegalArgumentException e) {
