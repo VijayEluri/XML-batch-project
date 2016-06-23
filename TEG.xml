@@ -28,11 +28,12 @@
 		<!--load name="loadTXGR" truncateFirst="true" delimit="\t" header="true" dir="." 
 				file="TEGdata.txt"
 				table="lcuTxGrant" connection="Campus6" quoteText="false"
-				printFieldValue="true" stopAfterErrors="1" printCreateTable="false">
+				printFieldValue="true" stopAfterErrors="1" 
+				printCreateTable="false">
 			<charField fieldName="Record Code" type="CHAR" size="2" />
 			<charField fieldName="Student Ssn" type="CHAR" size="9" />
 			<charField fieldName="SSN" type="CHAR" size="1" />
-			<dateField fieldName="Date Of Birth" type="DATE" format="MM/dd/yy" default="{null}"/>
+			<dateField fieldName="Date Of Birth" type="DATE" format="MMddyyyy" default="{null}"/>
 			<charField fieldName="Last Name" type="CHAR" size="30" />
 			<charField fieldName="First Name" type="CHAR" size="30" />
 			<charField fieldName="Middle Init" type="CHAR" size="1" />
@@ -53,16 +54,16 @@
 			<charField fieldName="Athletic Award" type="CHAR" size="1" default="N"/> 
 			<numberField fieldName="Selective Service Reg" type="NUMBER" size="1"  default="{null}" comment="21"/> 
 			<charField fieldName="TEXAS_TEG" type="CHAR" size="1" /> 
-			<dateField fieldName="Date TEG Awarded" type="DATE" format="MMddyyyy" default="{null}"/> 
+			<dateField fieldName="Date TEG Awarded" type="DATE" format="MM/dd/yyyy" default="{null}"/> 
 			<charField fieldName="Initial/Renewal" type="CHAR" size="1" /> 
 			<numberField fieldName="Hardship" type="NUMBER" size="1"  default="{null}"/> 
 			<numberField fieldName="Professional Judgement" type="NUMBER" size="1"  default="{null}"/>
 			<numberField fieldName="Completion Rate" type="NUMBER" size="3" padleft="0" default="{null}"/> 
-			<numberField fieldName="Fall 2012 Hours Attempted" type="NUMBER" size="3" padleft="0" default="{null}"/> 
-			<numberField fieldName="Spring 2013 Hours Attempted" type="NUMBER" size="3" padleft="0" default="{null}"/> 
-			<numberField fieldName="Winter 2012 Hours Attempted" type="NUMBER" size="3" padleft="0" default="{null}"/> 
-			<numberField fieldName="Summer 2013 Hours Attempted" type="NUMBER" size="3" padleft="0" default="{null}"/> 
-			<numberField fieldName="Gpa College" type="NUMBER" size="3" padleft="0" default="{null}"/> 
+			<numberField fieldName="Fall 2014 Hours Attempted" type="NUMBER" size="3" padleft="0" default="{null}"/> 
+			<numberField fieldName="Spring 2015 Hours Attempted" type="NUMBER" size="3" padleft="0" default="{null}"/> 
+			<numberField fieldName="Winter 2014 Hours Attempted" type="NUMBER" size="3" padleft="0" default="{null}"/> 
+			<numberField fieldName="Summer 2015 Hours Attempted" type="NUMBER" size="3" padleft="0" default="{null}"/> 
+			<numberField fieldName="GPA College" type="NUMBER" size="3" padleft="0" default="{null}"/> 
 			<numberField fieldName="Total Number of Hours Completed" type="NUMBER" size="3" padleft="0" default="{null}"/> 
 			<charField fieldName="Aid Disbursed After Enrollment Ended" type="CHAR" size="1"  default="{null}"/> 
 			<dateField fieldName="Graduation Date" type="DATE" size="8" format="MMddyyyy" default="{null}"/> 
@@ -138,14 +139,14 @@
 					(rate> 100)
 				]]>
 			</numberField>
-			<numberField name="fallHours" comment="field 27" fieldName="Fall 2012 Hours Attempted" 
+			<numberField name="fallHours" comment="field 27" fieldName="fallHours" 
 				type="NUMBER" size="3" padleft="0" default="000" valid="\d+"> 
 				<![CDATA[
 					(fallHours < 9 && degree < 3 && judgement == 0)
 					|| (fallHours < 7 && degree > 2 and judgement == 0)
 				]]>
 			</numberField>
-			<numberField name="springHours" comment="field 29" fieldName="Spring 2013 Hours Attempted" 
+			<numberField name="springHours" comment="field 29" fieldName="springHours" 
 				type="NUMBER" size="3" padleft="0" default="000" valid="\d+" validateColumn="201=191+1+3+3+3"> 
 				<![CDATA[
 					(springHours < 9 && degree < 3 && judgement == 0)
@@ -153,10 +154,10 @@
 				]]>
 			</numberField>
 
-			<numberField name="winterHours" fieldName="Winter 2012 Hours Attempted" 
+			<numberField name="winterHours" fieldName="winterHours" 
 				type="NUMBER" size="3" padleft="0" default="000" valid="\d+"> 
 			</numberField>
-			<numberField name="summerHours" fieldName="Summer 2013 Hours Attempted" 
+			<numberField name="summerHours" fieldName="summerHours" 
 				type="NUMBER" size="3" padleft="0" default="000" valid="\d+"> 
 			</numberField>
 			<numberField name="gpa" comment="field 32" fieldName="Gpa College" 
@@ -209,8 +210,12 @@ SELECT [Record Code] ,[Student Ssn] ,[SSN] ,[Date Of Birth] ,[Last Name] ,[First
       ,[Filler 12] ,0 as [Filler 13] ,[Legal Residence] ,[Degree] ,[Tot Budget]
       ,[EFC] ,[Disbursed Amt]*100 as [Disbursed Amt] ,[Tuition Differential] ,[Athletic Award] ,[Selective Service Reg]
       ,[TEXAS_TEG] ,[Date TEG Awarded] ,[Initial/Renewal] ,[Hardship] ,[Professional Judgement]
-      ,[Completion Rate] ,[Fall 2012 Hours Attempted] ,[Spring 2013 Hours Attempted] ,[Winter 2012 Hours Attempted]
-      ,[Summer 2013 Hours Attempted] ,[Gpa College] ,[Total Number of Hours Completed]
+      ,[Completion Rate] 
+      ,[Fall 2014 Hours Attempted] as fallHours
+      ,[Spring 2015 Hours Attempted] as springHours
+      ,[Winter 2014 Hours Attempted] as winterHours
+      ,[Summer 2015 Hours Attempted] as summerHours
+      ,[Gpa College] ,[Total Number of Hours Completed]
       ,[Aid Disbursed After Enrollment Ended] ,[Graduation Date] ,[SAP], [Semester of Initial Award]
 FROM [Area51].[dbo].[lcuTxGrant]
 	]]>
@@ -223,11 +228,12 @@ SELECT sum([Disbursed Amt])*100 as total
 			</sql>
 			<sql name="dataChecks">
 	<![CDATA[
-select min(case when ([Disbursed Amt] > 5277 or [Disbursed Amt] = 0 or ([Disbursed Amt] > 3518 and [Degree] in ('C', 'D', 'E') ) or [Disbursed Amt] > ([Tot Budget] - [EFC])) then 'error' else 'OK' end)
+select 
+   min(case when ([Disbursed Amt] > 5277 or [Disbursed Amt] = 0 or ([Disbursed Amt] > 3518 and [Degree] in ('C', 'D', 'E') ) or [Disbursed Amt] > ([Tot Budget] - [EFC])) then 'error' else 'OK' end)
   ,min(case when ([Tuition Differential] < [Disbursed Amt]) then 'error' else 'OK' end)
   ,min(case when ([Completion Rate] > 100) then 'error' else 'OK' end)
-  ,min(case when ( [Fall 2012 Hours Attempted] > 0 and ( ([Fall 2012 Hours Attempted] < 9 and [Degree] in ('A', 'B') and [Professional Judgement] = 0) or  ([Fall 2012 Hours Attempted] < 7 and [Degree] in ('C', 'D', 'E') and [Professional Judgement] = 0))) then 'error' else 'OK' end)
-  ,min(case when ( [Spring 2013 Hours Attempted] > 0 and ( ([Spring 2013 Hours Attempted] < 9 and [Degree] in ('A', 'B') and [Professional Judgement] = 0) or  ([Spring 2013 Hours Attempted] < 7 and [Degree] in ('C', 'D', 'E') and [Professional Judgement] = 0))) then 'error' else 'OK' end)
+  ,min(case when ( [Fall 2014 Hours Attempted] > 0 and ( ([Fall 2014 Hours Attempted] < 9 and [Degree] in ('A', 'B') and [Professional Judgement] = 0) or  ([Fall 2014 Hours Attempted] < 7 and [Degree] in ('C', 'D', 'E') and [Professional Judgement] = 0))) then 'error' else 'OK' end)
+  ,min(case when ( [Spring 2015 Hours Attempted] > 0 and ( ([Spring 2015 Hours Attempted] < 9 and [Degree] in ('A', 'B') and [Professional Judgement] = 0) or  ([Spring 2015 Hours Attempted] < 7 and [Degree] in ('C', 'D', 'E') and [Professional Judgement] = 0))) then 'error' else 'OK' end)
   ,min(case when ([Gpa College] > 400) then 'error' else 'OK' end)
   ,min(case when ([SAP] = 'Y' and [Initial/Renewal] = 'R' and [Gpa College] < 250) then 'error' else 'OK' end)
   ,min(case when ( ([Semester of Initial Award] = 0 and [Initial/Renewal] = 'I') or ([Semester of Initial Award] > 0 and [Initial/Renewal] = 'R') ) then 'error' else 'OK' end)

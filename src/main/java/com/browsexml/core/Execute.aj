@@ -1,30 +1,18 @@
 package com.browsexml.core;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Iterator;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import edu.bxml.io.FilterAJ;
-import edu.bxml.io.SortedCsvDiff;
-
 
 public aspect Execute {
-	pointcut execute():
-	    call(void *.execute());
-	    
+	pointcut execute(): call(void *.execute());
+
 	    
 	    /*
 	    	All variables referenced by foreign objects 

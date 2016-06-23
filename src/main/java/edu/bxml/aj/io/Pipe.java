@@ -77,41 +77,7 @@ public class Pipe extends FilterAJImpl implements FilterAJ, UncaughtExceptionHan
 			this.file = "_output_";
 			files = new File[] {new File(".", this.file)};
 		}
-		if (true) {
 
-//			currentFile = file;
-//			String toFile = this.toFile;
-//			OutputStream out = this.out;
-//			if (this.toDir != null) {
-//				if (toFile == null) {
-//					toFile = file.getName();
-//				}
-//				try {
-//					out = new FileOutputStream(new File(toDir, toFile));
-//				} catch (FileNotFoundException e) {
-//					e.printStackTrace();
-//					throw new XMLBuildException(e.getMessage());
-//				}
-//			}
-//			if (out == null) 
-//				out = System.out;
-//			found = true;
-//			log.debug("pipe file is " + file.getAbsolutePath());
-//			if (file.exists())
-//				try {
-//					pipeInput = (InputStream) new FileInputStream(file);
-//				} catch (FileNotFoundException e2) {
-//					e2.printStackTrace();
-//				}
-//			else {
-//				try {
-//					pipeInput = new ByteArrayInputStream("".getBytes("UTF-8"));
-//				} catch (UnsupportedEncodingException e) {
-//					e.printStackTrace();
-//				}
-//
-//			}
-//			Thread.setDefaultUncaughtExceptionHandler(this);
 			
 			pipeInput = getIn();
 			log.debug("HERE");
@@ -209,32 +175,8 @@ public class Pipe extends FilterAJImpl implements FilterAJ, UncaughtExceptionHan
 				command.execute();
 			}
 			closeIO();
-//			if (archive != null) {
-//				if (!archiveDir.exists()) {
-//					archiveDir.mkdirs();
-//				}
-//				if (archiveDir.exists()) {
-//					log.debug("archive exists");
-//					//file.renameTo(new File(archiveDir, file.getName()));
-//					try {
-//						FileInputStream inArch = new FileInputStream(file);
-//						FileOutputStream outArch = new FileOutputStream(
-//								new File(archiveDir, file.getName()));
-//						Copy.copyBinaryFile(inArch, outArch);
-//						inArch.close();
-//						outArch.close();
-//						
-//						log.debug("delete " + file.getAbsolutePath());
-//						log.debug("delete result = " + file.delete());
-//						
-//					} catch (FileNotFoundException e) {
-//						e.printStackTrace();
-//					} catch (IOException e) {
-//						e.printStackTrace();
-//					}
-//				}
-//			}
-		}
+
+		
 		if (!found) {
 			log.debug("no file in directory '" + dir + 
 					"' matched " + file);
