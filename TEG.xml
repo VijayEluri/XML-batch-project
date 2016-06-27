@@ -25,7 +25,7 @@
 	</properties>
         <!--io:pipe name="pipe" toDir="." toFile="txgr.txt" iff="true"-->
 	<query>
-		<!--load name="loadTXGR" truncateFirst="true" delimit="\t" header="true" dir="." 
+		<load iff="false" name="loadTXGR" truncateFirst="true" delimit="\t" header="true" dir="." 
 				file="TEGdata.txt"
 				table="lcuTxGrant" connection="Campus6" quoteText="false"
 				printFieldValue="true" stopAfterErrors="1" 
@@ -33,7 +33,7 @@
 			<charField fieldName="Record Code" type="CHAR" size="2" />
 			<charField fieldName="Student Ssn" type="CHAR" size="9" />
 			<charField fieldName="SSN" type="CHAR" size="1" />
-			<dateField fieldName="Date Of Birth" type="DATE" format="MMddyyyy" default="{null}"/>
+			<dateField fieldName="Date of Birth" type="DATE" format="MMddyyyy" default="{null}"/>
 			<charField fieldName="Last Name" type="CHAR" size="30" />
 			<charField fieldName="First Name" type="CHAR" size="30" />
 			<charField fieldName="Middle Init" type="CHAR" size="1" />
@@ -47,30 +47,30 @@
 			<charField fieldName="Filler 13" type="CHAR" size="1" />
 			<charField fieldName="Legal Residence" type="CHAR" size="1" />
 			<charField fieldName="Degree" type="CHAR" size="1" />
-			<numberField fieldName="Tot Budget" type="NUMBER" size="5" padleft="0" default="{null}"/> 
+			<numberField fieldName="Filler 16" type="NUMBER" size="5" padleft="0" default="{null}"/> 
 			<charField fieldName="EFC" type="CHAR" size="6" padleft="0"/> 
 			<numberField fieldName="Disbursed Amt" type="NUMBER" size="6" padleft="0" default="{null}"/> 
 			<numberField fieldName="Tuition Differential" type="NUMBER" size="6" padleft="0" default="{null}"/> 
 			<charField fieldName="Athletic Award" type="CHAR" size="1" default="N"/> 
 			<numberField fieldName="Selective Service Reg" type="NUMBER" size="1"  default="{null}" comment="21"/> 
-			<charField fieldName="TEXAS_TEG" type="CHAR" size="1" /> 
-			<dateField fieldName="Date TEG Awarded" type="DATE" format="MM/dd/yyyy" default="{null}"/> 
+			<charField fieldName="Filler 22" type="CHAR" size="1" default=" "/> 
+			<charField fieldName="Filler 23" type="CHAR" default="{null}"/> 
 			<charField fieldName="Initial/Renewal" type="CHAR" size="1" /> 
-			<numberField fieldName="Hardship" type="NUMBER" size="1"  default="{null}"/> 
+			<charField fieldName="Hardship" type="CHAR" size="1"  /> 
 			<numberField fieldName="Professional Judgement" type="NUMBER" size="1"  default="{null}"/>
 			<numberField fieldName="Completion Rate" type="NUMBER" size="3" padleft="0" default="{null}"/> 
-			<numberField fieldName="Fall 2014 Hours Attempted" type="NUMBER" size="3" padleft="0" default="{null}"/> 
-			<numberField fieldName="Spring 2015 Hours Attempted" type="NUMBER" size="3" padleft="0" default="{null}"/> 
-			<numberField fieldName="Winter 2014 Hours Attempted" type="NUMBER" size="3" padleft="0" default="{null}"/> 
-			<numberField fieldName="Summer 2015 Hours Attempted" type="NUMBER" size="3" padleft="0" default="{null}"/> 
-			<numberField fieldName="GPA College" type="NUMBER" size="3" padleft="0" default="{null}"/> 
+			<numberField fieldName="Fall 2015 Hours Attempted" type="NUMBER" size="3" padleft="0" default="{null}"/> 
+			<numberField fieldName="Spring 2016 Hours Attempted" type="NUMBER" size="3" padleft="0" default="{null}"/> 
+			<numberField fieldName="Winter 2015 Hours Attempted" type="NUMBER" size="3" padleft="0" default="{null}"/> 
+			<numberField fieldName="Filler 31" type="NUMBER" size="3" padleft="0" default="{null}"/> 
+			<numberField fieldName="Gpa College" type="NUMBER" size="3" padleft="0" default="{null}"/> 
 			<numberField fieldName="Total Number of Hours Completed" type="NUMBER" size="3" padleft="0" default="{null}"/> 
-			<charField fieldName="Aid Disbursed After Enrollment Ended" type="CHAR" size="1"  default="{null}"/> 
+			<charField fieldName="Filler 34" type="CHAR" size="1"  default="{null}"/> 
 			<dateField fieldName="Graduation Date" type="DATE" size="8" format="MMddyyyy" default="{null}"/> 
 			<charField fieldName="SAP" type="CHAR" size="1" /> 
 			<charField fieldName="Semester of Initial Award" type="CHAR" size="1"  default="{null}"/> 
-		</load-->
-		<select name="selectTXgrant" queryName="TXgrant" delimit="" toDir="." toFile="txgr.txt">
+		</load>
+		<select iff="true" name="selectTXgrant" queryName="TXgrant" delimit="" toDir="." toFile="txgr.txt">
 			<header columnsNames="false">
 				<footField type="CONSTANT">@H</footField>
 				<footField type="CONSTANT">TEG </footField>
@@ -84,7 +84,7 @@
 			<charField fieldName="Record Code" type="CHAR" size="2" />
 			<charField fieldName="Student Ssn" type="CHAR" size="9" padleft="0" />
 			<charField fieldName="SSN" type="CHAR" size="1" valid="[YN]"/>
-			<dateField fieldName="Date Of Birth" type="DATE" format="MMddyyyy" valid="\d+"/>
+			<dateField fieldName="Date of Birth" type="DATE" format="MMddyyyy" valid="\d+"/>
 			<charField fieldName="Last Name" type="CHAR" size="30" padright=" "/>
 			<charField fieldName="First Name" type="CHAR" size="30" padright=" " validateColumn="80=2+9+1+8+30+30"/>
 
@@ -95,12 +95,11 @@
 			<charField fieldName="Filler 11" type="CHAR" size="2" padright=" "/>
 			<charField fieldName="Filler 12" type="CHAR" size="9" padright=" " />
 			<charField fieldName="Filler 13" type="CHAR" size="1" default="0" />
-			<charField fieldName="Legal Residence" type="CHAR" size="1" validateColumn="154=80+1+30+10+20+2+9+1+1"/>
+			<numberField fieldName="Legal Residence" type="NUMBER" size="1" valid="[12]" validateColumn="154=80+1+30+10+20+2+9+1+1"/>
 
 			<charField name="degree" comment="field 15" fieldName="Degree" 
 				type="CHAR" size="1" valid="[ABCDE]"/>
-			<numberField name="coa" comment="field 16" 
-				fieldName="Tot Budget" type="NUMBER" size="5" padleft="0" default="00000" /> 
+			<charField name="Filler 16" comment="field 16" fieldName="Filler 16" type="CHAR" size="5" padleft=" " default="     " /> 
 			<numberField name="efc" comment="field 17" fieldName="EFC" type="CHAR" size="6" padleft="0" validateColumn="166=154+1+5+6"/> 
 
 			<numberField name="teg"	comment="field 18"  
@@ -124,15 +123,15 @@
 			<numberField name="ss" comment="field 21" fieldName="Selective Service Reg" 
 				type="NUMBER" size="1"  valid="[123]"> 
 			</numberField>
-			<charField fieldName="TEXAS_TEG" type="CHAR" size="1" valid="[YN]"/> 
-			<dateField fieldName="Date TEG Awarded" type="DATE" format="MMddyyyy" default="00000000"/> 
+			<charField fieldName="Filler 22" type="CHAR" size="1" padleft=" " default=" "/> 
+			<charField fieldName="Filler 23" type="CHAR" size="8" default="        " padleft=" " /> 
 			<charField name="renewal" comment="field 24" fieldName="Initial/Renewal" 
 				type="CHAR" size="1" valid="[IR]"/> 
-			<numberField comment="field 25" fieldName="Hardship" type="NUMBER" size="1"  default="0"
-				valid="[012]" validateColumn="191=179+1+1+8+1+1"/> 
+			<charField comment="field 25" fieldName="Hardship" type="CHAR" size="1"  default="N"
+				valid="[YN]" validateColumn="191=179+1+1+8+1+1"/> 
 
 			<numberField name="judement" comment="field 26" fieldName="Professional Judgement" 
-				type="NUMBER" size="1"  default="0" valid="[01234]"/>
+				type="NUMBER" size="1"  default="0" valid="[034]"/>
 			<numberField name="rate" comment="field 27" fieldName="Completion Rate" 
 				type="NUMBER" size="3" padleft="0" default="000"> 
 				<![CDATA[
@@ -154,12 +153,11 @@
 				]]>
 			</numberField>
 
-			<numberField name="winterHours" fieldName="winterHours" 
-				type="NUMBER" size="3" padleft="0" default="000" valid="\d+"> 
-			</numberField>
-			<numberField name="summerHours" fieldName="summerHours" 
-				type="NUMBER" size="3" padleft="0" default="000" valid="\d+"> 
-			</numberField>
+			<charField name="winterHours" comment="field 30" fieldName="winterHours" 
+				type="CHAR" size="3" padleft=" " default="   " > 
+			</charField>
+			<charField name="summerHours" comment="field 31" fieldName="Filler 31" 
+				type="CHAR" size="3" padleft="0" default="   " /> 
 			<numberField name="gpa" comment="field 32" fieldName="Gpa College" 
 				type="NUMBER" size="3" padleft="0" default="000"> 
 				<![CDATA[
@@ -169,8 +167,8 @@
 			</numberField>
 			<numberField comment="field 33" fieldName="Total Number of Hours Completed" type="NUMBER"
 				size="3" padleft="0" default="000" /> 
-			<charField comment="field 34" fieldName="Aid Disbursed After Enrollment Ended" 
-				type="CHAR" size="1"  default="0" valid="[YN]" validateColumn="214=201+3+3+3+3+1"/> 
+			<charField comment="field 34" fieldName="Filler 34" 
+				type="CHAR" size="1"  default=" " padleft=" " validateColumn="214=201+3+3+3+3+1"/> 
 
 
 			<dateField name="gradDate" comment="field 35" fieldName="Graduation Date" 
@@ -200,25 +198,20 @@
 				</footField>
 			</footer>
 		</select>
-		<connection name="Campus6" login="sa" password="${password}"
+		<connection name="Campus6" login="Avatar" password="${password}"
 				class="net.sourceforge.jtds.jdbc.Driver"
-				url="jdbc:jtds:sqlserver://kindness.lcunet.lcu.edu/Area51;instance=powercampus" >
+				url="jdbc:jtds:sqlserver://lcukindness.lcunet.lcu.edu/Area51" >
 			<sql name="TXgrant">
 	<![CDATA[
-SELECT [Record Code] ,[Student Ssn] ,[SSN] ,[Date Of Birth] ,[Last Name] ,[First Name]
-      ,[Middle Init] ,[Filler 8] ,[Filler 9] ,[Filler 10] ,[Filler 11]
-      ,[Filler 12] ,0 as [Filler 13] ,[Legal Residence] ,[Degree] ,[Tot Budget]
-      ,[EFC] ,[Disbursed Amt]*100 as [Disbursed Amt] ,[Tuition Differential] ,[Athletic Award] ,[Selective Service Reg]
-      ,[TEXAS_TEG] ,[Date TEG Awarded] ,[Initial/Renewal] ,[Hardship] ,[Professional Judgement]
-      ,[Completion Rate] 
-      ,[Fall 2014 Hours Attempted] as fallHours
-      ,[Spring 2015 Hours Attempted] as springHours
-      ,[Winter 2014 Hours Attempted] as winterHours
-      ,[Summer 2015 Hours Attempted] as summerHours
-      ,[Gpa College] ,[Total Number of Hours Completed]
-      ,[Aid Disbursed After Enrollment Ended] ,[Graduation Date] ,[SAP], [Semester of Initial Award]
+select [Record Code], [Student Ssn], [SSN], [Date of Birth], [Last Name], [First Name], [Middle Init], [Filler 8],
+	[Filler 9], [Filler 10], [Filler 11], [Filler 12], [Filler 13], [Legal Residence], [Degree], [Filler 16],
+	[EFC], [Disbursed Amt], [Tuition Differential], [Athletic Award], [Selective Service Reg], [Filler 22], [Filler 23],
+	[Initial/Renewal], [Hardship], [Professional Judgement], [Completion Rate], [Fall 2015 Hours Attempted],
+	[Spring 2016 Hours Attempted], [Winter 2015 Hours Attempted], [Filler 31], [GPA College], [Total Number of Hours Completed],
+	[Filler 34], [Graduation Date], [SAP], [Semester of Initial Award]
 FROM [Area51].[dbo].[lcuTxGrant]
-	]]>
+]]>
+
 			</sql>
 			<sql name="TegTotal">
 	<![CDATA[
