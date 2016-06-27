@@ -138,7 +138,7 @@
 					(rate> 100)
 				]]>
 			</numberField>
-			<numberField name="fallHours" comment="field 27" fieldName="fallHours" 
+			<numberField name="fallHours" comment="field 28" fieldName="fallHours" 
 				type="NUMBER" size="3" padleft="0" default="000" valid="\d+"> 
 				<![CDATA[
 					(fallHours < 9 && degree < 3 && judgement == 0)
@@ -153,11 +153,11 @@
 				]]>
 			</numberField>
 
-			<charField name="winterHours" comment="field 30" fieldName="winterHours" 
-				type="CHAR" size="3" padleft=" " default="   " > 
-			</charField>
+			<numberField name="winterHours" comment="field 30" fieldName="winterHours" 
+				type="CHAR" size="3" padleft="0" default="000" > 
+			</numberField>
 			<charField name="summerHours" comment="field 31" fieldName="Filler 31" 
-				type="CHAR" size="3" padleft="0" default="   " /> 
+				type="CHAR" size="3" padleft=" " default="   " /> 
 			<numberField name="gpa" comment="field 32" fieldName="Gpa College" 
 				type="NUMBER" size="3" padleft="0" default="000"> 
 				<![CDATA[
@@ -206,8 +206,8 @@
 select [Record Code], [Student Ssn], [SSN], [Date of Birth], [Last Name], [First Name], [Middle Init], [Filler 8],
 	[Filler 9], [Filler 10], [Filler 11], [Filler 12], [Filler 13], [Legal Residence], [Degree], [Filler 16],
 	[EFC], [Disbursed Amt], [Tuition Differential], [Athletic Award], [Selective Service Reg], [Filler 22], [Filler 23],
-	[Initial/Renewal], [Hardship], [Professional Judgement], [Completion Rate], [Fall 2015 Hours Attempted],
-	[Spring 2016 Hours Attempted], [Winter 2015 Hours Attempted], [Filler 31], [GPA College], [Total Number of Hours Completed],
+	[Initial/Renewal], [Hardship], [Professional Judgement], [Completion Rate], [Fall 2015 Hours Attempted] as fallHours,
+	[Spring 2016 Hours Attempted] as springHours, [Winter 2015 Hours Attempted] as winterHours, [Filler 31], [Gpa College], [Total Number of Hours Completed],
 	[Filler 34], [Graduation Date], [SAP], [Semester of Initial Award]
 FROM [Area51].[dbo].[lcuTxGrant]
 ]]>
