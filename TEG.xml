@@ -125,8 +125,7 @@
 			</numberField>
 			<charField fieldName="Filler 22" type="CHAR" size="1" padleft=" " default=" "/> 
 			<charField fieldName="Filler 23" type="CHAR" size="8" default="        " padleft=" " /> 
-			<charField name="renewal" comment="field 24" fieldName="Initial/Renewal" 
-				type="CHAR" size="1" valid="[IR]"/> 
+			<charField name="renewal" comment="field 24" fieldName="Initial/Renewal" type="CHAR" size="1" valid="[IR]" /> 
 			<charField comment="field 25" fieldName="Hardship" type="CHAR" size="1"  default="N"
 				valid="[YN]" validateColumn="191=179+1+1+8+1+1"/> 
 
@@ -205,7 +204,7 @@
 	<![CDATA[
 select [Record Code], [Student Ssn], [SSN], [Date of Birth], [Last Name], [First Name], [Middle Init], [Filler 8],
 	[Filler 9], [Filler 10], [Filler 11], [Filler 12], [Filler 13], [Legal Residence], [Degree], [Filler 16],
-	[EFC], [Disbursed Amt], [Tuition Differential], [Athletic Award], [Selective Service Reg], [Filler 22], [Filler 23],
+	[EFC], [Disbursed Amt] *100 as [Disbursed Amt], [Tuition Differential], [Athletic Award], [Selective Service Reg], [Filler 22], [Filler 23],
 	[Initial/Renewal], [Hardship], [Professional Judgement], [Completion Rate], [Fall 2015 Hours Attempted] as fallHours,
 	[Spring 2016 Hours Attempted] as springHours, [Winter 2015 Hours Attempted] as winterHours, [Filler 31], [Gpa College], [Total Number of Hours Completed],
 	[Filler 34], [Graduation Date], [SAP], [Semester of Initial Award]
