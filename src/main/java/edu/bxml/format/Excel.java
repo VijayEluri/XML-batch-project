@@ -31,7 +31,13 @@ public class Excel extends FilterAJImpl implements FilterAJ {
 	private ArrayList<Column> columns = new ArrayList<Column>();
 	private String dateFormat = null;
 	private SimpleDateFormat format = null;
+	
 
+	@Override
+	public void setOutputStream(PrintStream out) {
+		this.out = out;
+	}
+	
 	public String getDateFormat() {
 		return dateFormat;
 	}
@@ -54,7 +60,7 @@ public class Excel extends FilterAJImpl implements FilterAJ {
 
 	@Override
 	public void execute() {
-		localOut = new PrintStream(out);
+		localOut = new PrintStream(this.getOut());
 		Query query = this.getAncestorOfType(Query.class);
 		
 
