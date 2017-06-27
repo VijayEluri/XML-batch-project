@@ -230,16 +230,6 @@ public class Filter extends XmlObjectImpl implements XmlObject, Runnable {
 	}
 
 	/**
-	 * Decrypt/Encrypt a PGP document.
-	 * 
-	 * @param file
-	 */
-	@attribute(value = "", required = false)
-	public void addPgp(Pgp pgp) {
-		filters.add(pgp);
-	}
-
-	/**
 	 * Parse a csv file (any character sequence can 
 	 * be used as the delimiter) into separate fields
 	 * 

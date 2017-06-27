@@ -35,7 +35,21 @@ public class Properties extends XmlObjectImpl implements XmlObject {
 	public String file = null;
 	private String queryName = null;
 	private String separator = ",";
+	private Boolean optional = false;
 	
+	
+	public Boolean getOptional() {
+		return optional;
+	}
+
+	public void setOptional(String optional) {
+		this.optional = Boolean.parseBoolean(optional);
+	}
+	
+	public void setOptional(Boolean optional) {
+		this.optional = optional;
+	}
+
 	public String getSeparator() {
 		return separator;
 	}
@@ -70,7 +84,9 @@ public class Properties extends XmlObjectImpl implements XmlObject {
 			try {
 				p.load(new FileInputStream(props));
 			} catch (FileNotFoundException e) {
-				throw new XMLBuildException(file + ": does not exist.", this);
+				if (!optional)
+					throw new XMLBuildException(file + ": does not exist.", this);
+				return;
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

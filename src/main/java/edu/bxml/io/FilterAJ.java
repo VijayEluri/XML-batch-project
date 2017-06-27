@@ -40,4 +40,5 @@ public interface FilterAJ extends HasPojo, Runnable, XmlObject {
 	void setOutputStream(PrintStream out);
 	void setOutputStream(OutputStream pout);
 	void setHereFile(String isHereFile);
+	File getInFile();
 }

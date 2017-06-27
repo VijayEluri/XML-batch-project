@@ -86,7 +86,8 @@ public class FilterAJImpl extends XmlObjectImpl implements FilterAJ, XmlObject, 
 	protected String archive = null;
 	protected File currentFile = null;  
 	protected File outFile = null;
-
+	protected File inFile = null;
+	
 	protected List<FilterAJ> filters = new ArrayList<FilterAJ>();
 	protected List<FilterAJ> filtersMaster = new ArrayList<FilterAJ>();
 	
@@ -115,18 +116,23 @@ public class FilterAJImpl extends XmlObjectImpl implements FilterAJ, XmlObject, 
 
 	@Override
 	public void closeIn() {
-		if (closeIn && in != null)
+		if (closeIn && in != null) {
 			try {
 				in.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			finally {
+				in = null;
+			}
+		}
 	}
 	
 	@Override
 	public void closeOut() {
 		if (closeOut && out != null) {
 			out.close();
+			out = null;
 		}
 	}
 
@@ -140,6 +146,8 @@ public class FilterAJImpl extends XmlObjectImpl implements FilterAJ, XmlObject, 
 			return in;
 		}
 		
+		log.debug("getIn  getDir() = " + getDir()); 
+		log.debug("getIn  getFile() = " + getDir()); 
 		if (getDir() != null) {
 			if (getFile() != null) {
 				try {
@@ -193,13 +201,15 @@ public class FilterAJImpl extends XmlObjectImpl implements FilterAJ, XmlObject, 
 		FilterAJImpl ancestor = this.getAncestorOfType(FilterAJImpl.class);
 		log.debug("get OUT for " + this.getName() + ((this.getPojo()!= null)?("   pojo type is " + this.getPojo().getClass().getName()):""));
 
+		log.debug("getOut  getToDir() = " + getToDir()); 
+		log.debug("getOut getToFile() = " + getToFile()); 
 		try {
 			if (getToDir() != null && getToFile() != null){
 				
 				outFile = new File(toDir, toFile);
 				log.debug("toDir = " + toDir);
 				log.debug("toFile = " + toFile);
-				log.debug("set output file to " + outFile.getAbsolutePath());
+				log.error("set output file to " + outFile.getAbsolutePath(), new Exception("set output file"));
 				
 				out = new PrintStream(new FileOutputStream(outFile));
 // Easy debug put info in output stream
@@ -301,6 +311,11 @@ public class FilterAJImpl extends XmlObjectImpl implements FilterAJ, XmlObject, 
 	@Override
 	public File getOutFile() {
 		return outFile;
+	}
+	
+	@Override
+	public File getInFile() {
+		return inFile;
 	}
 
 	@Override

@@ -207,35 +207,7 @@ public class Pipe extends Filter {
 		filters.add(gZip);
 	}
 
-	/**
-	 * add pgp encrypt or decrypt to the pipeline
-	 * 
-	 * @param file
-	 */
-	@attribute(value = "", required = false)
-	public void addPgp(Pgp pgp) {
-		filters.add(pgp);
-	}
-	
-	/**
-	 * add pgp encrypt or decrypt to the pipeline
-	 * 
-	 * @param file
-	 */
-	@attribute(value = "", required = false)
-	public void addStreamDecryptVerify(StreamDecryptVerify pgp) {
-		filters.add(pgp);
-	}
-	
-	/**
-	 * add pgp encrypt or decrypt to the pipeline
-	 * 
-	 * @param file
-	 */
-	@attribute(value = "", required = false)
-	public void addPgpEncrypt(PgpEncrypt pgp) {
-		filters.add(pgp);
-	}
+
 
 	/**
 	 * Add Processing of fields to a pipeline

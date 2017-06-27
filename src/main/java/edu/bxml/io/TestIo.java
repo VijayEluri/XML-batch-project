@@ -85,73 +85,6 @@ public class TestIo extends TestCase {
 		
 	}
 	
-	public void testPgpEncryptEqualsDecrypt() {
-		/*
-<io xmlns='edu.bxml.io' xmlns:io='edu.bxml.io' xmlns:format="edu.bxml.format">
-	<pipe dir="web" file="test.txt">
-		<pgpEncrypt passPhrase = "TestingPassphrase" keyFile="bob-public.pgp.asc"/>
-		<pgpEncrypt decrypt="true" 
-			passPhrase = "TestingPassphrase" keyFile="bob-secret.pgp.asc"/>
-	</pipe>	
-</io>
-		 */
-		Io io = new Io();
-		Pipe pipe = new Pipe();
-		pipe.setDir("test/");
-		pipe.setFile("TestMessage.txt");
-		pipe.setToDir("build/test");
-		pipe.setToFile("PgpEncryptEqualsUnEncrypt.txt");
-		
-		pipe.setDir("C:/Users/geoff.ritchey/work/course/test");
-		pipe.setFile("TestMessage.txt");
-		
-		PgpEncrypt encrypt = new PgpEncrypt();
-		encrypt.setPassPhrase("TestingPassphrase");
-		try {
-			encrypt.setKeyFile("test/pgp/bob-public.pgp.asc");
-		} catch (XMLBuildException e3) {
-			e3.printStackTrace();
-		}
-		
-		PgpEncrypt decrypt = new PgpEncrypt();
-		
-		decrypt.setDecrypt("true");
-		decrypt.setPassPhrase("TestingPassphrase");
-		try {
-			decrypt.setKeyFile("test/pgp/bob-secret.pgp.asc");
-			decrypt.setSignersKeyFile("test/pgp/bob-public.pgp.asc");
-		} catch (XMLBuildException e) {
-			e.printStackTrace();
-		}
-		
-		io.addPipe(pipe);
-		pipe.addPgpEncrypt(encrypt);
-		pipe.addPgpEncrypt(decrypt);
-		
-		try { 
-			pipe.init(io);
-			decrypt.init(pipe);
-			encrypt.init(pipe);
-
-			decrypt.check();
-			encrypt.check();
-			pipe.check();
-			io.check();
-		} catch (XMLBuildException e2) {
-			assertTrue("check failed", false);
-			e2.printStackTrace();
-		}
-		
-		try {
-			io.execute();
-		} catch (XMLBuildException e1) {
-			e1.printStackTrace();
-		}
-		
-		assertTrue(Compare.compare("build/test/PgpEncryptEqualsUnEncrypt.txt", 
-				"test/TestMessage.txt"));
-				
-	}
 	
 	public void testLoad() {
 		/*
@@ -215,55 +148,6 @@ public class TestIo extends TestCase {
 		
 	}
 	
-	public void testBillingFile() {
-		/*
-<io 
-	<io:Filter toDir="." toFile="{MMddyyyy}.xml">
-		<pipe dir="\\Stargate\infiNETDrop\QuickBill" file=".*\.dat\.pgp">
-				<!--archive="C:/Users/geoff.ritchey/Desktop/PGP/archive"-->
-			<pgpEncrypt decrypt="true" keyFile="C:/pgp262i/LCU.asc" 
-				passPhrase = "LCU2006QuickBill"/>
-				
-				There seems to be a problem where stream decrypt
-				doesn't work in a case where message collection 
-				decrypt does.
-				
-				PgpEncrypt (streams) should work but doesn't so resort 
-				to Pgp.
-		 */
-		Io io = new Io();
-		Filter filter = new Filter();
-		filter.setToDir("build");
-		filter.setToFile("XXX.txt");
-		io.addFilter(filter);
-		
-		Pipe pipe = new Pipe();
-		pipe.setDir("test/pgp");
-		pipe.setFile(".*\\.dat\\.pgp");
-		filter.addPipe(pipe);
-		
-		Pgp decrypt = new Pgp();
-		decrypt.setPrivateArmouredKeyFile("test/pgp/LCU.asc");
-
-		decrypt.setPassPhrase("LCU2006QuickBill");
-		pipe.addPgp(decrypt);
-		
-		try {
-			filter.init(io);
-			pipe.init(filter);
-			decrypt.init(pipe);
-		
-			decrypt.check();
-			pipe.check();
-			filter.check();
-			io.check();
-			
-			io.execute();
-		} catch (XMLBuildException e) {
-			e.printStackTrace();
-		}
-		assertTrue(Compare.compare("build/XXX.txt", "test/pgp/20080725.txt"));
-	}
 	
 	public void testTee() {
 		/*

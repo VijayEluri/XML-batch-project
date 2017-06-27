@@ -36,32 +36,32 @@
 			<dateField fieldName="Date of Birth" type="DATE" format="MMddyyyy" default="{null}"/>
 			<charField fieldName="Last Name" type="CHAR" size="30" />
 			<charField fieldName="First Name" type="CHAR" size="30" />
-			<charField fieldName="Middle Init" type="CHAR" size="1" />
-			<charField fieldName="Filler 8" type="CHAR" size="30" >
+			<charField fieldName="MI" type="CHAR" size="1" />
+			<charField fieldName="Filler_8" type="CHAR" size="30" >
 				<replace expression="&quot;" replacement=""/>
 			</charField>
-			<charField fieldName="Filler 9" type="CHAR" size="10" />
-			<charField fieldName="Filler 10" type="CHAR" size="20" />
-			<charField fieldName="Filler 11" type="CHAR" size="2" />
-			<charField fieldName="Filler 12" type="CHAR" size="9" />
-			<charField fieldName="Filler 13" type="CHAR" size="1" />
+			<charField fieldName="Filler_9" type="CHAR" size="10" />
+			<charField fieldName="Filler_10" type="CHAR" size="20" />
+			<charField fieldName="Filler_11" type="CHAR" size="2" />
+			<charField fieldName="Filler-12" type="CHAR" size="9" />
+			<charField fieldName="Filler_13" type="CHAR" size="1" />
 			<charField fieldName="Legal Residence" type="CHAR" size="1" />
 			<charField fieldName="Degree" type="CHAR" size="1" />
-			<numberField fieldName="Filler 16" type="NUMBER" size="5" padleft="0" default="{null}"/> 
-			<charField fieldName="EFC" type="CHAR" size="6" padleft="0"/> 
+			<numberField fieldName="Filler_16" type="NUMBER" size="5" padleft="0" default="{null}"/> 
+			<charField fieldName="Tfc" type="CHAR" size="6" padleft="0"/> 
 			<numberField fieldName="Disbursed Amt" type="NUMBER" size="6" padleft="0" default="{null}"/> 
 			<numberField fieldName="Tuition Differential" type="NUMBER" size="6" padleft="0" default="{null}"/> 
-			<charField fieldName="Athletic Award" type="CHAR" size="1" default="N"/> 
+			<charField fieldName="Athletic Aid" type="CHAR" size="1" default="N"/> 
 			<numberField fieldName="Selective Service Reg" type="NUMBER" size="1"  default="{null}" comment="21"/> 
-			<charField fieldName="Filler 22" type="CHAR" size="1" default=" "/> 
-			<charField fieldName="Filler 23" type="CHAR" default="{null}"/> 
+			<charField fieldName="Filler_22" type="CHAR" size="1" default=" "/> 
+			<charField fieldName="Filler_23" type="CHAR" default="{null}"/> 
 			<charField fieldName="Initial/Renewal" type="CHAR" size="1" /> 
 			<charField fieldName="Hardship" type="CHAR" size="1"  /> 
 			<numberField fieldName="Professional Judgement" type="NUMBER" size="1"  default="{null}"/>
 			<numberField fieldName="Completion Rate" type="NUMBER" size="3" padleft="0" default="{null}"/> 
-			<numberField fieldName="Fall 2015 Hours Attempted" type="NUMBER" size="3" padleft="0" default="{null}"/> 
-			<numberField fieldName="Spring 2016 Hours Attempted" type="NUMBER" size="3" padleft="0" default="{null}"/> 
-			<numberField fieldName="Winter 2015 Hours Attempted" type="NUMBER" size="3" padleft="0" default="{null}"/> 
+			<numberField fieldName="Fall 2016 Hours Attempted" type="NUMBER" size="3" padleft="0" default="{null}"/> 
+			<numberField fieldName="Spring 2017 Hours Attempted" type="NUMBER" size="3" padleft="0" default="{null}"/> 
+			<numberField fieldName="Winter 2016 Hours Attempted" type="NUMBER" size="3" padleft="0" default="{null}"/> 
 			<numberField fieldName="Filler 31" type="NUMBER" size="3" padleft="0" default="{null}"/> 
 			<numberField fieldName="Gpa College" type="NUMBER" size="3" padleft="0" default="{null}"/> 
 			<numberField fieldName="Total Number of Hours Completed" type="NUMBER" size="3" padleft="0" default="{null}"/> 
@@ -88,19 +88,19 @@
 			<charField fieldName="Last Name" type="CHAR" size="30" padright=" "/>
 			<charField fieldName="First Name" type="CHAR" size="30" padright=" " validateColumn="80=2+9+1+8+30+30"/>
 
-			<charField fieldName="Middle Init" type="CHAR" size="1" padright=" " default=" "/>
-			<charField fieldName="Filler 8" type="CHAR" size="30" padright=" "/>
-			<charField fieldName="Filler 9" type="CHAR" size="10" padright=" "/>
-			<charField fieldName="Filler 10" type="CHAR" size="20" padright=" "/>
-			<charField fieldName="Filler 11" type="CHAR" size="2" padright=" "/>
-			<charField fieldName="Filler 12" type="CHAR" size="9" padright=" " />
-			<charField fieldName="Filler 13" type="CHAR" size="1" default="0" />
+			<charField fieldName="MI" type="CHAR" size="1" padright=" " default=" "/>
+			<charField fieldName="Filler_8" type="CHAR" size="30" padright=" "/>
+			<charField fieldName="Filler_9" type="CHAR" size="10" padright=" "/>
+			<charField fieldName="Filler_10" type="CHAR" size="20" padright=" "/>
+			<charField fieldName="Filler_11" type="CHAR" size="2" padright=" "/>
+			<charField fieldName="Filler-12" type="CHAR" size="9" padright=" " />
+			<charField fieldName="Filler_13" type="CHAR" size="1" default="0" />
 			<numberField fieldName="Legal Residence" type="NUMBER" size="1" valid="[12]" validateColumn="154=80+1+30+10+20+2+9+1+1"/>
 
 			<charField name="degree" comment="field 15" fieldName="Degree" 
 				type="CHAR" size="1" valid="[ABCDE]"/>
-			<charField name="Filler 16" comment="field 16" fieldName="Filler 16" type="CHAR" size="5" padleft=" " default="     " /> 
-			<numberField name="efc" comment="field 17" fieldName="EFC" type="CHAR" size="6" padleft="0" validateColumn="166=154+1+5+6"/> 
+			<charField name="Filler_16" comment="field 16" fieldName="Filler_16" type="CHAR" size="5" padleft=" " default="     " /> 
+			<numberField name="efc" comment="field 17" fieldName="Tfc" type="CHAR" size="6" padleft="0" validateColumn="166=154+1+5+6"/> 
 
 			<numberField name="teg"	comment="field 18"  
 				fieldName="Disbursed Amt" type="NUMBER" size="6" padleft="0" default="000000">
@@ -118,13 +118,13 @@
 					(tudiff < teg)
 				]]>
 			</numberField>
-			<charField fieldName="Athletic Award" type="CHAR" size="1" default="N" valid="[YN]" validateColumn="179=166+6+6+1"/> 
+			<charField fieldName="Athletic Aid" type="CHAR" size="1" default="N" valid="[YN]" validateColumn="179=166+6+6+1"/> 
 
 			<numberField name="ss" comment="field 21" fieldName="Selective Service Reg" 
 				type="NUMBER" size="1"  valid="[123]"> 
 			</numberField>
-			<charField fieldName="Filler 22" type="CHAR" size="1" padleft=" " default=" "/> 
-			<charField fieldName="Filler 23" type="CHAR" size="8" default="        " padleft=" " /> 
+			<charField fieldName="Filler_22" type="CHAR" size="1" padleft=" " default=" "/> 
+			<charField fieldName="Filler_23" type="CHAR" size="8" default="        " padleft=" " /> 
 			<charField name="renewal" comment="field 24" fieldName="Initial/Renewal" type="CHAR" size="1" valid="[IR]" /> 
 			<charField comment="field 25" fieldName="Hardship" type="CHAR" size="1"  default="N"
 				valid="[YN]" validateColumn="191=179+1+1+8+1+1"/> 
@@ -202,13 +202,15 @@
 				url="jdbc:jtds:sqlserver://lcukindness.lcunet.lcu.edu/Area51" >
 			<sql name="TXgrant">
 	<![CDATA[
-select [Record Code], [Student Ssn], [SSN], [Date of Birth], [Last Name], [First Name], [Middle Init], [Filler 8],
-	[Filler 9], [Filler 10], [Filler 11], [Filler 12], [Filler 13], [Legal Residence], [Degree], [Filler 16],
-	[EFC], [Disbursed Amt] *100 as [Disbursed Amt], [Tuition Differential], [Athletic Award], [Selective Service Reg], [Filler 22], [Filler 23],
-	[Initial/Renewal], [Hardship], [Professional Judgement], [Completion Rate], [Fall 2015 Hours Attempted] as fallHours,
-	[Spring 2016 Hours Attempted] as springHours, [Winter 2015 Hours Attempted] as winterHours, [Filler 31], [Gpa College], [Total Number of Hours Completed],
-	[Filler 34], [Graduation Date], [SAP], [Semester of Initial Award]
-FROM [Area51].[dbo].[lcuTxGrant]
+select "Record Code" ,"Student Ssn" ,"SSN" ,to_date("Date of Birth", 'MMddyyyy') as "Date of Birth","Last Name" ,"First Name" ,"MI" ,"Filler_8" 
+,"Filler_9" ,"Filler_10" ,"Filler_11" ,"Filler-12" ,"Filler_13" ,"Legal Residence" 
+,"Degree" ,0 as "Filler_16" ,"Tfc" ,cast("Disbursed Amt" as int) *100 as "Disbursed Amt"
+, cast("Tuition Differential" as int) as  "Tuition Differential","Athletic Aid" , "Selective Service Reg" 
+,"Filler_22" ,"Filler_23" ,"Initial/Renewal" ,"Hardship" ,"Professional Judgement" ,"Completion Rate" 
+,"Fall 2016 Hours Attempted" ,"Spring 2017 Hours Attempted" ,"Winter 2016 Hours Attempted" ,"Filler 31" 
+,"Gpa College" ,"Total Number of Hours Completed" ,"Filler 34" ,"Graduation Date" 
+,"SAP" ,"Semester of Initial Award" 
+from lcuTxGrant 
 ]]>
 
 			</sql>
@@ -221,11 +223,11 @@ SELECT sum([Disbursed Amt])*100 as total
 			<sql name="dataChecks">
 	<![CDATA[
 select 
-   min(case when ([Disbursed Amt] > 5277 or [Disbursed Amt] = 0 or ([Disbursed Amt] > 3518 and [Degree] in ('C', 'D', 'E') ) or [Disbursed Amt] > ([Tot Budget] - [EFC])) then 'error' else 'OK' end)
+   min(case when ([Disbursed Amt] > 5277 or [Disbursed Amt] = 0 or ([Disbursed Amt] > 3518 and [Degree] in ('C', 'D', 'E') ) or [Disbursed Amt] > ([Tot Budget] - [Tfc])) then 'error' else 'OK' end)
   ,min(case when ([Tuition Differential] < [Disbursed Amt]) then 'error' else 'OK' end)
   ,min(case when ([Completion Rate] > 100) then 'error' else 'OK' end)
-  ,min(case when ( [Fall 2014 Hours Attempted] > 0 and ( ([Fall 2014 Hours Attempted] < 9 and [Degree] in ('A', 'B') and [Professional Judgement] = 0) or  ([Fall 2014 Hours Attempted] < 7 and [Degree] in ('C', 'D', 'E') and [Professional Judgement] = 0))) then 'error' else 'OK' end)
-  ,min(case when ( [Spring 2015 Hours Attempted] > 0 and ( ([Spring 2015 Hours Attempted] < 9 and [Degree] in ('A', 'B') and [Professional Judgement] = 0) or  ([Spring 2015 Hours Attempted] < 7 and [Degree] in ('C', 'D', 'E') and [Professional Judgement] = 0))) then 'error' else 'OK' end)
+  ,min(case when ( [Fall 2016 Hours Attempted] > 0 and ( ([Fall 2016 Hours Attempted] < 9 and [Degree] in ('A', 'B') and [Professional Judgement] = 0) or  ([Fall 2016 Hours Attempted] < 7 and [Degree] in ('C', 'D', 'E') and [Professional Judgement] = 0))) then 'error' else 'OK' end)
+  ,min(case when ( [Spring 2017 Hours Attempted] > 0 and ( ([Spring 2017 Hours Attempted] < 9 and [Degree] in ('A', 'B') and [Professional Judgement] = 0) or  ([Spring 2017 Hours Attempted] < 7 and [Degree] in ('C', 'D', 'E') and [Professional Judgement] = 0))) then 'error' else 'OK' end)
   ,min(case when ([Gpa College] > 400) then 'error' else 'OK' end)
   ,min(case when ([SAP] = 'Y' and [Initial/Renewal] = 'R' and [Gpa College] < 250) then 'error' else 'OK' end)
   ,min(case when ( ([Semester of Initial Award] = 0 and [Initial/Renewal] = 'I') or ([Semester of Initial Award] > 0 and [Initial/Renewal] = 'R') ) then 'error' else 'OK' end)

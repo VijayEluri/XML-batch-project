@@ -82,16 +82,7 @@ public class Io extends XmlObjectImpl implements XmlObject {
 		commands.add(zip);
 	}
 	
-	/**
-	 * encrypt files
-	 * 
-	 * @param file
-	 */
-	@attribute(value = "", required = false)
-	public void addPgp(Pgp pgp) {
-		commands.add(pgp);
-	}
-	
+
 	/**
 	 * list contents of a directory
 	 * 
