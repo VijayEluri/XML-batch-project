@@ -214,12 +214,13 @@ public abstract class XmlObjectImpl implements XmlObject {
 			return null;
 		}
 		String typeName = type.getName();
-		log.trace("current x = " + x.getName());
-		log.trace("current x.getParent() = " + x.getParent());
+		log.debug("current x = " + x.getName());
+		log.debug("current x.getParent() = " + x.getParent());
 		while (x != null && (x=x.getParent()) != null) {
-			
+			log.debug("x class is = " + x.getClass().getName());
 			if (x instanceof FilterAJ) {
 				Object y = ((FilterAJ) x).getPojo();
+				log.debug("y class is + " + y.getClass().getName());
 				if (y != null && type.equals(y.getClass())) {
 					return type.cast(((FilterAJ) x).getPojo());
 				}
