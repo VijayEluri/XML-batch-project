@@ -9,7 +9,7 @@
 	</appender>
 	<appender name="R" class="org.apache.log4j.RollingFileAppender">
 		<param name="file" value="target/surefire/test.log" />
-		<param name="MaxFileSize" value="1000KB" />
+		<param name="MaxFileSize" value="100000KB" />
 		<!-- Keep one backup file -->
 		<param name="MaxBackupIndex" value="1" />
 		<layout class="org.apache.log4j.PatternLayout">
@@ -19,6 +19,7 @@
 	    
 	<logger name="edu.bxml"> <level value="DEBUG"/> </logger>
 	<logger name="com.ritchey"> <level value="DEBUG"/> </logger>
+        <logger name="com.browsexml"> <level value="DEBUG"/> </logger>
     	
     <root>
 		<priority value="debug" />

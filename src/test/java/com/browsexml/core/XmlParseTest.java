@@ -1,7 +1,9 @@
 package com.browsexml.core;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
+import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -16,6 +18,29 @@ public class XmlParseTest {
 
     }
     
+    @Test
+    public void testXmlSchedule() {
+        Map<String, String> myMap = new HashMap<String, String>();
+       
+        String catalinaBase = System.getenv("catalina.base");
+
+        String year = "2018";
+        String term = "FALL";
+	myMap.put("year", year);
+	myMap.put("term", term);
+	SAXParserFactory factory = SAXParserFactory.newInstance();
+	factory.setNamespaceAware(true);
+	XmlParser f = null;
+        File dir = new File( ".");
+        File properties = new File(dir, "schedule.xml");
+	try {
+		// Insert page variables into batch program
+		f = new XmlParser(properties.getAbsolutePath(), factory, myMap);
+	}
+	catch (Exception p) {
+			p.printStackTrace();
+	}
+    }
     
     //@Test
     public void testSearchReplace() {

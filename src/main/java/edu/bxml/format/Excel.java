@@ -26,6 +26,9 @@ import edu.bxml.io.FilterAJImpl;
 @attribute(value = "", required = true)
 public class Excel extends FilterAJImpl implements FilterAJ {
 	
+        final public int DATE_TIME_FORMAT_CODE = 71;
+        final public int STRING_FORMAT_CODE = 62;
+        
 	PrintStream localOut = null;
 	public static String newline = "\n";//System.getProperty("line.separator");
 	private ArrayList<Column> columns = new ArrayList<Column>();
@@ -132,12 +135,12 @@ public class Excel extends FilterAJImpl implements FilterAJ {
 		}
 		localOut.println(""
 				+ "  <Table ss:ExpandedColumnCount=\"1024\" "+ newline 
-				+ "   x:FullColumns=\"1\" x:FullRows=\"1\" ss:StyleID=\"s62\" ss:DefaultRowHeight=\"15\"> ");
+				+ "   x:FullColumns=\"1\" x:FullRows=\"1\" ss:StyleID=\"s" + STRING_FORMAT_CODE +"\" ss:DefaultRowHeight=\"15\"> ");
 		int i = 1;
 		for (Column column:columns) {
 			String width = column.getWidth();
 			if (width != null) {
-				localOut.println("   <Column ss:Index=\"" + i + "\" ss:StyleID=\"s62\" ss:Width=\"" + width + "\"/> ");
+				localOut.println("   <Column ss:Index=\"" + i + "\" ss:StyleID=\"s" + STRING_FORMAT_CODE +"\" ss:Width=\"" + width + "\"/> ");
 			}
 			i++;
 		}
@@ -171,8 +174,11 @@ log.debug("rs count = " + rs.getFetchSize());
 		
 		strData = escHtml(strData);
 		int formatNumber = column.getFormatNumber();
-		String formatType = "DateTime";
-		if (formatNumber == 62) {
+		String formatType = null;
+                if (formatNumber == DATE_TIME_FORMAT_CODE) {
+                    formatType = "DateTime";
+                }
+                else if (formatNumber == STRING_FORMAT_CODE) {
 			formatType = "String";
 		}
 		
@@ -202,7 +208,7 @@ log.debug("rs count = " + rs.getFetchSize());
 				+ "   <Selected/> "+ newline 
 				+ "   <ProtectObjects>False</ProtectObjects> "+ newline 
 				+ "   <ProtectScenarios>False</ProtectScenarios> "+ newline 
-				+ "  </WorksheetOptions> " + "  <x:WorksheetOptions/> "+ newline 
+				+ "  </WorksheetOptions> " + "  <WorksheetOptions/> "+ newline 
 				+ " </Worksheet> " + newline 
 				+ "</Workbook> " + newline 
 				+ "");

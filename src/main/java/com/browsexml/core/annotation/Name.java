@@ -7,11 +7,6 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Ancestor {
+public @interface Name {
 
-    /**
-     *
-     * @return
-     */
-    boolean required() default true;
 }

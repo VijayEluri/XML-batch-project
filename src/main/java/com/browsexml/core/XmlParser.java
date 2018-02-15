@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.Stack;
-import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -51,6 +50,7 @@ import com.browsexml.core.annotation.Ancestor;
 import com.browsexml.core.annotation.Check;
 import com.browsexml.core.annotation.EndDocument;
 import com.browsexml.core.annotation.Finally;
+import com.browsexml.core.annotation.Name;
 import com.browsexml.core.annotation.SymbolTable;
 import com.browsexml.core.annotation.Value;
 import com.browsexml.core.annotation.Wrapper;
@@ -60,13 +60,16 @@ import edu.bxml.http.Get;
 import edu.bxml.http.Http;
 import edu.bxml.io.FilterAJ;
 import edu.bxml.io.FilterAJImpl;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.InterfaceMaker;
 import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.MethodProxy;
 
 /**
- * Format a query's output
+ * Format a query results
  */
 @attribute("")
 public class XmlParser {
@@ -76,11 +79,10 @@ public class XmlParser {
 	boolean traceNoSuchMethod = true;
 	boolean traceNoSuchClass = true;
 
-	private static final Pattern predefines = Pattern.compile("\\#\\{[^\\{\\}]*\\}");
+	private static final Pattern PREDEFINES = Pattern.compile("\\#\\{[^\\{\\}]*\\}");
 
 	QueryReader handler = new QueryReader();
 
-	private String requestMethod = "GET";
 	private String[] cookies = null;
 
 	public String query = null;
@@ -102,6 +104,7 @@ public class XmlParser {
 	static Pattern attributePattern = Pattern.compile("\\%\\{(\\S+?)\\}");
 
 	ConcurrentHashMap<String, Object> symbolTable;
+    private String requestMethod;
 
 	public void setSymbolTable(ConcurrentHashMap<String, Object> symbolTable) {
 		if (symbolTable == null)
@@ -124,9 +127,9 @@ public class XmlParser {
 	}
 
 	URLClassLoader urlClassLoader = null;
-	Vector<URL> urls = new Vector<URL>();
+	List<URL> urls = new ArrayList<URL>();
 
-	static ScriptEngineManager sem = new ScriptEngineManager();
+	static final ScriptEngineManager sem = new ScriptEngineManager();
 	static ScriptEngine javascriptEngine = sem.getEngineByName("ECMAScript");
 
 	static public String processMacros(Object pojo, String text) {
@@ -161,7 +164,7 @@ public class XmlParser {
 			} catch (Exception e1) {
 				log.debug("script engine = " + javascriptEngine);
 				log.debug("symold table = " + st);
-				e1.printStackTrace();
+                                log.error("text = " + text, e1);
 			}
 			try {
 				log.debug("eval " + text);
@@ -209,20 +212,19 @@ public class XmlParser {
 		}
 	}
 
-	/**
-	 * processMacros using getters on any object(s) to set values
-	 * 
-	 * @param x
-	 * @param text
-	 * @return
-	 */
+
+        /**
+         * processMacros using getters on any object(s) to set values
+         * @param object
+         * @param text
+         * @return
+         * @throws XMLBuildException 
+         */
 	static public String processAttributes(XmlObject object, String text) throws XMLBuildException {
 		if (text == null) {
 			return text;
 		}
-		ConcurrentHashMap st = object.getSymbolTable();
 		Matcher myMatcher = attributePattern.matcher(text);
-		String[] var = null;
 		while (myMatcher.find()) {
 			String match = myMatcher.group(1);
 			log.debug("match = " + match);
@@ -260,6 +262,9 @@ public class XmlParser {
 	}
 
 	public static String properName(String name) {
+		if (name == null || name.length() < 2) {
+			return name;
+		}
 		return name.substring(0, 1).toUpperCase() + name.substring(1);
 	}
 
@@ -276,25 +281,28 @@ public class XmlParser {
 			log.debug("invoke function = " + functionName);
 			return m.invoke(object);
 		} catch (SecurityException e) {
-			e.printStackTrace();
+                    log.error(e.getMessage(),e);
 		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
+			log.error(e.getMessage(),e);
 		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
+			log.error(e.getMessage(),e);
 		} catch (IllegalAccessException e) {
-			e.printStackTrace();
+			log.error(e.getMessage(),e);
 		} catch (InvocationTargetException e) {
-			e.printStackTrace();
+			log.error(e.getMessage(),e);
 		}
 		throw new XMLBuildException("invoke function getMethod failed: " + functionName, null);
 	}
 
-	/**
-	 * Iterate through all the attributes of the current object and call
+        /**
+         * Iterate through all the attributes of the current object and call
 	 * set[attributeName] on the currentObject.
-	 * 
-	 * @param attrs
-	 */
+         * @param attrs
+         * @param currentObject
+         * @param symbolTable
+         * @param locator
+         * @throws SAXParseException 
+         */
 	public static void setAttributes(Attributes attrs, XmlObject currentObject, Map symbolTable, Locator locator)
 			throws SAXParseException {
 		Class<?> c = currentObject.getClass();
@@ -336,18 +344,18 @@ public class XmlParser {
 				String source = null;
 				String linenumber = currentObject.getLineNumber();
 				source = currentObject.getSource();
-				nsme.printStackTrace();
+				log.error(nsme.getMessage(), nsme);
 				message = nsme.getMessage();
 				log.debug("source = " + source);
 				log.debug("location = " + linenumber);
 
 			} catch (InvocationTargetException ite) {
-				ite.printStackTrace();
+				log.error(ite.getMessage(), ite);
 				if (ite.getMessage() == null)
 					throw new SAXParseException(ite.getCause().getMessage(), locator);
 
 			} catch (IllegalAccessException iae) {
-				iae.printStackTrace();
+                                log.error(iae.getMessage(), iae);
 				message = iae.getMessage();
 			}
 		}
@@ -371,8 +379,11 @@ public class XmlParser {
 				Object parentPojo = ((FilterAJ) parent).getPojo();
 				Object currentPojo = ((FilterAJ) current).getPojo();
 				if (parentPojo != null) {
+                                        boolean methodsPresent = false;
 					for (Method method : parentPojo.getClass().getMethods()) {
+                                            
 						if (method.isAnnotationPresent(Add.class)) {
+                                                    methodsPresent = true;
 							log.debug("Annotation Add found on " + method);
 							if (currentPojo == null) {
 								parameterTypes[0] = current.getClass();
@@ -390,7 +401,7 @@ public class XmlParser {
 								log.debug("success");
 								return;
 							} catch (IllegalArgumentException e) {
-								log.debug(e.getMessage(), e);
+								log.debug(e.getMessage());
 							} catch (IllegalAccessException e) {
 								log.debug(e.getMessage(), e);
 							} catch (InvocationTargetException e) {
@@ -398,6 +409,12 @@ public class XmlParser {
 							}
 						}
 					}
+                                        if (methodsPresent)
+                                            log.error("No method found for " + parentPojo.getClass().getName() + " calling add for " + parameterTypes[0], new Exception());
+                                        else {
+                                            log.error("No method annotated with Add found for " + parentPojo.getClass().getName());
+                                        }
+                                        
 				}
 			}
 		}
@@ -411,13 +428,13 @@ public class XmlParser {
 					success = true;
 				} catch (IllegalArgumentException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					log.error(e.getMessage(),e);
 				} catch (IllegalAccessException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					log.error(e.getMessage(),e);
 				} catch (InvocationTargetException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					log.error(e.getMessage(),e);
 				}
 			}
 		}
@@ -430,14 +447,14 @@ public class XmlParser {
 				m.invoke(parent, arguments);
 				success = true;
 			} catch (IllegalAccessException e) {
-				e.printStackTrace();
+				log.error(e.getMessage(),e);
 			} catch (NoSuchMethodException e) {
 				// for (Method m:c.getMethods()) {
 				// log.debug("method: " + m.getName());
 				// }
 			} catch (InvocationTargetException e) {
 				if (e.getMessage() == null) {
-					e.printStackTrace();
+					log.error(e.getMessage(),e);
 					throw new SAXParseException(e.getCause().getMessage(), locator);
 				}
 				//
@@ -446,7 +463,8 @@ public class XmlParser {
 
 		if (ex != null && !success) {
 			log.debug("location = " + locator.getLineNumber() + "  column: " + locator.getColumnNumber());
-			new SAXParseException("No Such Method Exception: " + name, locator).printStackTrace();
+			SAXParseException spe = new SAXParseException("No Such Method Exception: " + name, locator);
+                        log.error(spe.getMessage(), spe);
 		}
 	}
 
@@ -465,24 +483,24 @@ public class XmlParser {
 			try {
 				hmItem.getKey().invoke(x, arguments);
 			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
+				log.error(e.getMessage(),e);
 			} catch (IllegalAccessException e) {
-				e.printStackTrace();
+				log.error(e.getMessage(),e);
 			} catch (InvocationTargetException e) {
-				e.printStackTrace();
+				log.error(e.getMessage(),e);
 			}
 		}
 	}
 
-	/**
-	 * Replace date strings of the form {SimpleDateFormat pattern} with the
+
+        /**
+         * Replace date strings of the form {SimpleDateFormat pattern} with the
 	 * date. Example: #{yyyymmdd} gets replaced with 20060801 on August 1, 2006.
-	 * 
-	 * @param filename
-	 * @return
-	 */
+         * @param text
+         * @return 
+         */
 	public static String replacePoundMacros(String text) {
-		Matcher m = predefines.matcher(text);
+		Matcher m = PREDEFINES.matcher(text);
 		while (m.find()) {
 			String replace = m.group();
 			String format = replace.substring(2, replace.length() - 1);
@@ -491,7 +509,7 @@ public class XmlParser {
 			SimpleDateFormat f = new SimpleDateFormat(format);
 			String replacement = f.format(new Date());
 			text = text.replaceAll(replace, replacement);
-			m = predefines.matcher(text);
+			m = PREDEFINES.matcher(text);
 		}
 		return text;
 	}
@@ -506,7 +524,7 @@ public class XmlParser {
 			//root.execute();
 			log.debug("done execute");
 		} else {
-			new Exception().printStackTrace();
+                        log.error("root null", new Exception());
 		}
 
 	}
@@ -520,9 +538,9 @@ public class XmlParser {
 		try {
 			saxParser = factory.newSAXParser();
 		} catch (ParserConfigurationException e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		} catch (SAXException e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		}
 	}
 
@@ -546,6 +564,7 @@ public class XmlParser {
 	public XmlParser(URL xmlFile, SAXParserFactory factory, Map env)
 			throws XMLBuildException, IOException, SAXParseException, SAXException, ParserConfigurationException {
 		saxParser = factory.newSAXParser();
+		factory.setNamespaceAware(true);
 		symbolTable = new ConcurrentHashMap<String, Object>();
 		if (env != null)
 			symbolTable.put("_#env", env);
@@ -581,9 +600,10 @@ public class XmlParser {
 		if (cookies == null) {
 			return null;
 		}
-		StringBuffer cookie = null;
-		for (int i = 0; i < cookies.length; i++)
-			cookie.append(";").append(cookies[i]);
+		StringBuilder cookie = new StringBuilder("");
+            for (String cookie1 : cookies) {
+                cookie.append(";").append(cookie1);
+            }
 		return cookie.substring(1);
 	}
 
@@ -601,7 +621,7 @@ public class XmlParser {
 		this.requestMethod = method;
 	}
 
-	public void parse(byte[] data) throws Exception {
+	public final void parse(byte[] data) throws Exception {
 		InputStream in = null;
 		in = new ByteArrayInputStream(data);
 		parse(in);
@@ -609,7 +629,7 @@ public class XmlParser {
 
 	public void setSource(String file) {
 		if (file == null) {
-			new Exception().printStackTrace();
+			log.error("setSourceFile file is null",new Exception());
 		} else
 			source = file;
 	}
@@ -618,7 +638,7 @@ public class XmlParser {
 		return context;
 	}
 
-	public void parse(URL xmlFile)
+	public final void parse(URL xmlFile)
 			throws ConnectException, XMLBuildException, IOException, SAXParseException, SAXException {
 		log.debug("URL file = " + xmlFile);
 		parse(xmlFile.openStream());
@@ -626,41 +646,40 @@ public class XmlParser {
 
 	public void doFinally() {
 		log.debug("FINALLY");
-		for (FilterAJ key : createOrder) {
-			log.debug("static end = " + key);
-
-			FilterAJ wrapper = null;
-			try {
-				wrapper = XmlParser.getWrapper(key);
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
-			if (wrapper != null && wrapper.isIff()) {
-				try {
-					Object currentPojo = wrapper.getPojo();
-
-					for (Method m : currentPojo.getClass().getMethods()) {
-						if (m.isAnnotationPresent(Finally.class)) {
-							log.debug("FINALLY found");
-							m.invoke(currentPojo, (Object[]) null);
-							break;
-						}
-					}
-				} catch (SecurityException e) {
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					e.printStackTrace();
-				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					e.printStackTrace();
-				}
-			}
-
-		}
+            for (FilterAJ createOrderKey : createOrder) {
+                log.debug("static end = " + createOrderKey);
+                FilterAJ wrapper = null;
+                try {
+                    wrapper = XmlParser.getWrapper(createOrderKey);
+                } catch (XMLBuildException e) {
+                    log.error(e.getMessage(),e);
+                }
+                if (wrapper != null && wrapper.isIff()) {
+                    try {
+                        Object currentPojo = wrapper.getPojo();
+                        
+                        for (Method m : currentPojo.getClass().getMethods()) {
+                            if (m.isAnnotationPresent(Finally.class)) {
+                                log.debug("FINALLY found");
+                                m.invoke(currentPojo, (Object[]) null);
+                                break;
+                            }
+                        }
+                    } catch (SecurityException e) {
+                        log.error(e.getMessage(),e);
+                    } catch (IllegalAccessException e) {
+                        log.error(e.getMessage(),e);
+                    } catch (IllegalArgumentException e) {
+                        log.error(e.getMessage(),e);
+                    } catch (InvocationTargetException e) {
+                        log.error(e.getMessage(),e);
+                    }
+                }
+            }
 	}
 
-	public void parse(String xmlFile)
+        @SuppressWarnings("IndexOfReplaceableByContains")
+	private void parse(String xmlFile)
 			throws ConnectException, XMLBuildException, IOException, SAXParseException, SAXException {
 		source = xmlFile;
 
@@ -712,14 +731,14 @@ public class XmlParser {
 				// log.debug("in = " + in);
 				saxParser.parse(in, handler);
 			} catch (IOException ioe) {
-				ioe.printStackTrace();
+				log.error(ioe.getMessage(),ioe);
 				throw ioe;
 			} catch (SAXParseException spe) {
 				log.warn(spe.getMessage());
 				log.warn("at " + spe.getSystemId() + "  line: " + spe.getLineNumber() + "  column: "
 						+ spe.getColumnNumber());
 				log.warn("");
-				spe.printStackTrace();
+				log.error(spe.getMessage(),spe);
 				throw spe;
 			} catch (SAXException t) {
 				log.debug(t.getMessage());
@@ -759,7 +778,7 @@ public class XmlParser {
 	}
 
 	public static Boolean endDocument(Object currentPojo) throws SAXException, IOException {
-		log.debug("STATIC END DOC " + currentPojo.getClass().getName(), new Exception());
+		//log.debug("STATIC END DOC " + currentPojo.getClass().getName(), new Exception());
 
 		FilterAJ wrapper = (FilterAJ) pojoToWrapper.get(currentPojo);
 		if (wrapper != null) {
@@ -781,10 +800,9 @@ public class XmlParser {
 			// }
 			try {
 				log.debug("Name = " + wrapper.getName());
-			} catch (Exception e1) {
+			} catch (Exception e) {
 
-				e1.printStackTrace();
-				System.exit(1);
+				log.error(e.getMessage(),e);
 			}
 
 			Method endDocument = null;
@@ -802,8 +820,8 @@ public class XmlParser {
 					log.debug("current pojo = " + currentPojo);
 					try {
 						log.debug("current pojo name = " + XmlParser.getWrapper(currentPojo).getName());
-					} catch (Exception e) {
-						e.printStackTrace();
+					} catch (XMLBuildException e) {
+						log.error(e.getMessage(),e);
 					}
 					log.debug("end document: wrappers = " + pojoToWrapper);
 				}
@@ -818,13 +836,13 @@ public class XmlParser {
 					check.invoke(currentPojo, (Object[]) null);
 				} catch (IllegalAccessException e) {
 					checkPassed = false;
-					e.printStackTrace();
+					log.error(e.getMessage(),e);
 				} catch (IllegalArgumentException e) {
 					checkPassed = false;
-					e.printStackTrace();
+					log.error(e.getMessage(),e);
 				} catch (InvocationTargetException e) {
 					checkPassed = false;
-					e.printStackTrace();
+					log.error(e.getMessage(),e);
 				}
 			}
 
@@ -865,11 +883,11 @@ public class XmlParser {
 					endDocument.invoke(currentPojo, (Object[]) null);
 
 				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
+					log.error(e.getMessage(),e);
 				} catch (IllegalAccessException e) {
-					e.printStackTrace();
+					log.error(e.getMessage(),e);
 				} catch (InvocationTargetException e) {
-					e.printStackTrace();
+					log.error(e.getMessage(),e);
 				} finally {
 					if (redirectIn) {
 						if (pushedInstream) {
@@ -915,11 +933,11 @@ public class XmlParser {
 			try {
 				hmItem.getKey().invoke(x, arguments);
 			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
+				log.error(e.getMessage(),e);
 			} catch (IllegalAccessException e) {
-				e.printStackTrace();
+				log.error(e.getMessage(),e);
 			} catch (InvocationTargetException e) {
-				e.printStackTrace();
+				log.error(e.getMessage(),e);
 			}
 		}
 	}
@@ -928,8 +946,8 @@ public class XmlParser {
 		FilterAJ wrapper = null;
 		try {
 			wrapper = getWrapper(pojo);
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (XMLBuildException e) {
+			log.error(e.getMessage(),e);
 		}
 		if (wrapper != null)
 			replaceAllVariables(wrapper);
@@ -983,11 +1001,18 @@ public class XmlParser {
 				try {
 					Method pojoMethod = pojo.getClass().getMethod(method.getName(), method.getParameterTypes());
 					ret = pojoMethod.invoke(pojo, args);
-				} catch (Exception e) {
+				} catch (IllegalAccessException e) {
 					// This is not an error; the pojo simply didn't implement a
 					// callable wrapper method
 					// e.printStackTrace();
-				}
+				} catch (IllegalArgumentException e) {
+                                // This is not an error; the pojo simply didn't implement a
+                                // callable wrapper method
+                                // e.printStackTrace();
+                            } catch (NoSuchMethodException e) {
+                            } catch (SecurityException e) {
+                            } catch (InvocationTargetException e) {
+                            }
 
 				return ret;
 
@@ -1011,6 +1036,7 @@ public class XmlParser {
 			this.parser = x;
 		}
 
+                @Override
 		public void processingInstruction(String target, String data) {
 			if (target.equals("classpath")) {
 				String[] paths = data.split(";");
@@ -1018,7 +1044,7 @@ public class XmlParser {
 					try {
 						urls.add(new URL(path));
 					} catch (MalformedURLException e) {
-						e.printStackTrace();
+						log.error(e.getMessage(),e);
 					}
 					if (urls == null) {
 						urlClassLoader = new URLClassLoader((URL[]) urls.toArray());
@@ -1030,18 +1056,21 @@ public class XmlParser {
 			}
 		}
 
+                @Override
 		public void setDocumentLocator(Locator locator) {
 			this.locator = locator;
 		}
 
+                @Override
 		public void startDocument() throws SAXException {
 			// SplashScreen s = SplashScreen.getSplashScreen();
 			// if (s != null)
 			// s.close();
 		}
 
+                @Override
 		public void endDocument() throws SAXException {
-			log.debug("END DOCUMENT");
+			log.debug("END DOCUMENT  geoff");
 			XmlObject skipParent = null;
 			for (FilterAJ key : createOrder) {
 				if (skipParent != null) { // Skip all children of iff="false"
@@ -1064,8 +1093,8 @@ public class XmlParser {
 					FilterAJ wrapper = null;
 					try {
 						wrapper = XmlParser.getWrapper(key);
-					} catch (Exception e) {
-						e.printStackTrace();
+					} catch (XMLBuildException e) {
+						log.error(e.getMessage(),e);
 					}
 					if (wrapper != null && wrapper.isIff()) {
 						XmlParser.endDocument(key.getPojo());
@@ -1073,16 +1102,17 @@ public class XmlParser {
 						skipParent = key;
 					}
 				} catch (IOException e) {
-					e.printStackTrace();
+					log.error(e.getMessage(),e);
 				}
 
 			}
 		}
 
+                @Override
 		public void startElement(String namespaceURI, String sName, String qName, Attributes attrs)
 				throws SAXException {
 			// qName = qName.toLowerCase();
-
+                        log.debug("start element  sName:" + sName + "  qName:" + qName );
 			// log.debug("Start qName = " + qName);
 			textBuffer = null;
 
@@ -1118,13 +1148,12 @@ public class XmlParser {
 				Object o = null;
 				try {
 					o = c.newInstance();
-				} catch (IllegalAccessException e1) {
+				} catch (IllegalAccessException e) {
 					// TODO Auto-generated catch block
-					e1.printStackTrace();
+					
 					log.debug(c.getName() + ": the class or its nullary constructor is not accessible");
 					log.debug("Make sure " + c.getName() + " has a public nullary constructor.");
-					e1.printStackTrace();
-					System.exit(-1);
+					log.error(e.getMessage(),e);
 				}
 
 				try {
@@ -1146,13 +1175,14 @@ public class XmlParser {
 				}
 
 			} catch (InstantiationException e) {
+                            if (c != null) {
 				log.warn(c.getName()
 						+ ": this Class represents an abstract class, an interface, an array class, a primitive type, or void; or the class has no nullary constructor");
-				e.printStackTrace();
-				System.exit(1);
+                            }
+				log.error(e.getMessage(),e);
 			} catch (ClassNotFoundException e) {
 				if (traceNoSuchClass) {
-					e.printStackTrace();
+					log.error(e.getMessage(),e);
 					log.debug("could not load " + name);
 					throw new SAXException("Class not found: " + e.getMessage());
 				}
@@ -1198,14 +1228,15 @@ public class XmlParser {
 							for (Field f : currentPojo.getClass().getDeclaredFields()) {
 								log.debug("get annotations for field " + f.getName());
 								f.setAccessible(true);
+                                                                
 								if (f.isAnnotationPresent(SymbolTable.class)) {
 									try {
-										log.debug("annotation set symbolTable to " + symbolTable);
+										log.debug("geoff annotation set symbolTable to " + symbolTable);
 										f.set(currentPojo, symbolTable);
 									} catch (IllegalArgumentException e) {
-										e.printStackTrace();
+										log.error(e.getMessage(),e);
 									} catch (IllegalAccessException e) {
-										e.printStackTrace();
+										log.error(e.getMessage(),e);
 									}
 								}
 								if (f.isAnnotationPresent(Ancestor.class)) {
@@ -1214,16 +1245,21 @@ public class XmlParser {
 										log.debug("annotation set ancestor to " + ancestor);
 										f.set(currentPojo, ancestor);
 									} catch (IllegalArgumentException e) {
-										e.printStackTrace();
+										log.error(e.getMessage(),e);
 									} catch (IllegalAccessException e) {
-										e.printStackTrace();
+										log.error(e.getMessage(),e);
 									}
 									if (ancestor == null) {
-										throw new XMLBuildException("A class of type " + f.getType()
+                                                                            String message = "A class of type " + f.getType()
 												+ " must be an ancestor of " + currentObject.getName()
 												+ " which is of type " + currentPojo.getClass().getName()
-												+ "   with a type name of " + currentObject.getTypeName(),
-												currentObject);
+												+ "   with a type name of " + currentObject.getTypeName();
+                                                                            if (!f.getAnnotation(Ancestor.class).required()) {
+                                                                                log.warn(message + "  NOT REQUIERED");
+                                                                            }
+                                                                            else {
+										throw new XMLBuildException(message, currentObject);
+                                                                            }
 									}
 								}
 								log.debug("check wrapper class present =  " + f.isAnnotationPresent(Wrapper.class));
@@ -1232,20 +1268,30 @@ public class XmlParser {
 										log.debug("set Wrapper annotation for " + currentPojo);
 										f.set(currentPojo, XmlParser.getWrapper(currentPojo));
 									} catch (IllegalArgumentException e) {
-										e.printStackTrace();
+										log.error(e.getMessage(),e);
 									} catch (IllegalAccessException e) {
-										e.printStackTrace();
-									} catch (Exception e) {
-										e.printStackTrace();
+										log.error(e.getMessage(),e);
+									} catch (XMLBuildException e) {
+										log.error(e.getMessage(),e);
 									}
 								}
+                                                                if (f.isAnnotationPresent(Name.class)) {
+                                                                try {
+                                                                        log.debug("set wrapper name to " + c.getName());
+                                                                        f.set(currentPojo, cname );
+                                                                } catch (IllegalArgumentException e) {
+                                                                        log.error(e.getMessage(),e);
+                                                                }   catch (IllegalAccessException ex) { 
+                                                                        Logger.getLogger(XmlParser.class.getName()).log(Level.SEVERE, null, ex);
+                                                                    } 
+                        }
 								log.debug("loop end");
 							}
 						}
 					}
 
 				} catch (XMLBuildException e) {
-					e.printStackTrace();
+					log.error(e.getMessage(),e);
 					throw new SAXException(e.getMessage());
 				}
 			}
@@ -1257,7 +1303,9 @@ public class XmlParser {
 			currentObject = null;
 		}
 
+                @Override
 		public void endElement(String namespaceURI, String sName, String qName) throws SAXException {
+                    log.debug("endElement  geoff  qName = " + qName);
 			qName = qName.toLowerCase();
 			// log.debug("End qName = " + qName);
 			// log.debug("buffer = " + textBuffer);
@@ -1283,6 +1331,7 @@ public class XmlParser {
 			XmlObject o = object.pop();
 
 			try {
+                                log.debug("EndElement strBuffer = '" + strBuffer + "'");
 				if (strBuffer != null) {
 					if (strBuffer.contains("${") || strBuffer.contains("#{")) {
 						try {
@@ -1292,10 +1341,10 @@ public class XmlParser {
 									strBuffer);
 						} catch (SecurityException e) {
 							// TODO Auto-generated catch block
-							e.printStackTrace();
+							log.error(e.getMessage(),e);
 						} catch (NoSuchMethodException e) {
 							// TODO Auto-generated catch block
-							e.printStackTrace();
+							log.error(e.getMessage(),e);
 						}
 					}
 					o.setFromTextContent(strBuffer);
@@ -1309,7 +1358,7 @@ public class XmlParser {
 				}
 				o.check();
 			} catch (XMLBuildException e) {
-				e.printStackTrace();
+				log.error(e.getMessage(),e);
 				throw new SAXParseException(e.getMessage(), locator);
 			}
 			if (object.isEmpty())
@@ -1320,6 +1369,7 @@ public class XmlParser {
 			}
 		}
 
+                @Override
 		public void characters(char buf[], int offset, int len) throws SAXException {
 			String s = new String(buf, offset, len);
 			if (textBuffer == null) {
@@ -1341,12 +1391,13 @@ public class XmlParser {
 					m.setAccessible(true);
 					m.set(currentPojo, toObject(m.getType(), strBuffer));
 				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
+					log.error(e.getMessage(),e);
 				} catch (IllegalAccessException e) {
-					e.printStackTrace();
+					log.error(e.getMessage(),e);
 				}
 
 			}
+
 		}
 	}
 
@@ -1378,9 +1429,9 @@ public class XmlParser {
 					m.setAccessible(true);
 					return (String) m.get(currentPojo);
 				} catch (IllegalArgumentException e) {
-					e.printStackTrace();
+					log.error(e.getMessage(),e);
 				} catch (IllegalAccessException e) {
-					e.printStackTrace();
+					log.error(e.getMessage(),e);
 				}
 
 			}
@@ -1406,23 +1457,21 @@ public class XmlParser {
 		if (styleString == null)
 			return 0;
 
-		int value = 0;
 		String[] strings = styleString.split("\\|");
-		for (int i = 0; i < strings.length; i++) {
-			value = 0;
-			try {
-				value = Integer.parseInt(strings[i]);
-			} catch (NumberFormatException n) {
-				Field f = null;
-				try {
-					f = c.getField(strings[i]);
-					value = f.getInt(c);
-				} catch (NoSuchFieldException nsfe) {
-				} catch (IllegalAccessException iae) {
-				}
-			}
-			style |= value;
-		}
+            for (String string : strings) {
+                int value = 0;
+                try {
+                    value = Integer.parseInt(string);
+                } catch (NumberFormatException n) {
+                    try {
+                        Field f = c.getField(string);
+                        value = f.getInt(c);
+                    }catch (NoSuchFieldException nsfe) {
+                    }catch (IllegalAccessException iae) {
+                    }
+                }
+                style |= value;
+            }
 		return style;
 	}
 
@@ -1484,8 +1533,12 @@ public class XmlParser {
 	 * @param key
 	 * @return
 	 */
-	public static Object lookup(Object ob, String key) {
-		FilterAJ filter = XmlParser.pojoToWrapper.get(ob);
+	public static Object lookup(Object ob, String key) throws XMLBuildException {
+            FilterAJ filter = XmlParser.pojoToWrapper.get(ob);
+            if (key == null) {
+                throw new XMLBuildException("object " + filter.getName() +" lookup null key" );
+            }
+		
 		if (filter == null)
 			return null;
 		ConcurrentHashMap st = filter.getSymbolTable();
