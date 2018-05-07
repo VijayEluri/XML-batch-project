@@ -79,7 +79,8 @@ public class Properties extends XmlObjectImpl implements XmlObject {
 			throw new XMLBuildException("You must set a file name or query name.", this);
 		}
 		if (file != null) {
-			File props = new File(file);
+			Map m = getSymbolTable(); 
+			File props = new File(XmlParser.processMacros(m, file));
 			java.util.Properties p = new java.util.Properties();
 			try {
 				p.load(new FileInputStream(props));
@@ -92,7 +93,7 @@ public class Properties extends XmlObjectImpl implements XmlObject {
 				e.printStackTrace();
 				throw new XMLBuildException(e.getMessage(), this);
 			}
-			Map m = getSymbolTable(); 
+			
 			for (Enumeration e = p.keys();e.hasMoreElements();) {
 				String key = (String) e.nextElement();
 				String value = p.getProperty(key);
